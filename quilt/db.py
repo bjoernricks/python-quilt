@@ -138,6 +138,11 @@ class Db(PatchSeries):
             os.makedirs(self.dirname)
         self._create_version(self.version_file)
 
+    def save(self):
+        """ Create version file and save applied patches """
+        self.create()
+        super(Db, self).save()
+
     def applied_patches(self):
         """ Lists all applied patches """
         return self.patches()
