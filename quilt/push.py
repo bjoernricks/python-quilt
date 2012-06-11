@@ -41,6 +41,11 @@ class Push(Command):
         Patch(self.cwd, patch_file, backup=True, prefix=prefix)
         self.db.add_patch(patch_name)
 
+        if os.path.exists(prefix):
+            open(os.path.join(prefix, ".timestamp"), "w").close()
+        else:
+            os.makedirs(prefix)
+
     def _check(self):
         if not self.series.exists() or not self.series.patches():
             raise NoPatchesInSeries(self.series)
