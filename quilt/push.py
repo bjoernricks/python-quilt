@@ -19,6 +19,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
 # 02110-1301 USA
 
+import os.path
+
 from quilt.command import Command
 from quilt.db import Db, Series
 from quilt.error import NoPatchesInSeries
