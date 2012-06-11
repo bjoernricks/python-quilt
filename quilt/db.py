@@ -38,6 +38,8 @@ class PatchSeries(object):
 
     def __init__(self, dirname, filename):
         self._patches = []
+        self.dirname = dirname
+        self.filename = filename
         self.series_file = os.path.join(dirname, filename)
         self.read()
 
@@ -132,8 +134,8 @@ class Db(PatchSeries):
 
     def create(self):
         """ Creates the dirname and inserts a .version file """
-        if not os.path.exists(dirname):
-            os.makedirs(dirname)
+        if not os.path.exists(self.dirname):
+            os.makedirs(self.dirname)
         self._create_version(self.version_file)
 
     def applied_patches(self):
