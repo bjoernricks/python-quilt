@@ -121,8 +121,9 @@ class Db(PatchSeries):
     """
 
     def __init__(self, dirname):
+        self.version_file = os.path.join(dirname, ".version")
         if os.path.exists(dirname):
-            self.check_version(version_file)
+            self.check_version(self.version_file)
         super(Db, self).__init__(dirname, "applied-patches")
 
     def _create_version(self, version_file):
@@ -133,8 +134,7 @@ class Db(PatchSeries):
         """ Creates the dirname and inserts a .version file """
         if not os.path.exists(dirname):
             os.makedirs(dirname)
-        version_file = os.path.join(dirname, ".version")
-        self._create_version(version_file)
+        self._create_version(self.version_file)
 
     def applied_patches(self):
         """ Lists all applied patches """
