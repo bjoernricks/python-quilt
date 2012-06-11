@@ -22,6 +22,7 @@
 from quilt.command import Command
 from quilt.db import Db, Series
 from quilt.error import NoPatchesInSeries
+from quilt.patch import Patch
 
 class Push(Command):
 
