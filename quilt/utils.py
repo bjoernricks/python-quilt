@@ -60,7 +60,7 @@ class Process(object):
             kw["stdout"] = open(os.devnull, "w")
             kw["stderr"] = open(os.devnull, "w")
         try:
-            process = subprocess.Popen(self.cmd, env=env, **kw)
+            process = subprocess.Popen(self.cmd, **kw)
         except OSError, e:
             raise SubprocessError(self.cmd, e.errno, e.strerror)
 
