@@ -41,43 +41,55 @@ class PatchSeries(object):
         self.series_file = os.path.join(dirname, filename)
 
     def exists(self):
+        """ Returns True if series file exists """
         return os.path.exists(self.series_file)
 
     def read(self):
+        """ Reads all patches from the series file """
         with open(self.series_file, "r") as f:
             self._patches = f.readlines()
 
     def save(self):
+        """ Saves current patches list in the series file """
         with open(self.series_file, "w") as f:
             for patch in self._patches:
                 f.write(patch)
 
     def add_patch(self, patch_name):
+        """ Add a patch to the patches list """
         self._patches.append(patch_name)
 
     def remove_patch(self, patch_name):
+        """ Remove a patch from the patches list """
         self._patches.remove(patch_name)
 
     def top_patch(self):
+        """ Returns the last patch from the patches list or None if the list
+            is empty """
         if not self._patches:
             return None
         return self._patches[-1]
 
     def first_patch(self):
+        """ Returns the first patch from the patches list or None if the list
+            is empty """
         if not self._patches:
             return None
         return self._patches[0]
 
     def patches(self):
+        """ Returns the list of patches """
         return self._patches
 
     def patches_after(self, patch_name):
+        """ Returns a list of patches after patch name from the patches list """
         if patch_name not in self._patches:
             raise InvalidPatchError("Patch %r is not known.")
         index = self._patches.index(patch_name)
         return self._patches[index+1:]
 
     def patch_after(self, patch_name):
+        """ Returns the patch followed by patch name from the patches list """
         if patch_name not in self._patches:
             raise InvalidPatchError("Patch %r is not known.")
         index = self._patches.index(patch_name)
@@ -85,6 +97,10 @@ class PatchSeries(object):
 
 
 class Db(PatchSeries):
+
+    """ Represents the "Database" of quilt which contains the list of current
+        applied patches
+    """
 
     def __init__(self, dirname):
         if os.path.exists(dirname):
@@ -96,15 +112,19 @@ class Db(PatchSeries):
             f.write(str(DB_VERSION))
 
     def create(self):
+        """ Creates the dirname and inserts a .version file """
         if not os.path.exists(dirname):
             os.makedirs(dirname)
         version_file = os.path.join(dirname, ".version")
         self._create_version(version_file)
 
     def applied_patches(self):
+        """ Lists all applied patches """
         return self.patches()
 
     def check_version(self, version_file):
+        """ Checks if the .version file in dirname has the correct supported
+            version number """
         try:
             f = open(version_file, "r")
             version = f.read(1)
@@ -117,6 +137,10 @@ class Db(PatchSeries):
 
 
 class Series(PatchSeries):
+
+    """ Represents the series file of quilt which contains the patches to be
+        applied
+    """
 
     def __init__(self, dirname):
         super(Series, self).__init__(dirname, "series")
