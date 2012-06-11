@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # vim: fileencoding=utf-8 et sw=4 ts=4 tw=80:
 
 # python-quilt - A Python implementation of the quilt patch system
@@ -20,43 +19,15 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
 # 02110-1301 USA
 
-import sys
-import os.path
+from optparse import OptionParser
 
-import quilt.cli.applied
-import quilt.cli.push
-import quilt.cli.top
-import quilt.cli.series
+from quilt.db import Db
 
-from quilt.error import QuiltError
+def parse(args):
+    usage = "%prog applied"
+    parser = OptionParser(usage=usage)
+    (options, pargs) = parser.parse_args(args)
 
-def usage():
-    print "%s command [--help] ..." % (os.path.basename(sys.argv[0]))
-
-def main():
-    if not len(sys.argv) > 1:
-        usage()
-        sys.exit(1)
-
-    cmd = sys.argv[1]
-    args = sys.argv[2:]
-
-    try:
-        if cmd == "push":
-            quilt.cli.push.parse(args)
-        elif cmd == "applied":
-            quilt.cli.applied.parse(args)
-        elif cmd == "top":
-            quilt.cli.top.parse(args)
-        elif cmd == "series":
-            quilt.cli.series.parse(args)
-        else:
-            print "command %s not known." % cmd
-            usage()
-            sys.exit(2)
-    except QuiltError, e:
-        print e
-        sys.exit(1)
-
-if __name__ == "__main__":
-        main()
+    db = Db(".pc")
+    for patch in db.applied_patches():
+        print patch
