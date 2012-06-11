@@ -43,7 +43,15 @@ class Push(Command):
     def apply_patch(self, patch_name):
         """ Apply all patches up to patch_name """
         self._check()
-        patches = self.series.patches_after(patch_name)
+        patches = []
+        patches.extend(self.series.patches_before(patch_name))
+        patches.append(patch_name)
+
+        applied = self.db.applied_patches()
+        for patch in applied:
+            if patch in patches:
+                patches.remove(applied)
+
         for patch in patches:
             self._apply_patch(patch)
 
