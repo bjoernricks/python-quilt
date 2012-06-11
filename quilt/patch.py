@@ -25,8 +25,9 @@ from quilt.utils import Process
 
 class Patch(object):
 
-    def __init__(self, cwd, patch_file, backup=False, prefix=None):
+    def __init__(self, cwd, patch_file, strip=1, backup=False, prefix=None):
         cmd = ["patch"]
+        cmd.append("-p" + str(strip))
         if backup:
             cmd.append("--backup")
         if prefix:
