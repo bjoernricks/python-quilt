@@ -41,12 +41,14 @@ class Push(Command):
             raise NoPatchesInSeries(self.series)
 
     def apply_patch(self, patch_name):
+        """ Apply all patches up to patch_name """
         self._check()
         patches = self.series.patches_after(patch_name)
         for patch in patches:
             self._apply_patch(patch)
 
     def apply_next_patch(self):
+        """ Apply next patch in series file """
         self._check()
         top = self.db.top_patch()
         if not top:
