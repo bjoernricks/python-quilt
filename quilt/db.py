@@ -97,6 +97,12 @@ class PatchSeries(object):
         index = self._patches.index(patch_name)
         return self._patches[index+1]
 
+    def patches_before(self, patch_name):
+        """ Returns a list of patches before patch name from the patches list """
+        self._check_patch(patch_name)
+        index = self._patches.index(patch_name)
+        return self._patches[:index]
+
     def is_patch(self, patch_name):
         """ Returns True if patch name is in the list of patches. Otherwise it
             returns False.
