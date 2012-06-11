@@ -40,6 +40,10 @@ class PatchSeries(object):
         self._patches = []
         self.series_file = os.path.join(dirname, filename)
 
+    def _check_patch(self, patch_name):
+        if not self.is_patch(patch_name)
+            raise InvalidPatchError("Patch %r is not known.")
+
     def exists(self):
         """ Returns True if series file exists """
         return os.path.exists(self.series_file)
@@ -83,17 +87,21 @@ class PatchSeries(object):
 
     def patches_after(self, patch_name):
         """ Returns a list of patches after patch name from the patches list """
-        if patch_name not in self._patches:
-            raise InvalidPatchError("Patch %r is not known.")
+        self._check_patch(patch_name)
         index = self._patches.index(patch_name)
         return self._patches[index+1:]
 
     def patch_after(self, patch_name):
         """ Returns the patch followed by patch name from the patches list """
-        if patch_name not in self._patches:
-            raise InvalidPatchError("Patch %r is not known.")
+        self._check_patch(patch_name)
         index = self._patches.index(patch_name)
         return self._patches[index+1]
+
+    def is_patch(self, patch_name):
+        """ Returns True if patch name is in the list of patches. Otherwise it
+            returns False.
+        """
+        return patch_name in self._patches
 
 
 class Db(PatchSeries):
