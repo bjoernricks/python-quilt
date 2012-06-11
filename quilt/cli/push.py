@@ -30,12 +30,18 @@ def parse(args):
     parser = OptionParser(usage=usage)
     parser.add_option("-a", "--all", help="apply all patches in series",
                       action="store_true")
+
     (options, pargs) = parser.parse_args(args)
+
     patches = os.environ.get("QUILT_PATCHES")
     if not patches:
         patches = "patches"
+
     push = Push(os.getcwd(), ".pc", patches)
-    if not args:
+
+    if options.all:
+        push.apply_all()
+    elif not args:
         push.apply_next_patch()
     else:
         push.apply_patch(args[0])
