@@ -50,8 +50,11 @@ class PatchSeries(object):
 
     def read(self):
         """ Reads all patches from the series file """
-        with open(self.series_file, "r") as f:
-            self._patches = f.readlines()
+        if self.exists():
+            with open(self.series_file, "r") as f:
+                for line in f:
+                    line = line[:-1]
+                    self._patches.append(line)
 
     def save(self):
         """ Saves current patches list in the series file """
