@@ -60,6 +60,8 @@ class Push(Command):
         for patch in patches:
             self._apply_patch(patch)
 
+        self.db.save()
+
     def apply_next_patch(self):
         """ Apply next patch in series file """
         self._check()
@@ -69,6 +71,8 @@ class Push(Command):
         else:
             patch = self.series.patch_after(top)
         self._apply_patch(patch)
+
+        self.db.save()
 
     def apply_all(self):
         """ Apply all patches in series file """
@@ -81,3 +85,4 @@ class Push(Command):
         for patch in patches:
             self._apply_patch(patch)
 
+        self.db.save()
