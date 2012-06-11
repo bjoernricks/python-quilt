@@ -19,6 +19,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
 # 02110-1301 USA
 
+import os
+
 from quilt.utils import Process
 
 class Patch(object):
@@ -29,6 +31,8 @@ class Patch(object):
             cmd.append("--backup")
         if prefix:
             cmd.append("--prefix")
+            if not prefix[-1] == os.sep:
+                prefix += os.sep
             cmd.append(prefix)
         cmd.append("-i")
         cmd.append(patch_file)
