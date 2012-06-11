@@ -65,3 +65,14 @@ class Push(Command):
             patch = self.series.patch_after(top)
         self._apply_patch(patch)
 
+    def apply_all(self):
+        """ Apply all patches in series file """
+        self._check()
+        top = self.db.top_patch()
+        if top:
+            patches = self.series.patches_after(top)
+        else:
+            patches = self.series.patches()
+        for patch in patches:
+            self._apply_patch(patch)
+
