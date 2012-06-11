@@ -39,6 +39,7 @@ class PatchSeries(object):
     def __init__(self, dirname, filename):
         self._patches = []
         self.series_file = os.path.join(dirname, filename)
+        self.read()
 
     def _check_patch(self, patch_name):
         if not self.is_patch(patch_name):
