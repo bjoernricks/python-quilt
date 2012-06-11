@@ -31,12 +31,14 @@ class Push(Command):
     def __init__(self, cwd, quilt_pc, quilt_patches):
         super(Push, self).__init__(cwd)
         self.quilt_pc = quilt_pc
+        self.quilt_patches = quilt_patches
         self.db = Db(quilt_pc)
         self.series = Series(quilt_patches)
 
     def _apply_patch(self, patch_name):
-        prefix = os.path.join(quilt_patches, patch_name)
-        Patch(self.cwd, patch_name, backup=True, prefix=prefix).run()
+        prefix = os.path.join(self.quilt_pc, patch_name)
+        patch_file = os.path.join(self.quilt_patches, patch_name)
+        Patch(self.cwd, patch_file, backup=True, prefix=prefix)
         self.db.add_patch(patch_name)
 
     def _check(self):
