@@ -19,29 +19,31 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
 # 02110-1301 USA
 
+import os.path
+
 from quilt.command import Command
 from quilt.db import Db, Series
 from quilt.error import NoAppliedPatch
-from quilt.utils import Directory, RollbackPatch, File
+from quilt.patch import RollbackPatch
+from quilt.utils import Directory, File
 
 class Pop(Command):
 
-    def __init__(self, cwd, quilt_pc, quilt_patches):
+    def __init__(self, cwd, quilt_pc):
         super(Pop, self).__init__(cwd)
         self.quilt_pc = quilt_pc
         self.db = Db(quilt_pc)
-        self.series = Series(quilt_patches)
 
     def _check(self):
         if not self.db.exists() or not self.db.patches():
             raise NoAppliedPatch(self.db)
 
     def _unapply_patch(self, patch_name):
-        prefix = os.path.join(quilt_patches, patch_name)
+        prefix = os.path.join(self.quilt_pc, patch_name)
         timestamp = File(os.path.join(prefix, ".timestamp"))
         timestamp.delete_if_exists()
 
-        patch = RollbackPatch(self.cwd, self.prefix)
+        patch = RollbackPatch(self.cwd, prefix)
         patch.rollback()
         patch.delete_backup()
 
@@ -65,16 +67,16 @@ class Pop(Command):
         """ Unapply top patch """
         self._check()
 
-        patch = self.top_patch()
+        patch = self.db.top_patch()
         self._unapply_patch(patch)
 
         self.db.save()
 
     def unapply_all(self):
-        """ Unapply all patches in series file """
+        """ Unapply all patches """
         self._check()
 
-        for patch in reverse(self.db.patches())
+        for patch in reverse(self.db.patches()):
             self._unapply_patch(patch)
 
         self.db.save()
