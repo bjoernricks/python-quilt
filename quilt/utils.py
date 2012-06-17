@@ -23,6 +23,7 @@
 
 import os
 import os.path
+import shutil
 import subprocess
 
 from quilt.error import QuiltError
@@ -112,6 +113,10 @@ class Directory(object):
         """ Returns all directories and files in this directory and its
             subdirectories """
         return self._content(self.dirname)
+
+    def delete(self):
+        """ Delete the directory and its content """
+        shutil.rmtree(self.dirname)
 
     def __add__(self, other):
         if isinstance(other, Directory):
