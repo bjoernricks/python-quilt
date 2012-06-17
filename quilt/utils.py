@@ -88,15 +88,22 @@ class Directory(object):
         """ Creates the directory and all its parent directories """
         os.makedirs(self.dirname)
 
-    def _content(self, dirname):
+    def _content(self, startdir, dirname=None):
         files = []
         dirs = []
-        contents = os.listdir(dirname)
+        if dirname:
+            dir = os.path.join(startdir, dirname)
+        else:
+            dir = startdir
+        contents = os.listdir(dir)
         for content in contents:
-            path = os.path.join(dirname, content)
-            name = path.split(os.sep, 1)[1]
+            if not dirname:
+                name = content
+            else:
+                name = os.path.join(dirname, content)
+            path = os.path.join(dir, content)
             if os.path.isdir(path):
-                (newdirs, newfiles) = self._content(path)
+                (newdirs, newfiles) = self._content(startdir, name)
                 dirs.append(name)
                 files.extend(newfiles)
                 dirs.extend(newdirs)
