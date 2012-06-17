@@ -22,6 +22,7 @@
 """Helper functions to run subprocesses in various ways"""
 
 import os
+import os.path
 import subprocess
 
 from quilt.error import QuiltError
@@ -72,9 +73,22 @@ class Process(object):
             raise SubprocessError(self.cmd, ret)
 
 
-class Touch(object):
+class File(object):
 
-    """ 'Touch' a file. Creates an empty file. """
 
     def __init__(self, filename):
-        open(os.path.join(prefix, ".timestamp"), "w").close()
+        self.filename = filename
+
+    def exists(self):
+        return os.path.exists(self.filename)
+
+    def delete(self):
+        os.remove(self.filename)
+
+    def delete_if_exists(self):
+        if self.exists():
+            self.delete()
+
+    def touch(self):
+        """ 'Touch' a file. Creates an empty file. """
+        open(self.filename, "w").close()
