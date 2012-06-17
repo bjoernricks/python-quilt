@@ -22,7 +22,14 @@
 class QuiltError(Exception):
     pass
 
+
 class NoPatchesInSeries(QuiltError):
 
     def __str__(self):
         return "No patch in series file %s" % self.args[0].series_file
+
+
+class NoAppliedPatch(QuiltError):
+
+    def __str__(self):
+        return "No applied patch in file %s" % self.args[0].series_file
