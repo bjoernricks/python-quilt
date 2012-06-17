@@ -50,7 +50,7 @@ class RollbackPatch(object):
         self.cwd = Directory(cwd)
         self.backup_dir = Directory(backup_dir)
 
-    def rollback(self, keep=False)
+    def rollback(self, keep=False):
         (dirs, files) = self.backup_dir.content()
 
         for dir in dirs:
@@ -62,6 +62,7 @@ class RollbackPatch(object):
             file = File(file)
             backup_file = self.backup_dir + file
             rollback_file = self.cwd + file
+
             if not keep:
                 rollback_file.delete_if_exists()
             if not backup_file.is_empty():
