@@ -70,3 +70,11 @@ class Process(object):
         ret = process.wait()
         if ret != 0:
             raise SubprocessError(self.cmd, ret)
+
+
+class Touch(object):
+
+    """ 'Touch' a file. Creates an empty file. """
+
+    def __init__(self, filename):
+        open(os.path.join(prefix, ".timestamp"), "w").close()
