@@ -23,7 +23,7 @@ import os.path
 
 from quilt.command import Command
 from quilt.db import Db, Series
-from quilt.error import NoPatchesInSeries
+from quilt.error import NoPatchesInSeries, AllPatchesApplied
 from quilt.patch import Patch, RollbackPatch
 from quilt.utils import SubprocessError, File
 
@@ -80,6 +80,9 @@ class Push(Command):
             if patch in patches:
                 patches.remove(applied)
 
+        if not patches:
+            raise AllPatchesApplied(self.series)
+
         for patch in patches:
             self._apply_patch(patch)
 
@@ -93,6 +96,10 @@ class Push(Command):
             patch = self.series.first_patch()
         else:
             patch = self.series.patch_after(top)
+
+        if not patch:
+            raise AllPatchesApplied(self.series)
+
         self._apply_patch(patch)
 
         self.db.save()
@@ -105,6 +112,10 @@ class Push(Command):
             patches = self.series.patches_after(top)
         else:
             patches = self.series.patches()
+
+        if not patches:
+            raise AllPatchesApplied(self.series)
+
         for patch in patches:
             self._apply_patch(patch)
 
