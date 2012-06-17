@@ -33,3 +33,9 @@ class NoAppliedPatch(QuiltError):
 
     def __str__(self):
         return "No applied patch in file %s" % self.args[0].series_file
+
+
+class AllPatchesApplied(QuiltError):
+
+    def __str__(self):
+        return "All patches are already applied"
