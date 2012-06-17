@@ -27,6 +27,7 @@ import quilt.cli.applied
 import quilt.cli.push
 import quilt.cli.top
 import quilt.cli.series
+import quilt.cli.pop
 
 from quilt.error import QuiltError
 
@@ -44,6 +45,8 @@ def main():
     try:
         if cmd == "push":
             quilt.cli.push.parse(args)
+        elif cmd == "pop":
+            quilt.cli.pop.parse(args)
         elif cmd == "applied":
             quilt.cli.applied.parse(args)
         elif cmd == "top":
