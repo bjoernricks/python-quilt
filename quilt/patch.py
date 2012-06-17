@@ -25,6 +25,8 @@ from quilt.utils import Process
 
 class Patch(object):
 
+    """ Wrapper arround the patch util """
+
     def __init__(self, cwd, patch_file, strip=1, backup=False, prefix=None):
         cmd = ["patch"]
         cmd.append("-p" + str(strip))
