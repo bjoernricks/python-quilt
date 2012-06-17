@@ -56,7 +56,7 @@ class PatchSeries(object):
         if self.exists():
             with open(self.series_file, "r") as f:
                 for line in f:
-                    line = line[:-1]
+                    line = line.rstrip("\r\n")
                     self._patches.append(line)
 
     def save(self):
