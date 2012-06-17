@@ -52,7 +52,9 @@ class Push(Command):
             refresh.touch()
 
             if not force:
-                RollbackPatch(self.cwd, prefix)
+                patch = RollbackPatch(self.cwd, prefix)
+                patch.rollback()
+                patch.delete_backup()
                 raise QuiltError("Patch %s does not apply" % patch_name)
 
         self.db.add_patch(patch_name)
