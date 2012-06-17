@@ -157,5 +157,19 @@ class File(object):
             link = link.filename
         os.link(self.filename, link)
 
+    def copy(self, dest):
+        """ Copy file to destination """
+        if isinstance(dest, File):
+            dest = dest.filename
+        elif isinstance(dest, Directory):
+            dest = dest.dirname
+
+        shutil.copy2(self.filename, dest)
+
+    def is_empty(self):
+        """ Returns True if the size of the file is 0 """
+        st = os.stat(self.filename)
+        return st.st_size == 0
+
     def __str__(self):
         return self.filename
