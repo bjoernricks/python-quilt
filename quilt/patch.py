@@ -20,8 +20,9 @@
 # 02110-1301 USA
 
 import os
+import os.path
 
-from quilt.utils import Process
+from quilt.utils import Process, Directory, File
 
 class Patch(object):
 
@@ -41,3 +42,24 @@ class Patch(object):
         cmd.append(patch_file)
 
         Process(cmd).run(cwd=cwd)
+
+
+class RollbackPatch(object):
+
+    def __init__(self, cwd, backup_dir):
+        self.cwd = Directory(cwd)
+        self.backup_dir = Directory(backup_dir)
+        (dirs, files) = self.backup_dir.content()
+
+        for dir in dirs:
+            newdir = self.cwd + dir
+            if not newdir.exists():
+                newdir.create()
+
+        for file in files:
+            file = File(file)
+            backup_file = self.backup_dir + file
+            rollback_file = self.cwd + file
+            if rollback_file.exists():
+                rollback_file.delete()
+            backup_file.link(rollback_file)
