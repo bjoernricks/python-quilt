@@ -73,8 +73,61 @@ class Process(object):
             raise SubprocessError(self.cmd, ret)
 
 
-class File(object):
+class Directory(object):
+    """Handle directories on filesystems """
 
+    def __init__(self, dirname):
+        self.dirname = dirname
+
+    def exists(self):
+        """ Returns True if the directoy exists """
+        return os.path.exists(self.dirname)
+
+    def create(self):
+        """ Creates the directory and all its parent directories """
+        os.makedirs(self.dirname)
+
+    def _content(self, dirname):
+        files = []
+        dirs = []
+        contents = os.listdir(dirname)
+        for content in contents:
+            path = os.path.join(dirname, content)
+            name = path.split(os.sep, 1)[1]
+            if os.path.isdir(path):
+                (newdirs, newfiles) = self._content(path)
+                dirs.append(name)
+                files.extend(newfiles)
+                dirs.extend(newdirs)
+            else:
+                files.append(name)
+        return (dirs, files)
+
+    def files(self):
+        """ Returns all files in this directory and its subdirectories"""
+        (dirs, files) = self._content(self.dirname)
+        return files
+
+    def content(self):
+        """ Returns all directories and files in this directory and its
+            subdirectories """
+        return self._content(self.dirname)
+
+    def __add__(self, other):
+        if isinstance(other, Directory):
+            return Directory(os.path.join(self.dirname, other.dirname))
+        elif isinstance(other, basestring):
+            return Directory(os.path.join(self.dirname, other))
+        elif isinstance(other, File):
+            return File(os.path.join(self.dirname, other.filename))
+        else:
+            raise NotImplementedError()
+
+    def __str__(self):
+        return self.dirname
+
+
+class File(object):
 
     def __init__(self, filename):
         self.filename = filename
@@ -92,3 +145,12 @@ class File(object):
     def touch(self):
         """ 'Touch' a file. Creates an empty file. """
         open(self.filename, "w").close()
+
+    def link(self, link):
+        """ Create hard link as link to this file """
+        if isinstance(link, File):
+            link = link.filename
+        os.link(self.filename, link)
+
+    def __str__(self):
+        return self.filename
