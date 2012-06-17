@@ -24,8 +24,8 @@ import os.path
 from quilt.command import Command
 from quilt.db import Db, Series
 from quilt.error import NoPatchesInSeries
-from quilt.patch import Patch
-from quilt.utils import SubprocessError, Touch
+from quilt.patch import Patch, RollbackPatch
+from quilt.utils import SubprocessError, File
 
 class Push(Command):
 
@@ -36,25 +36,29 @@ class Push(Command):
         self.db = Db(quilt_pc)
         self.series = Series(quilt_patches)
 
-    def _apply_patch(self, patch_name):
+    def _apply_patch(self, patch_name, force=False):
         prefix = os.path.join(self.quilt_pc, patch_name)
         patch_file = os.path.join(self.quilt_patches, patch_name)
-        refresh = prefix + "~refresh"
+        refresh = File(prefix + "~refresh")
 
-        if os.path.exists(refresh):
+        if refresh.exits():
             raise QuiltException("Patch %s needs to be refreshed" % \
                                   patch_name)
 
         try:
             Patch(self.cwd, patch_file, backup=True, prefix=prefix)
+            refresh.delete_if_exists()
         except SubprocessError, e:
-            Touch(refresh)
-            raise QuiltError("Patch %s does not apply" % patch_name)
+            refresh.touch()
+
+            if not force:
+                RollbackPatch(self.cwd, prefix)
+                raise QuiltError("Patch %s does not apply" % patch_name)
 
         self.db.add_patch(patch_name)
 
         if os.path.exists(prefix):
-            Touch(os.path.join(prefix, ".timestamp"))
+            File(os.path.join(prefix, ".timestamp")).touch()
         else:
             os.makedirs(prefix)
 
