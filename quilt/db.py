@@ -45,7 +45,7 @@ class PatchSeries(object):
 
     def _check_patch(self, patch_name):
         if not self.is_patch(patch_name):
-            raise InvalidPatchError("Patch %r is not known.")
+            raise InvalidPatchError("Patch %r is not known." % patch_name)
 
     def exists(self):
         """ Returns True if series file exists """
