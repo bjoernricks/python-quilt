@@ -41,7 +41,7 @@ class Push(Command):
         patch_file = os.path.join(self.quilt_patches, patch_name)
         refresh = File(prefix + "~refresh")
 
-        if refresh.exits():
+        if refresh.exists():
             raise QuiltException("Patch %s needs to be refreshed" % \
                                   patch_name)
 
