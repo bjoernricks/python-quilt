@@ -1,0 +1,63 @@
+python-quilt
+============
+
+python-quilt is a python_ implementation of the well-known tool quilt_
+to manage a series of patches.
+
+It's intended to be used within a python application or framework but
+also provides a console client interface called pquilt.
+
+python-quilt only requires patch_ for creating and applying diffs.
+
+Source code of python-quilt can be found at https://github.com/bjoernricks/python-quilt
+
+Supported quilt commands
+------------------------
+Currently the following quilt commands have been implemented already
+*(but might still miss some features)*.
+
+- applied
+- pop
+- push
+- top
+- series
+
+Currently unsupported commands
+------------------------------
+- add
+- delete
+- diff
+- edit
+- files
+- header
+- import
+- new
+- next
+- previous
+- refresh
+- rename
+- revert
+- unapplied
+
+Unlikely to be supported
+------------------------
+The following quilt commands are unlikely to be implemented either
+because they they don't make much sense in a python package or nobody
+has stepped up to implement its feature.
+
+- annotate
+- fold
+- fork
+- graph
+- grep
+- mail
+- patches
+- setup
+- shell
+- snapshot
+- upgrade
+
+
+.. _python: http://www.python.org/
+.. _quilt: http://savannah.nongnu.org/projects/quilt
+.. _patch: http://savannah.gnu.org/projects/patch/
