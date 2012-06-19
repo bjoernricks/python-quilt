@@ -28,6 +28,7 @@ import quilt.cli.push
 import quilt.cli.top
 import quilt.cli.series
 import quilt.cli.pop
+import quilt.cli.patchimport
 
 from quilt.error import QuiltError
 
@@ -53,6 +54,8 @@ def main():
             quilt.cli.top.parse(args)
         elif cmd == "series":
             quilt.cli.series.parse(args)
+        elif cmd == "import":
+            quilt.cli.patchimport.parse(args)
         else:
             print "command %s not known." % cmd
             usage()
