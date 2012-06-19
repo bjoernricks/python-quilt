@@ -57,6 +57,15 @@ class PatchSeries(object):
             with open(self.series_file, "r") as f:
                 for line in f:
                     line = line.rstrip("\r\n")
+
+                    if line.startswith("#"):
+                        continue
+
+                    if "#" in line:
+                        line = line[:line.index("#")]
+
+                    line = line.strip()
+
                     self._patches.append(line)
 
     def save(self):
