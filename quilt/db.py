@@ -106,10 +106,10 @@ class PatchSeries(object):
     def patches_after(self, patch_name):
         """ Returns a list of patches after patch name from the patches list """
         self._check_patch(patch_name)
-        index = self._patches.index(patch_name)
-        if index + 1 >= len(self._patches):
+        index = self._patches.index(patch_name) + 1
+        if index >= len(self._patches):
             return []
-        return self._patches[index+1:]
+        return self._patches[index:]
 
     def patch_after(self, patch_name):
         """ Returns the patch followed by patch name from the patches list """
