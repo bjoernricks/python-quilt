@@ -22,6 +22,7 @@ Currently the following quilt commands have been implemented already
 - push
 - top
 - series
+- unapplied
 
 Currently unsupported commands
 ------------------------------
@@ -37,7 +38,6 @@ Currently unsupported commands
 - refresh
 - rename
 - revert
-- unapplied
 
 Unlikely to be supported
 ------------------------
