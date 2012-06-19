@@ -31,6 +31,7 @@ class Import(Command):
     def __init__(self, cwd, quilt_pc, quilt_patches):
         super(Import, self).__init__(cwd)
         self.quilt_pc = Directory(quilt_pc)
+        self.quilt_patches = Directory(quilt_patches)
         self.db = Db(quilt_pc)
         self.series = Series(quilt_patches)
 
@@ -48,11 +49,11 @@ class Import(Command):
         if not new_name:
             dir_name = os.path.dirname(new_name)
             name = os.path.basename(new_name)
-            dest_dir = self.quilt_pc + Directory(dir_name)
+            dest_dir = self.quilt_patches + Directory(dir_name)
             dest_dir.create()
         else:
             name = os.path.basename(patch_name)
-            dest_dir = self.quilt_pc
+            dest_dir = self.quilt_patches
 
         patch_file = File(patch_name)
         dest_file = dest_dir + File(name)
@@ -62,12 +63,13 @@ class Import(Command):
     def import_patches(self, patches):
         """ Import several patches into the patch queue """
 
-        dest_dir = self.quilt_pc
+        dest_dir = self.quilt_patches
 
         for patch in patches:
             patch_name = os.path.basename(patch)
-            patch_file = File(patch_name)
+            patch_file = File(patch)
             dest_file = dest_dir + File(patch_name)
             patch_file.copy(dest_file)
+            patch_names.append(patch_name)
 
         self.series.add_patches(patches)
