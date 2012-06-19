@@ -41,6 +41,7 @@ class Import(Command):
             self.series.insert_patches(patches)
         else:
             self.series.add_patches(patches, top)
+        self.series.save()
 
     def import_patch(self, patch_name, new_name=None):
         """ Import patch into the patch queue
