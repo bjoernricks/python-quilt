@@ -66,6 +66,9 @@ class PatchSeries(object):
 
                     line = line.strip()
 
+                    if not line:
+                        continue
+
                     self._patches.append(line)
 
     def save(self):
