@@ -65,6 +65,7 @@ class Import(Command):
         """ Import several patches into the patch queue """
 
         dest_dir = self.quilt_patches
+        patch_names = []
 
         for patch in patches:
             patch_name = os.path.basename(patch)
