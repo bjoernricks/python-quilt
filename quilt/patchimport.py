@@ -46,7 +46,7 @@ class Import(Command):
         """ Import patch into the patch queue
         The patch is inserted after the current top applied patch
         """
-        if not new_name:
+        if new_name:
             dir_name = os.path.dirname(new_name)
             name = os.path.basename(new_name)
             dest_dir = self.quilt_patches + Directory(dir_name)
