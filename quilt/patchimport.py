@@ -59,7 +59,7 @@ class Import(Command):
         patch_file = File(patch_name)
         dest_file = dest_dir + File(name)
         patch_file.copy(dest_file)
-        self.series.add_patches([name])
+        self._import_patches([name])
 
     def import_patches(self, patches):
         """ Import several patches into the patch queue """
@@ -73,4 +73,4 @@ class Import(Command):
             patch_file.copy(dest_file)
             patch_names.append(patch_name)
 
-        self.series.add_patches(patches)
+        self._import_patches(patch_names)
