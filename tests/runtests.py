@@ -43,12 +43,16 @@ def main():
     parser.set_defaults(verbosity=1)
     parser.add_option("-v", "--verbose", action="store_const", const=2,
                       dest="verbosity")
-    opts, rest = parser.parse_args()
+    opts, args = parser.parse_args()
 
-    if rest:
-        names = rest
+    if args:
+        names = args
     else:
         names = find_test_modules(test_dir)
+    if not names:
+        print "No tests available"
+        sys.exit(1)
+
     suite = unittest.defaultTestLoader.loadTestsFromNames(names)
     runner = unittest.TextTestRunner(verbosity=opts.verbosity)
     result = runner.run(suite)
