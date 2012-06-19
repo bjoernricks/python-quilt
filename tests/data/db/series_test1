@@ -1,0 +1,10 @@
+# this is a comment
+firstpatch
+secondpatch # with comment
+
+     # comment with whitespace
+     thirdpatch   
+patchwith.patch
+patchwith.diff
+patchwith param1 param2
+lastpatch
