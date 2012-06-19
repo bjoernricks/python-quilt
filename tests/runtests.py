@@ -21,6 +21,7 @@
 # 02110-1301 USA
 
 import os
+import glob
 import sys
 import unittest
 import optparse
@@ -28,21 +29,12 @@ import optparse
 test_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(test_dir, os.pardir))
 
-def find_test_modules(dirname, package = None):
-    if package:
-        prefix = package + "."
-    else:
-        prefix = ""
-
-    suffix = ".py"
+def find_test_modules(dirname):
     names = []
-    files = os.listdir(dirname)
-    for dir in files:
-        if os.path.isdir(dir):
-            dirname = dir.replace(test_dir + "/", "")
-            names.extend([dirname + "." + prefix + name[:-len(suffix)] + ".suite"
-                for name in os.listdir(dir)
-                    if name.startswith("test_") and name.endswith(suffix)])
+    files = glob.glob(os.path.join(test_dir, "test_*.py"))
+    for test_file in files:
+            name = os.path.basename(test_file)[:-3]
+            names.append(name + ".suite")
     return names
 
 
