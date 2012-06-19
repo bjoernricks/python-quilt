@@ -86,7 +86,8 @@ class Directory(object):
 
     def create(self):
         """ Creates the directory and all its parent directories """
-        os.makedirs(self.dirname)
+        if not os.path.exists(self.dirname):
+            os.makedirs(self.dirname)
 
     def _content(self, startdir, dirname=None):
         files = []
