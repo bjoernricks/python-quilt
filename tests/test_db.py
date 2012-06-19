@@ -60,7 +60,9 @@ class DbTest(unittest.TestCase):
                           "patchwith param1 param2", "lastpatch"],
                           db.patches())
 
+    def test_add_remove(self):
         # test add, remove patches
+        db = PatchSeries(os.path.join(test_dir, "data", "db"), "series_test1")
         db.add_patch("newlastpatch")
         self.assertTrue(db.is_patch("newlastpatch"))
         self.assertEqual(["firstpatch", "secondpatch", "thirdpatch",
@@ -70,7 +72,6 @@ class DbTest(unittest.TestCase):
                           db.patches())
         self.assertEqual("newlastpatch", db.top_patch())
 
-        # test add, remove patches
         db.remove_patch("newlastpatch")
         self.assertFalse(db.is_patch("newlastpatch"))
         self.assertEqual(["firstpatch", "secondpatch", "thirdpatch",
@@ -78,6 +79,40 @@ class DbTest(unittest.TestCase):
                           "patchwith param1 param2", "lastpatch"],
                           db.patches())
         self.assertEqual("lastpatch", db.top_patch())
+
+        db.add_patches(["newlast1", "newlast2"])
+        self.assertTrue(db.is_patch("newlast1"))
+        self.assertTrue(db.is_patch("newlast2"))
+        self.assertEqual(["firstpatch", "secondpatch", "thirdpatch",
+                          "patchwith.patch", "patchwith.diff",
+                          "patchwith param1 param2", "lastpatch",
+                          "newlast1", "newlast2"],
+                          db.patches())
+        self.assertEqual("newlast2", db.top_patch())
+
+        db = PatchSeries(os.path.join(test_dir, "data", "db"), "series_test1")
+        db.add_patches(["newlast1", "newlast2"], "firstpatch")
+        self.assertTrue(db.is_patch("newlast1"))
+        self.assertTrue(db.is_patch("newlast2"))
+        self.assertEqual(["firstpatch", "newlast1", "newlast2",
+                          "secondpatch", "thirdpatch",
+                          "patchwith.patch", "patchwith.diff",
+                          "patchwith param1 param2", "lastpatch"],
+                          db.patches())
+        self.assertEqual("lastpatch", db.top_patch())
+
+        db = PatchSeries(os.path.join(test_dir, "data", "db"), "series_test1")
+        db.insert_patches(["newfirst1", "newfirst2"])
+        self.assertTrue(db.is_patch("newfirst1"))
+        self.assertTrue(db.is_patch("newfirst2"))
+        self.assertEqual(["newfirst1", "newfirst2", "firstpatch",
+                          "secondpatch", "thirdpatch",
+                          "patchwith.patch", "patchwith.diff",
+                          "patchwith param1 param2", "lastpatch"],
+                          db.patches())
+        self.assertEqual("newfirst1", db.first_patch())
+        self.assertEqual("lastpatch", db.top_patch())
+
 
 
 def suite():
