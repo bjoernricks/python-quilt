@@ -88,6 +88,18 @@ class PatchSeries(object):
         _patches.extend(self._patches)
         self._patches = _patches
 
+    def add_patches(self, patches, after=None):
+        """ Add a list of patches to the patches list """
+        if after is None:
+            self._patches.extend(patches)
+        else:
+            self._check_patch(after)
+            _patches = self.patches_before(after)
+            _patches.append(after)
+            _patches.extend(patches)
+            _patches.extend(self.patches_after(after))
+            self._patches = _patches
+
     def remove_patch(self, patch_name):
         """ Remove a patch from the patches list """
         self._patches.remove(patch_name)
