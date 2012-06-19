@@ -30,22 +30,40 @@ class Import(Command):
         self.db = Db(quilt_pc)
         self.series = Series(quilt_patches)
 
-    def import_patch(self, patch_name, reverse=False, strip=None, new_name=None):
+    def _import_patches(self, patches, reverse=False, strip=None):
+        top = self.db.top_patch()
+        if top is None:
+            self.series.insert_patches(patches)
+        else:
+            self.series.add_patches(patches, top)
+
+    def import_patch(self, patch_name, new_name=None):
         """ Import patch into the patch queue
         The patch is inserted after the current top applied patch
         """
         if not new_name:
-            new_name = patch_name
+            dir_name = os.path.dirname(new_name)
+            name = os.path.basename(new_name)
             dest_dir = self.quilt_pc + Directory(dir_name)
             dest_dir.create()
         else:
+            name = os.path.basename(patch_name)
             dest_dir = self.quilt_pc
 
-        dir_name = os.path.dirname(new_name)
-        patch = File(os.path.basename(patch_name))
-        dest_file = dest_dir + patch
+        patch_file = File(patch_name)
+        dest_file = dest_dir + File(name)
+        patch_file.copy(dest_file)
+        self.series.add_patches([name])
 
-        patch_file = File(patch_name).copy(dest_file)
-
-    def import_patches(self, patches, reverse=False, strip=None):
+    def import_patches(self, patches):
         """ Import several patches into the patch queue """
+
+        dest_dir = self.quilt_pc
+
+        for patch in patches:
+            patch_name = os.path.basename(patch)
+            patch_file = File(patch_name)
+            dest_file = dest_dir + File(patch_name)
+            patch_file.copy(dest_file)
+
+        self.series.add_patches(patches)
