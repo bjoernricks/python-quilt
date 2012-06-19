@@ -37,7 +37,6 @@ class InvalidPatchError(QuiltError):
 class PatchSeries(object):
 
     def __init__(self, dirname, filename):
-        self._patches = []
         self.dirname = dirname
         self.filename = filename
         self.series_file = os.path.join(dirname, filename)
@@ -53,6 +52,7 @@ class PatchSeries(object):
 
     def read(self):
         """ Reads all patches from the series file """
+        self._patches = []
         if self.exists():
             with open(self.series_file, "r") as f:
                 for line in f:
