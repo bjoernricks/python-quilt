@@ -35,6 +35,15 @@ from quilt.error import QuiltError
 def usage():
     print "%s command [--help] ..." % (os.path.basename(sys.argv[0]))
 
+commands = {
+            "push" : quilt.cli.push.parse,
+            "pop" : quilt.cli.pop.parse,
+            "applied" : quilt.cli.applied.parse,
+            "top" : quilt.cli.top.parse,
+            "series" : quilt.cli.series.parse,
+            "import" : quilt.cli.patchimport.parse,
+        }
+
 def main():
     if not len(sys.argv) > 1:
         usage()
@@ -44,22 +53,12 @@ def main():
     args = sys.argv[2:]
 
     try:
-        if cmd == "push":
-            quilt.cli.push.parse(args)
-        elif cmd == "pop":
-            quilt.cli.pop.parse(args)
-        elif cmd == "applied":
-            quilt.cli.applied.parse(args)
-        elif cmd == "top":
-            quilt.cli.top.parse(args)
-        elif cmd == "series":
-            quilt.cli.series.parse(args)
-        elif cmd == "import":
-            quilt.cli.patchimport.parse(args)
-        else:
+        parse = commands.get(cmd)
+        if not parse:
             print "command %s not known." % cmd
             usage()
             sys.exit(2)
+        parse(args)
     except QuiltError, e:
         print e
         sys.exit(1)
