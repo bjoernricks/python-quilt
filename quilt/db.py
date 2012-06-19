@@ -81,6 +81,13 @@ class PatchSeries(object):
         """ Add a patch to the patches list """
         self._patches.append(patch_name)
 
+    def insert_patches(self, patches):
+        """ Insert list of patches at the front of the curent patches list """
+        _patches = []
+        _patches.extend(patches)
+        _patches.extend(self._patches)
+        self._patches = _patches
+
     def remove_patch(self, patch_name):
         """ Remove a patch from the patches list """
         self._patches.remove(patch_name)
