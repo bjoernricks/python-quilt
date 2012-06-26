@@ -19,6 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
 # 02110-1301 USA
 
+import getopt
 import os.path
 
 from quilt.error import QuiltError
@@ -32,6 +33,41 @@ class DBError(QuiltError):
 
 class InvalidPatchError(QuiltError):
     pass
+
+class PatchLine(object):
+
+    def __init__(self, line):
+        line = line.rstrip("\r\n")
+        self.comment = ""
+        self.patch = None
+
+        if line.rstrip().startswith("#"):
+            self.comment = line
+            return
+
+        if "#" in line:
+            patchline, self.comment = line.split("#", 1)
+        else:
+            patchline = line
+
+        patch_name, patch_args = patchline.strip().split(" ", 1)
+
+        try:
+            opts, args = getopt.getopt(patch_args, "p:R", ["strip=", "reverse"])
+        except getopt.GetoptError, err:
+            pass
+        for o, a in opts:
+            if o in ["p", "strip"]:
+                strip = a
+            elif o in ["R", "reverse"]:
+                reverse = a
+
+
+    def get_patch(self):
+        pass
+
+    def get_comment(self):
+        return self.comment
 
 
 class PatchSeries(object):
