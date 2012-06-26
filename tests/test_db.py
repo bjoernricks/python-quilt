@@ -17,20 +17,21 @@
 
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301 USA
 
 import os.path
 import sys
-import unittest
 import shutil
+
+from helpers import QuiltTest
 
 test_dir = os.path.dirname(__file__)
 sys.path.append(os.path.join(test_dir, os.pardir))
 
 from quilt.db import PatchSeries
 
-class DbTest(unittest.TestCase):
+class DbTest(QuiltTest):
 
     def test_series(self):
         db = PatchSeries(os.path.join(test_dir, "data", "db"), "series_test1")
@@ -116,10 +117,7 @@ class DbTest(unittest.TestCase):
 
 
 def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(DbTest))
-    return suite
+    return DbTest.suite()
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner()
-    runner.run(suite())
+    DbTest.run_tests()
