@@ -28,9 +28,14 @@ class Patch(object):
 
     """ Wrapper arround the patch util """
 
-    def __init__(self, cwd, patch_file, strip=1, backup=False, prefix=None):
+    def __init__(self, patch_file, strip=1, reverse=False):
+        self.patch_file = patch_file
+        self.strip = strip
+        self.reverse = reverse
+
+    def run(self, cwd, backup=False, prefix=None, reverse=False):
         cmd = ["patch"]
-        cmd.append("-p" + str(strip))
+        cmd.append("-p" + str(self.strip))
         if backup:
             cmd.append("--backup")
         if prefix:
@@ -38,9 +43,11 @@ class Patch(object):
             if not prefix[-1] == os.sep:
                 prefix += os.sep
             cmd.append(prefix)
+        reverse = reverse != self.reverse
+        if reverse:
+            cmd.append("-R")
         cmd.append("-i")
-        cmd.append(patch_file)
-
+        cmd.append(self.patch_file)
         Process(cmd).run(cwd=cwd)
 
 
