@@ -23,6 +23,7 @@ import getopt
 import os.path
 
 from quilt.error import QuiltError
+from quilt.patch import Patch
 
 
 DB_VERSION = 2
@@ -36,13 +37,29 @@ class InvalidPatchError(QuiltError):
 
 class PatchLine(object):
 
-    def __init__(self, line):
-        line = line.rstrip("\r\n")
+    """ Represents a line in a series files """
+
+    def __init__(self, patch):
+        """ patch can be either a string or a Patch object """
         self.comment = ""
         self.patch = None
+        self.line = ""
+        if isinstance(patch, basestring):
+            self._parse_line(patch)
+        elif isinstance(patch, Patch):
+            self.patch = patch
+            self.line = patch.get_name()
+
+    def _parse_line(self, line):
+        line = line.rstrip("\r\n")
+        self.line = line
 
         if line.rstrip().startswith("#"):
             self.comment = line
+            return
+
+        if not line.strip():
+            # empty line
             return
 
         if "#" in line:
@@ -50,24 +67,41 @@ class PatchLine(object):
         else:
             patchline = line
 
-        patch_name, patch_args = patchline.strip().split(" ", 1)
+        patchline = patchline.strip()
+        if not patchline:
+            return
 
-        try:
-            opts, args = getopt.getopt(patch_args, "p:R", ["strip=", "reverse"])
-        except getopt.GetoptError, err:
-            pass
-        for o, a in opts:
-            if o in ["p", "strip"]:
-                strip = a
-            elif o in ["R", "reverse"]:
-                reverse = a
+        patch_args = None
+        strip = 1
+        reverse = False
 
+        if " " in patchline:
+            patch_name, patch_args = patchline.split(" ", 1)
+        else:
+            patch_name = patchline
+
+        if patch_args:
+            try:
+                opts, args = getopt.getopt(patch_args, "p:R", ["strip=",
+                                                               "reverse"])
+                for o, a in opts:
+                    if o in ["p", "strip"]:
+                        strip = a
+                    elif o in ["R", "reverse"]:
+                        reverse = True
+            except getopt.GetoptError, err:
+                print >> sys.stderr, err
+
+        self.patch = Patch(patch_name, strip, reverse)
 
     def get_patch(self):
-        pass
+        return self.patch
 
     def get_comment(self):
         return self.comment
+
+    def __str__(self):
+        return self.line
 
 
 class PatchSeries(object):
