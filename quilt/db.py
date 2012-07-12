@@ -210,6 +210,18 @@ class PatchSeries(object):
             return []
         return self.patchlines[index:]
 
+    def _patchlines_before(self, patch):
+        self._check_patch(patch)
+        patchline = self.patch2line[patch]
+        index = self.patchlines.index(patchline)
+        return self.patchlines[:index]
+
+    def _patchlines_until(self, patch):
+        self._check_patch(patch)
+        patchline = self.patch2line[patch]
+        index = self.patchlines.index(patchline) + 1
+        return self.patchlines[:index]
+
     def patches_after(self, patch):
         """ Returns a list of patches after patch from the patches list """
         return [line.get_patch() for line in self._patchlines_after(patch) if \
@@ -224,16 +236,19 @@ class PatchSeries(object):
             return None
         return self.patchlines[index+1].get_patch()
 
-    def _patchlines_before(self, patch):
-        self._check_patch(patch)
-        patchline = self.patch2line[patch]
-        index = self.patchlines.index(patchline)
-        return self.patchlines[:index]
-
     def patches_before(self, patch):
         """ Returns a list of patches before patch from the patches list """
         return [line.get_patch() for line in self._patchlines_before(patch) \
                 if line.get_patch()]
+
+    def patches_until(self, patch):
+        """ Returns a list of patches before patch from the patches list
+        including the provided patch
+        """
+        return [line.get_patch() for line in self._patchlines_until(patch) if \
+                line.get_patch()]
+
+
 
     def is_patch(self, patch):
         """ Returns True if patch is in the list of patches. Otherwise it
