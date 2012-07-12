@@ -64,8 +64,8 @@ class Patch(object):
         return self.get_name()
 
     def __repr__(self):
-        return "<Patch(%s, %s, %s) id=%0x>" % (self.get_name(), self.strip,
-                                               self.reverse, id(self))
+        return "<Patch(%r, %r, %r) id=0x%0x>" % (self.get_name(), self.strip,
+                                                 self.reverse, id(self))
 
 
 class RollbackPatch(object):
