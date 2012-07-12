@@ -33,9 +33,6 @@ import quilt.cli.unapplied
 
 from quilt.error import QuiltError
 
-def usage():
-    print "%s command [--help] ..." % (os.path.basename(sys.argv[0]))
-
 commands = {
             "push" : quilt.cli.push.parse,
             "pop" : quilt.cli.pop.parse,
@@ -45,6 +42,12 @@ commands = {
             "series" : quilt.cli.series.parse,
             "import" : quilt.cli.patchimport.parse,
         }
+
+def usage():
+    print "%s command [--help] ..." % (os.path.basename(sys.argv[0]))
+    print "Available commands:"
+    for cmd in sorted(commands.keys()):
+        print "\t", cmd
 
 def main():
     if not len(sys.argv) > 1:
