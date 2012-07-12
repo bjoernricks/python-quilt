@@ -36,7 +36,8 @@ class Push(Command):
         self.db = Db(quilt_pc)
         self.series = Series(quilt_patches)
 
-    def _apply_patch(self, patch_name, force=False):
+    def _apply_patch(self, patch, force=False):
+        patch_name = patch.get_name()
         prefix = os.path.join(self.quilt_pc, patch_name)
         patch_file = os.path.join(self.quilt_patches, patch_name)
         refresh = File(prefix + "~refresh")
@@ -57,7 +58,7 @@ class Push(Command):
                 patch.delete_backup()
                 raise QuiltError("Patch %s does not apply" % patch_name)
 
-        self.db.add_patch(patch_name)
+        self.db.add_patch(patch)
 
         if os.path.exists(prefix):
             File(os.path.join(prefix, ".timestamp")).touch()
@@ -84,7 +85,7 @@ class Push(Command):
             raise AllPatchesApplied(self.series)
 
         for patch in patches:
-            self._apply_patch(patch)
+            self._apply_patch(Patch(patch))
 
         self.db.save()
 
