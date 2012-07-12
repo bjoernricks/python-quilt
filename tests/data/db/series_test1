@@ -6,5 +6,5 @@ secondpatch # with comment
      thirdpatch   
 patchwith.patch
 patchwith.diff
-patchwith param1 param2
+patchwith -R -p1
 lastpatch
