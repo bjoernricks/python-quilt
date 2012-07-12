@@ -24,7 +24,7 @@ import os.path
 from quilt.command import Command
 from quilt.db import Db, Series
 from quilt.error import NoAppliedPatch
-from quilt.patch import RollbackPatch
+from quilt.patch import RollbackPatch, Patch
 from quilt.utils import Directory, File
 
 class Pop(Command):
@@ -38,16 +38,17 @@ class Pop(Command):
         if not self.db.exists() or not self.db.patches():
             raise NoAppliedPatch(self.db)
 
-    def _unapply_patch(self, patch_name):
+    def _unapply_patch(self, patch):
+        patch_name = patch.get_name()
         prefix = os.path.join(self.quilt_pc, patch_name)
         timestamp = File(os.path.join(prefix, ".timestamp"))
         timestamp.delete_if_exists()
 
-        patch = RollbackPatch(self.cwd, prefix)
-        patch.rollback()
-        patch.delete_backup()
+        unpatch = RollbackPatch(self.cwd, prefix)
+        unpatch.rollback()
+        unpatch.delete_backup()
 
-        self.db.remove_patch(patch_name)
+        self.db.remove_patch(patch)
 
         refresh = File(prefix + "~refresh")
         refresh.delete_if_exists()
@@ -57,7 +58,7 @@ class Pop(Command):
             patch """
         self._check()
 
-        patches = self.db.patches_after(patch_name)
+        patches = self.db.patches_after(Patch(patch_name))
         for patch in reverse(patches):
             self._unapply_patch(patch)
 
