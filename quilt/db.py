@@ -134,6 +134,7 @@ class PatchSeries(object):
         with open(self.series_file, "w") as f:
             for patchline in self.patchlines:
                 f.write(str(patchline))
+                f.write("\n")
 
     def add_patch(self, patch):
         """ Add a patch to the patches list """
