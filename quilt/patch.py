@@ -28,8 +28,8 @@ class Patch(object):
 
     """ Wrapper arround the patch util """
 
-    def __init__(self, patch_file, strip=1, reverse=False):
-        self.patch_file = patch_file
+    def __init__(self, patch_name, strip=1, reverse=False):
+        self.patch_name = patch_name
         self.strip = strip
         self.reverse = reverse
 
