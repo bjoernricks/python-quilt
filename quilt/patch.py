@@ -50,6 +50,23 @@ class Patch(object):
         cmd.append(self.patch_file)
         Process(cmd).run(cwd=cwd)
 
+    def get_name(self):
+        return self.patch_name
+
+    def __eq__(self, other):
+        return (isinstance(other, Patch) and self.get_name() == \
+                other.get_name())
+
+    def __hash__(self):
+        return hash(self.get_name())
+
+    def __str__(self):
+        return self.get_name()
+
+    def __repr__(self):
+        return "<Patch(%s, %s, %s) id=%0x>" % (self.get_name(), self.strip,
+                                               self.reverse, id(self))
+
 
 class RollbackPatch(object):
 
