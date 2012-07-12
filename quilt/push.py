@@ -23,7 +23,7 @@ import os.path
 
 from quilt.command import Command
 from quilt.db import Db, Series
-from quilt.error import NoPatchesInSeries, AllPatchesApplied
+from quilt.error import NoPatchesInSeries, AllPatchesApplied, QuiltError
 from quilt.patch import Patch, RollbackPatch
 from quilt.utils import SubprocessError, File
 
@@ -42,7 +42,7 @@ class Push(Command):
         refresh = File(prefix + "~refresh")
 
         if refresh.exists():
-            raise QuiltException("Patch %s needs to be refreshed" % \
+            raise QuiltError("Patch %s needs to be refreshed" % \
                                   patch_name)
 
         try:
