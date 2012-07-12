@@ -23,6 +23,7 @@ import os.path
 
 from quilt.command import Command
 from quilt.db import Db, Series
+from quilt.patch import Patch
 from quilt.utils import Directory, File
 
 class Import(Command):
@@ -37,10 +38,10 @@ class Import(Command):
 
     def _import_patches(self, patches, reverse=False, strip=None):
         top = self.db.top_patch()
-        if top is None:
-            self.series.insert_patches(patches)
-        else:
-            self.series.add_patches(patches, top)
+        patchlist = []
+        for patch in patches:
+            patchlist.append(Patch(patch, reverse=reverse, strip=strip))
+        self.series.add_patches(patchlist, top)
         self.series.save()
 
     def import_patch(self, patch_name, new_name=None):
