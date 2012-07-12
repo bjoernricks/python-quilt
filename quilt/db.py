@@ -112,9 +112,9 @@ class PatchSeries(object):
         self.series_file = os.path.join(dirname, filename)
         self.read()
 
-    def _check_patch(self, patch_name):
-        if not self.is_patch(patch_name):
-            raise InvalidPatchError("Patch %r is not known." % patch_name)
+    def _check_patch(self, patch):
+        if not self.is_patch(patch):
+            raise InvalidPatchError("Patch %r is not known." % patch)
 
     def exists(self):
         """ Returns True if series file exists """
@@ -122,103 +122,124 @@ class PatchSeries(object):
 
     def read(self):
         """ Reads all patches from the series file """
-        self._patches = []
+        self.patchlines = []
+        self.patch2line = dict()
         if self.exists():
             with open(self.series_file, "r") as f:
                 for line in f:
-                    line = line.rstrip("\r\n")
-
-                    if line.startswith("#"):
-                        continue
-
-                    if "#" in line:
-                        line = line[:line.index("#")]
-
-                    line = line.strip()
-
-                    if not line:
-                        continue
-
-                    self._patches.append(line)
+                    self.add_patch(line)
 
     def save(self):
         """ Saves current patches list in the series file """
         with open(self.series_file, "w") as f:
-            for patch in self._patches:
-                f.write(patch)
+            for patchline in self.patchlines:
+                f.write(patchline)
 
-    def add_patch(self, patch_name):
+    def add_patch(self, patch):
         """ Add a patch to the patches list """
-        self._patches.append(patch_name)
+        patchline = PatchLine(patch)
+        patch = patchline.get_patch()
+        if patch:
+            self.patch2line[patch] = patchline
+        self.patchlines.append(patchline)
+
+    def _add_patches(self, patches):
+        for patch_name in patches:
+            self.add_patch(patch_name)
 
     def insert_patches(self, patches):
         """ Insert list of patches at the front of the curent patches list """
-        _patches = []
-        _patches.extend(patches)
-        _patches.extend(self._patches)
-        self._patches = _patches
+        patchlines = []
+        for patch_name in patches:
+            patchline = PatchLine(patch_name)
+            patch = patchline.get_patch()
+            if patch:
+                self.patch2line[patch] = patchline
+            patchlines.append(patchline)
+        patchlines.extend(self.patchlines)
+        self.patchlines = patchlines
 
     def add_patches(self, patches, after=None):
         """ Add a list of patches to the patches list """
         if after is None:
-            self._patches.extend(patches)
+            self._add_patches(patches)
         else:
             self._check_patch(after)
-            _patches = self.patches_before(after)
-            _patches.append(after)
-            _patches.extend(patches)
-            _patches.extend(self.patches_after(after))
-            self._patches = _patches
+            patchlines = self._patchlines_before(after)
+            patchlines.append(self.patch2line[after])
+            for patch in patches:
+                patchline = PatchLine(patch)
+                patchlines.append(patchline)
+                self.patch2line[patchline.get_patch()] = patchline
+            patchlines.extend(self._patchlines_after(after))
+            self.patchlines = patchlines
 
-    def remove_patch(self, patch_name):
+    def remove_patch(self, patch):
         """ Remove a patch from the patches list """
-        self._patches.remove(patch_name)
+        self._check_patch(patch)
+        patchline = self.patch2line[patch]
+        del self.patch2line[patch]
+        self.patchlines.remove(patchline)
 
     def top_patch(self):
         """ Returns the last patch from the patches list or None if the list
             is empty """
-        if not self._patches:
+        patches = self.patches()
+        if not patches:
             return None
-        return self._patches[-1]
+        return patches[-1]
 
     def first_patch(self):
         """ Returns the first patch from the patches list or None if the list
             is empty """
-        if not self._patches:
+        patches = self.patches()
+        if not patches:
             return None
-        return self._patches[0]
+        return patches[0]
 
     def patches(self):
         """ Returns the list of patches """
-        return self._patches
+        return [line.get_patch() for line in self.patchlines if \
+                line.get_patch()]
 
-    def patches_after(self, patch_name):
-        """ Returns a list of patches after patch name from the patches list """
-        self._check_patch(patch_name)
-        index = self._patches.index(patch_name) + 1
-        if index >= len(self._patches):
+    def _patchlines_after(self, patch):
+        self._check_patch(patch)
+        patchline = self.patch2line[patch]
+        index = self.patchlines.index(patchline) + 1
+        if index >= len(self.patchlines):
             return []
-        return self._patches[index:]
+        return self.patchlines[index:]
 
-    def patch_after(self, patch_name):
+    def patches_after(self, patch):
+        """ Returns a list of patches after patch from the patches list """
+        return [line.get_patch() for line in self._patchlines_after(patch) if \
+                line.get_patch()]
+
+    def patch_after(self, patch):
         """ Returns the patch followed by patch name from the patches list """
-        self._check_patch(patch_name)
-        index = self._patches.index(patch_name)
-        if index + 1 >= len(self._patches):
+        self._check_patch(patch)
+        patchline = self.patch2line[patch]
+        index = self.patchlines.index(patchline)
+        if index + 1 >= len(self.patchlines):
             return None
-        return self._patches[index+1]
+        return self.patchlines[index+1].get_patch()
 
-    def patches_before(self, patch_name):
-        """ Returns a list of patches before patch name from the patches list """
-        self._check_patch(patch_name)
-        index = self._patches.index(patch_name)
-        return self._patches[:index]
+    def _patchlines_before(self, patch):
+        self._check_patch(patch)
+        patchline = self.patch2line[patch]
+        index = self.patchlines.index(patchline)
+        return self.patchlines[:index]
 
-    def is_patch(self, patch_name):
-        """ Returns True if patch name is in the list of patches. Otherwise it
+    def patches_before(self, patch):
+        """ Returns a list of patches before patch from the patches list """
+        return [line.get_patch() for line in self._patchlines_before(patch) \
+                if line.get_patch()]
+
+    def is_patch(self, patch):
+        """ Returns True if patch is in the list of patches. Otherwise it
             returns False.
         """
-        return patch_name in self._patches
+        return patch in self.patch2line
 
 
 class Db(PatchSeries):
