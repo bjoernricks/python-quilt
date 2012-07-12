@@ -229,12 +229,10 @@ class PatchSeries(object):
 
     def patch_after(self, patch):
         """ Returns the patch followed by patch name from the patches list """
-        self._check_patch(patch)
-        patchline = self.patch2line[patch]
-        index = self.patchlines.index(patchline)
-        if index + 1 >= len(self.patchlines):
-            return None
-        return self.patchlines[index+1].get_patch()
+        patches = self.patches_after(patch)
+        if patches:
+            return patches[0]
+        return None
 
     def patches_before(self, patch):
         """ Returns a list of patches before patch from the patches list """

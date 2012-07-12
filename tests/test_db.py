@@ -62,6 +62,7 @@ class DbTest(QuiltTest):
                           db.patches_after(thirdpatch))
         self.assertEquals([], db.patches_after(lastpatch))
         self.assertEquals(None, db.patch_after(lastpatch))
+        self.assertEquals(thirdpatch, db.patch_after(secondpatch))
         self.assertEqual(patch_list(["firstpatch", "secondpatch",
                          "thirdpatch"]),
                          db.patches_until(thirdpatch))
