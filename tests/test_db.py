@@ -30,89 +30,107 @@ test_dir = os.path.dirname(__file__)
 sys.path.append(os.path.join(test_dir, os.pardir))
 
 from quilt.db import PatchSeries
+from quilt.db import Patch
+
+def patch_list(patch_names):
+    return [Patch(name) for name in patch_names]
 
 class DbTest(QuiltTest):
 
     def test_series(self):
+        firstpatch = Patch("firstpatch")
+        lastpatch = Patch("lastpatch")
+        secondpatch = Patch("secondpatch")
+        thirdpatch = Patch("thirdpatch")
+
         db = PatchSeries(os.path.join(test_dir, "data", "db"), "series_test1")
 
-        self.assertEqual(["firstpatch", "secondpatch", "thirdpatch", 
+        self.assertEqual(patch_list(["firstpatch", "secondpatch", "thirdpatch",
                           "patchwith.patch", "patchwith.diff",
-                          "patchwith param1 param2", "lastpatch"],
+                          "patchwith", "lastpatch"]),
                           db.patches())
-        self.assertEqual("firstpatch", db.first_patch())
-        self.assertEqual("lastpatch", db.top_patch())
-        self.assertEqual("secondpatch", db.patch_after("firstpatch"))
-        self.assertTrue(db.is_patch("thirdpatch"))
-        self.assertFalse(db.is_patch("notapatch"))
-        self.assertEqual([], db.patches_before("firstpatch"))
-        self.assertEqual(["firstpatch", "secondpatch"],
-                         db.patches_before("thirdpatch"))
-        self.assertEquals(["patchwith.patch", "patchwith.diff",
-                           "patchwith param1 param2", "lastpatch"],
-                          db.patches_after("thirdpatch"))
-        self.assertEquals([], db.patches_after("lastpatch"))
-        self.assertEquals(None, db.patch_after("lastpatch"))
+        self.assertEqual(firstpatch, db.first_patch())
+        self.assertEqual(lastpatch, db.top_patch())
+        self.assertEqual(secondpatch, db.patch_after(firstpatch))
+        self.assertTrue(db.is_patch(thirdpatch))
+        self.assertFalse(db.is_patch(Patch("notapatch")))
+        self.assertEqual([], db.patches_before(firstpatch))
+        self.assertEqual(patch_list(["firstpatch", "secondpatch"]),
+                         db.patches_before(thirdpatch))
+        self.assertEquals(patch_list(["patchwith.patch", "patchwith.diff",
+                           "patchwith", "lastpatch"]),
+                          db.patches_after(thirdpatch))
+        self.assertEquals([], db.patches_after(lastpatch))
+        self.assertEquals(None, db.patch_after(lastpatch))
 
         # test re-reading patches list
         db.read()
-        self.assertEqual(["firstpatch", "secondpatch", "thirdpatch",
+        self.assertEqual(patch_list(["firstpatch", "secondpatch", "thirdpatch",
                           "patchwith.patch", "patchwith.diff",
-                          "patchwith param1 param2", "lastpatch"],
+                          "patchwith", "lastpatch"]),
                           db.patches())
 
     def test_add_remove(self):
         # test add, remove patches
-        db = PatchSeries(os.path.join(test_dir, "data", "db"), "series_test1")
-        db.add_patch("newlastpatch")
-        self.assertTrue(db.is_patch("newlastpatch"))
-        self.assertEqual(["firstpatch", "secondpatch", "thirdpatch",
-                          "patchwith.patch", "patchwith.diff",
-                          "patchwith param1 param2", "lastpatch",
-                          "newlastpatch"],
-                          db.patches())
-        self.assertEqual("newlastpatch", db.top_patch())
 
-        db.remove_patch("newlastpatch")
-        self.assertFalse(db.is_patch("newlastpatch"))
-        self.assertEqual(["firstpatch", "secondpatch", "thirdpatch",
-                          "patchwith.patch", "patchwith.diff",
-                          "patchwith param1 param2", "lastpatch"],
-                          db.patches())
-        self.assertEqual("lastpatch", db.top_patch())
-
-        db.add_patches(["newlast1", "newlast2"])
-        self.assertTrue(db.is_patch("newlast1"))
-        self.assertTrue(db.is_patch("newlast2"))
-        self.assertEqual(["firstpatch", "secondpatch", "thirdpatch",
-                          "patchwith.patch", "patchwith.diff",
-                          "patchwith param1 param2", "lastpatch",
-                          "newlast1", "newlast2"],
-                          db.patches())
-        self.assertEqual("newlast2", db.top_patch())
+        firstpatch = Patch("firstpatch")
+        lastpatch = Patch("lastpatch")
+        newlastpatch = Patch("newlastpatch")
 
         db = PatchSeries(os.path.join(test_dir, "data", "db"), "series_test1")
-        db.add_patches(["newlast1", "newlast2"], "firstpatch")
-        self.assertTrue(db.is_patch("newlast1"))
-        self.assertTrue(db.is_patch("newlast2"))
-        self.assertEqual(["firstpatch", "newlast1", "newlast2",
+        db.add_patch(newlastpatch)
+        self.assertTrue(db.is_patch(newlastpatch))
+        self.assertEqual(patch_list(["firstpatch", "secondpatch", "thirdpatch",
+                          "patchwith.patch", "patchwith.diff",
+                          "patchwith", "lastpatch",
+                          "newlastpatch"]),
+                          db.patches())
+        self.assertEqual(newlastpatch, db.top_patch())
+
+        db.remove_patch(newlastpatch)
+        self.assertFalse(db.is_patch(newlastpatch))
+        self.assertEqual(patch_list(["firstpatch", "secondpatch", "thirdpatch",
+                          "patchwith.patch", "patchwith.diff",
+                          "patchwith", "lastpatch"]),
+                          db.patches())
+        self.assertEqual(lastpatch, db.top_patch())
+
+        newlast1 = Patch("newlast1")
+        newlast2 = Patch("newlast2")
+        db.add_patches(([newlast1, newlast2]))
+        self.assertTrue(db.is_patch(newlast1))
+        self.assertTrue(db.is_patch(newlast2))
+        self.assertEqual(patch_list(["firstpatch", "secondpatch", "thirdpatch",
+                          "patchwith.patch", "patchwith.diff",
+                          "patchwith", "lastpatch",
+                          "newlast1", "newlast2"]),
+                          db.patches())
+        self.assertEqual(newlast2, db.top_patch())
+
+        db = PatchSeries(os.path.join(test_dir, "data", "db"), "series_test1")
+        db.add_patches([newlast1, newlast2], firstpatch)
+        self.assertTrue(db.is_patch(newlast1))
+        self.assertTrue(db.is_patch(newlast2))
+        self.assertEqual(patch_list(["firstpatch", "newlast1", "newlast2",
                           "secondpatch", "thirdpatch",
                           "patchwith.patch", "patchwith.diff",
-                          "patchwith param1 param2", "lastpatch"],
+                          "patchwith", "lastpatch"]),
                           db.patches())
-        self.assertEqual("lastpatch", db.top_patch())
+        self.assertEqual(lastpatch, db.top_patch())
 
         db = PatchSeries(os.path.join(test_dir, "data", "db"), "series_test1")
-        db.insert_patches(["newfirst1", "newfirst2"])
-        self.assertTrue(db.is_patch("newfirst1"))
-        self.assertTrue(db.is_patch("newfirst2"))
-        self.assertEqual(["newfirst1", "newfirst2", "firstpatch",
+        newfirst1 = Patch("newfirst1")
+        newfirst2 = Patch("newfirst2")
+        db.insert_patches([newfirst1, newfirst2])
+        self.assertTrue(db.is_patch(newfirst1))
+        self.assertTrue(db.is_patch(newfirst2))
+        self.assertEqual(patch_list(["newfirst1", "newfirst2", "firstpatch",
                           "secondpatch", "thirdpatch",
                           "patchwith.patch", "patchwith.diff",
-                          "patchwith param1 param2", "lastpatch"],
+                          "patchwith", "lastpatch"]),
                           db.patches())
-        self.assertEqual("newfirst1", db.first_patch())
-        self.assertEqual("lastpatch", db.top_patch())
+        self.assertEqual(newfirst1, db.first_patch())
+        self.assertEqual(lastpatch, db.top_patch())
 
 
 
