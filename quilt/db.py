@@ -247,8 +247,6 @@ class PatchSeries(object):
         return [line.get_patch() for line in self._patchlines_until(patch) if \
                 line.get_patch()]
 
-
-
     def is_patch(self, patch):
         """ Returns True if patch is in the list of patches. Otherwise it
             returns False.
