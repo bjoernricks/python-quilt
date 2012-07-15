@@ -30,6 +30,7 @@ import quilt.cli.series
 import quilt.cli.pop
 import quilt.cli.patchimport
 import quilt.cli.unapplied
+import quilt.cli.new
 
 from quilt.error import QuiltError
 
@@ -41,6 +42,7 @@ commands = {
             "top" : quilt.cli.top.parse,
             "series" : quilt.cli.series.parse,
             "import" : quilt.cli.patchimport.parse,
+            "new" : quilt.cli.new.parse,
         }
 
 def usage():

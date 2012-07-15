@@ -18,6 +18,7 @@ Currently the following quilt commands have been implemented already
 
 - applied
 - import
+- new
 - pop
 - push
 - top
@@ -32,7 +33,6 @@ Currently unsupported commands
 - edit
 - files
 - header
-- new
 - next
 - previous
 - refresh
