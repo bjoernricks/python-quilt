@@ -24,7 +24,7 @@ import os.path
 
 from optparse import OptionParser
 
-from quilt.db import Series
+from quilt.db import Series, Db
 from quilt.patch import Patch
 from quilt.utils import File
 
@@ -51,6 +51,8 @@ def parse(args):
     patchfile = File(os.path.join(patches, newpatch))
     patchfile.touch()
 
-    series.add_patch(Patch(newpatch))
+    db = Db(".pc")
+    top = db.top_patch()
+    series.add_patches([Patch(newpatch)], top)
     series.save()
 
