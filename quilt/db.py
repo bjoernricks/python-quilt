@@ -163,7 +163,7 @@ class PatchSeries(object):
     def add_patches(self, patches, after=None):
         """ Add a list of patches to the patches list """
         if after is None:
-            self._add_patches(patches)
+            self.insert_patches(patches)
         else:
             self._check_patch(after)
             patchlines = self._patchlines_before(after)

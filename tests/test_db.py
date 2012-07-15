@@ -99,18 +99,20 @@ class DbTest(QuiltTest):
                           db.patches())
         self.assertEqual(lastpatch, db.top_patch())
 
+        newfirst1 = Patch("newfirst1")
+        newfirst2 = Patch("newfirst2")
+        db.add_patches([newfirst1, newfirst2])
+        self.assertTrue(db.is_patch(newfirst1))
+        self.assertTrue(db.is_patch(newfirst2))
+        self.assertEqual(patch_list(["newfirst1", "newfirst2",
+                          "firstpatch", "secondpatch", "thirdpatch",
+                          "patchwith.patch", "patchwith.diff",
+                          "patchwith", "lastpatch"]),
+                          db.patches())
+        self.assertEqual(lastpatch, db.top_patch())
+
         newlast1 = Patch("newlast1")
         newlast2 = Patch("newlast2")
-        db.add_patches(([newlast1, newlast2]))
-        self.assertTrue(db.is_patch(newlast1))
-        self.assertTrue(db.is_patch(newlast2))
-        self.assertEqual(patch_list(["firstpatch", "secondpatch", "thirdpatch",
-                          "patchwith.patch", "patchwith.diff",
-                          "patchwith", "lastpatch",
-                          "newlast1", "newlast2"]),
-                          db.patches())
-        self.assertEqual(newlast2, db.top_patch())
-
         db = PatchSeries(os.path.join(test_dir, "data", "db"), "series_test1")
         db.add_patches([newlast1, newlast2], firstpatch)
         self.assertTrue(db.is_patch(newlast1))
