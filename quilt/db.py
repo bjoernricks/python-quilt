@@ -240,6 +240,12 @@ class PatchSeries(object):
         return [line.get_patch() for line in self._patchlines_before(patch) \
                 if line.get_patch()]
 
+    def patch_before(self, patch):
+        patches = self.patches_before(patch)
+        if patches:
+            return patches[0]
+        return None
+
     def patches_until(self, patch):
         """ Returns a list of patches before patch from the patches list
         including the provided patch
