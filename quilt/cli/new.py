@@ -26,7 +26,7 @@ from optparse import OptionParser
 
 from quilt.db import Series, Db
 from quilt.patch import Patch
-from quilt.utils import File
+from quilt.utils import File, Directory
 
 def parse(args):
     usage = "%prog new patchname"
@@ -48,7 +48,9 @@ def parse(args):
         print >> sys.stderr, "Patch %s already exists" % newpatch
         sys.exit(2)
 
-    patchfile = File(os.path.join(patches, newpatch))
+    patch_dir = Directory(patches)
+    patch_dir.create()
+    patchfile = patch_dir + File(newpatch)
     patchfile.touch()
 
     db = Db(".pc")
