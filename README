@@ -16,9 +16,11 @@ Supported quilt commands
 Currently the following quilt commands have been implemented already
 *(but might still miss some features)*.
 
+- add
 - applied
 - import
 - new
+- next
 - pop
 - push
 - top
@@ -27,13 +29,11 @@ Currently the following quilt commands have been implemented already
 
 Currently unsupported commands
 ------------------------------
-- add
 - delete
 - diff
 - edit
 - files
 - header
-- next
 - previous
 - refresh
 - rename
