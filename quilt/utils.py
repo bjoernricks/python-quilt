@@ -179,5 +179,24 @@ class File(object):
         st = os.stat(self.filename)
         return st.st_size == 0
 
-    def __str__(self):
+    def is_link(self):
+        return os.path.islink(self.filename)
+
+    def get_name(self):
+        """ Returns the name of this file """
         return self.filename
+
+    def get_basename(self):
+        """ Return the base name of the file e.g. file if filename is /foo/file.
+        If filename doesn't contain a directory get_name and get_basename
+        are equal.
+        """
+        return os.path.basename(self.filename)
+
+    def get_directory(self):
+        """ Returns the directory where the file is placed in
+        """
+        return Directory(os.path.dirname(self.filename))
+
+    def __str__(self):
+        return self.get_name()
