@@ -54,6 +54,14 @@ def parse(args):
     patchfile.touch()
 
     db = Db(".pc")
+    if not db.exists():
+        db.create()
+
+    pc_dir = Directory(os.path.join(".pc", newpatch))
+    # be sure that the directory is clear
+    pc_dir.delete()
+    pc_dir.create()
+
     top = db.top_patch()
     series.add_patches([Patch(newpatch)], top)
     series.save()
