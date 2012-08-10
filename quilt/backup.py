@@ -29,12 +29,11 @@ class Backup(object):
     backup-files script.
     """
 
-    def __init__(self, filename):
-        self.filename = filename
-
-    def backup(self, dest_dir):
+    def backup_file(self, filename, dest_dir, copy_empty=False):
         file = File(self.filename)
         if file.exists():
+            if not copy_empty and file.is_empty():
+                return
             if not isinstance(dest_dir, Directory):
                 dest_dir = Directory(dest_dir)
             dest_dir.create()

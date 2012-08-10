@@ -64,8 +64,7 @@ class Add(Command):
     def _backup_file(self, filename, patch):
         """ Creates a backup of filename """
         dest_dir = self.quilt_pc + patch.get_name()
-        backup = Backup(filename)
-        backup.backup(dest_dir)
+        backup.backup_file(filename, dest_dir)
 
     def add_file(self, filename, patch_name=None):
         """ Add file to the patch with patch_name.
