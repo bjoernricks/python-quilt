@@ -58,7 +58,7 @@ class Add(Command):
             file = self.quilt_pc + File(os.path.join(patch.get_name(),
                                                      filename))
             if file.exists():
-                raise QuiltError("File %s is already modified in patch %s" % \
+                raise QuiltError("File %s is already modified by patch %s" % \
                                  (filename, patch.get_name()))
 
     def _backup_file(self, filename, patch):
