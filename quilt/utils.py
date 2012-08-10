@@ -123,8 +123,9 @@ class Directory(object):
         return self._content(self.dirname)
 
     def delete(self):
-        """ Delete the directory and its content """
-        shutil.rmtree(self.dirname)
+        """ Delete the directory and its content if directory exists"""
+        if self.exists():
+            shutil.rmtree(self.dirname)
 
     def __add__(self, other):
         if isinstance(other, Directory):
