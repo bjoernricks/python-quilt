@@ -67,7 +67,7 @@ class Add(Command):
         backup = Backup(filename)
         backup.backup(dest_dir)
 
-    def add_file(self, filename, patch_name):
+    def add_file(self, filename, patch_name=None):
         """ Add file to the patch with patch_name.
         If patch_name is None or empty the topmost patch will be used.
         """
@@ -96,6 +96,6 @@ class Add(Command):
             # be sure user can write original file
             os.chmod(filename, stat.S_IWUSR | stat.S_IRUSR)
 
-    def add_files(self, filenames, patch_name):
+    def add_files(self, filenames, patch_name=None):
         for filename in filenames:
             self.add_file(filename, patch_name)
