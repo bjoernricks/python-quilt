@@ -22,6 +22,7 @@ Currently the following quilt commands have been implemented already
 - new
 - next
 - pop
+- previous
 - push
 - top
 - series
@@ -34,7 +35,6 @@ Currently unsupported commands
 - edit
 - files
 - header
-- previous
 - refresh
 - rename
 - revert
