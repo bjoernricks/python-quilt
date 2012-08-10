@@ -229,7 +229,9 @@ class PatchSeries(object):
                 line.get_patch()]
 
     def patch_after(self, patch):
-        """ Returns the patch followed by patch name from the patches list """
+        """ Returns the patch followed by patch from the patches list or None if
+        no patch after can be found.
+        """
         patches = self.patches_after(patch)
         if patches:
             return patches[0]
@@ -241,6 +243,9 @@ class PatchSeries(object):
                 if line.get_patch()]
 
     def patch_before(self, patch):
+        """ Returns the patch before patch from the patches list or None if no
+        patch before can be found.
+        """
         patches = self.patches_before(patch)
         if patches:
             return patches[0]
