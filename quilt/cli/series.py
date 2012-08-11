@@ -18,21 +18,16 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
 # 02110-1301 USA
-import os
 
-from optparse import OptionParser
-
+from quilt.cli.meta import Command
 from quilt.db import Series
 
-def parse(args):
+class SeriesCommand(Command):
+
     usage = "%prog series"
-    parser = OptionParser(usage=usage)
-    (options, pargs) = parser.parse_args(args)
+    name = "series"
 
-    patches = os.environ.get("QUILT_PATCHES")
-    if not patches:
-        patches = "patches"
-
-    series = Series(patches)
-    for patch in series.patches():
-        print patch
+    def run(self, option, args):
+        series = Series(self.get_patches_dir())
+        for patch in series.patches():
+            print patch
