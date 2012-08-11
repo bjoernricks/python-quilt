@@ -28,41 +28,37 @@ from quilt.db import Series, Db
 from quilt.patch import Patch
 from quilt.utils import File, Directory
 
-def parse(args):
+from quilt.cli.meta import Command
+
+class NewCommand(Command):
+
+    min_args = 1
     usage = "%prog new patchname"
-    parser = OptionParser(usage=usage)
-    (options, pargs) = parser.parse_args(args)
+    name = "new"
 
-    if len(args) != 1:
-        parser.print_usage()
-        sys.exit(1)
+    def run(self, options, args):
+        newpatch = args[0]
 
-    newpatch = args[0]
+        series = Series(self.get_patches_dir())
+        if series.is_patch(Patch(newpatch)):
+            print >> sys.stderr, "Patch %s already exists" % newpatch
+            sys.exit(1)
 
-    patches = os.environ.get("QUILT_PATCHES")
-    if not patches:
-        patches = "patches"
+        patch_dir = Directory(self.get_patches_dir())
+        patch_dir.create()
+        patchfile = patch_dir + File(newpatch)
+        patchfile.touch()
 
-    series = Series(patches)
-    if series.is_patch(newpatch):
-        print >> sys.stderr, "Patch %s already exists" % newpatch
-        sys.exit(2)
+        db = Db(self.get_pc_dir())
+        if not db.exists():
+            db.create()
 
-    patch_dir = Directory(patches)
-    patch_dir.create()
-    patchfile = patch_dir + File(newpatch)
-    patchfile.touch()
+        pc_dir = Directory(os.path.join(self.get_pc_dir(), newpatch))
+        if pc_dir.exists():
+            # be sure that the directory is clear
+            pc_dir.delete()
+        pc_dir.create()
 
-    db = Db(".pc")
-    if not db.exists():
-        db.create()
-
-    pc_dir = Directory(os.path.join(".pc", newpatch))
-    # be sure that the directory is clear
-    pc_dir.delete()
-    pc_dir.create()
-
-    top = db.top_patch()
-    series.add_patches([Patch(newpatch)], top)
-    series.save()
-
+        top = db.top_patch()
+        series.add_patches([Patch(newpatch)], top)
+        series.save()
