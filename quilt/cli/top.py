@@ -19,13 +19,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
 # 02110-1301 USA
 
-from optparse import OptionParser
+from quilt.cli.meta import Command
+from quilt.db import Db
 
-from quilt.top import Top
+class TopCommand(Command):
 
-def parse(args):
     usage = "%prog top"
-    parser = OptionParser(usage=usage)
-    top = Top(".pc")
-    print top.top_patch()
+    name = "top"
+
+    def run(self, options, args):
+        db = Db(self.get_pc_dir())
+        top = db.top_patch()
+        if not top:
+            self.exit_error("No patches applied.")
+
+        print top
 
