@@ -19,15 +19,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
 # 02110-1301 USA
 
-from optparse import OptionParser
+from quilt.cli.meta import Command
 
-from quilt.db import Db
+class AppliedCommand(Command):
 
-def parse(args):
+    name = "applied"
     usage = "%prog applied"
-    parser = OptionParser(usage=usage)
-    (options, pargs) = parser.parse_args(args)
 
-    db = Db(".pc")
-    for patch in db.applied_patches():
-        print patch
+    def runt(self, options, args):
+        db = Db(self.get_pc_dir())
+        for patch in db.applied_patches():
+            print patch
