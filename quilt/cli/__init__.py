@@ -19,5 +19,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
 # 02110-1301 USA
 
-__version_info__ = ("0", "1", "dev1")
-__version__ = '.'.join(__version_info__)
+from quilt.cli.meta import find_command, list_commands
+
+import quilt.cli.new

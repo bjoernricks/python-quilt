@@ -56,7 +56,7 @@ class Command(object):
     name = None
 
     def parse(self, args):
-        parser = OptionParser(usage=usage)
+        parser = OptionParser(usage=self.usage)
 
         self.add_args(parser)
 
