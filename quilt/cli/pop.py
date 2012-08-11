@@ -16,29 +16,29 @@
 
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301 USA
 
 import os
 
-from optparse import OptionParser
-
+from quilt.cli.meta import Command
 from quilt.pop import Pop
 
-def parse(args):
+class PopCommand(Command):
+
     usage = "%prog pop [-a] [patch]"
-    parser = OptionParser(usage=usage)
-    parser.add_option("-a", "--all", help="remove all applied patches",
-                      action="store_true")
+    name = "pop"
 
-    (options, pargs) = parser.parse_args(args)
+    def add_args(self, parser):
+        parser.add_option("-a", "--all", help="remove all applied patches",
+                        action="store_true")
 
-    pop = Pop(os.getcwd(), ".pc")
+    def run(self, options, args):
+        pop = Pop(os.getcwd(), self.get_pc_dir())
 
-    if options.all:
-        pop.unapply_all()
-    elif not args:
-        pop.unapply_top_patch()
-    else:
-        pop.unapply_patch(args[0])
-
+        if options.all:
+            pop.unapply_all()
+        elif not args:
+            pop.unapply_top_patch()
+        else:
+            pop.unapply_patch(args[0])
