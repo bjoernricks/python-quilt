@@ -20,27 +20,20 @@
 # 02110-1301 USA
 
 import os
-import sys
-
-from optparse import OptionParser
 
 from quilt.add import Add
+from quilt.cli.meta import Command
 
-def parse(args):
+class AddCommand(Command):
+
     usage = "%prog add [-p patch] file1 [...]"
-    parser = OptionParser(usage=usage)
-    parser.add_option("-p", help="patch to add files to",
-                      metavar="PATCH", dest="patch")
+    name = "add"
+    min_args = 1
 
-    (options, pargs) = parser.parse_args(args)
+    def add_args(self, parser):
+        parser.add_option("-p", help="patch to add files to",
+                        metavar="PATCH", dest="patch")
 
-    if len(args) != 1:
-        parser.print_usage()
-        sys.exit(1)
-
-    patches = os.environ.get("QUILT_PATCHES")
-    if not patches:
-        patches = "patches"
-
-    add = Add(os.getcwd(), ".pc", patches)
-    add.add_files(pargs, options.patch)
+    def run(self, options, args):
+        add = Add(os.getcwd(), self.get_pc_dir(), self.get_patches_dir())
+        add.add_files(args, options.patch)
