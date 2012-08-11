@@ -20,44 +20,42 @@
 # 02110-1301 USA
 
 import sys
-import os.path
 
-from optparse import OptionParser
-
-from quilt.db import Series, Db
+from quilt.cli.meta import Command
+from quilt.db import Db, Series
 from quilt.patch import Patch
 from quilt.utils import File, Directory
 
-def parse(args):
+class NextCommand(Command):
+
     usage = "%prog next [patchname]"
-    parser = OptionParser(usage=usage)
-    (options, pargs) = parser.parse_args(args)
+    name = "next"
 
-    patches = os.environ.get("QUILT_PATCHES")
-    if not patches:
-        patches = "patches"
+    def run(self, options, args):
+        patch_name = args[0]
 
-    series = Series(patches)
-    db = Db(".pc")
+        series = Series(self.get_patches_dir())
+        if not series.exists():
+            self.exit_error("No series file found.")
 
-    top = None
-    if len(pargs) == 1:
-        top = Patch(args[0])
-    else:
-        if db.exists():
-            top = db.top_patch()
+        db = Db(self.get_pc_dir())
 
-    if not top:
-        top = series.first_patch()
+        top = None
+        if len(args) == 1:
+            top = Patch(patch_name)
+        else:
+            if db.exists():
+                top = db.top_patch()
+
         if not top:
-            print >> sys.stderr, "No patch in series."
-            sys.exit(1)
+            top = series.first_patch()
+            if not top:
+                self.exit_error("No patch in series.")
+            else:
+                print top
         else:
-            print top
-    else:
-        patch = series.patch_after(top)
-        if not patch:
-            print >> sys.stderr, "No patch available after %s." % patch
-            sys.exit(1)
-        else:
-            print patch
+            patch = series.patch_after(top)
+            if not patch:
+                self.exit_error("No patch available after %s." % patch_name)
+            else:
+                print patch
