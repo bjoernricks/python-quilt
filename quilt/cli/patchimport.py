@@ -21,32 +21,26 @@
 
 import os
 
-from optparse import OptionParser
-
-from quilt.error import QuiltError
+from quilt.cli.meta import Command
 from quilt.patchimport import Import
 
-def parse(args):
-    usage = "%prog import"
-    parser = OptionParser(usage=usage)
-    parser.add_option("-P", metavar="NAME", help="Import patch as NAME. This " \
-                      "option can only be used when importing a single patch.",
-                      dest="patchname")
-    (options, pargs) = parser.parse_args(args)
+class PatchImportCommand(Command):
+    name = "import"
+    usage = "%prog import [-P patch] patchfile [...]"
+    min_args = 1
 
-    patches = os.environ.get("QUILT_PATCHES")
-    if not patches:
-        patches = "patches"
+    def add_args(self, parser):
+        parser.add_option("-P", metavar="NAME", help="Import patch as NAME. " \
+                          "This option can only be used when importing a " \
+                          "single patch.", dest="patchname")
 
-    if len(pargs) < 1:
-        raise QuiltError("No patch is specified to be imported")
+    def run(self, options, args):
+        importp = Import(os.getcwd(), self.get_pc_dir(), self.get_patches_dir())
 
-    importp = Import(os.getcwd(), ".pc", patches)
-
-    if options.patchname:
-        if len(pargs) > 1:
-            raise QuiltError("It's only possible to rename a patch if one "
-                             "patch will be imported.")
-        importp.import_patch(pargs[0], options.patchname)
-    else:
-        importp.import_patches(pargs)
+        if options.patchname:
+            if len(args) > 1:
+                self.exit_error("It's only possible to rename a patch if one "
+                                "patch will be imported.")
+            importp.import_patch(args[0], options.patchname)
+        else:
+            importp.import_patches(args)
