@@ -21,27 +21,24 @@
 
 import os
 
-from optparse import OptionParser
-
+from quilt.cli.meta import Command
 from quilt.push import Push
 
-def parse(args):
+class PushCommand(Command):
+
     usage = "%prog push [-a] [patch]"
-    parser = OptionParser(usage=usage)
-    parser.add_option("-a", "--all", help="apply all patches in series",
-                      action="store_true")
+    name = "push"
 
-    (options, pargs) = parser.parse_args(args)
+    def add_args(self, parser):
+        parser.add_option("-a", "--all", help="apply all patches in series",
+                        action="store_true")
 
-    patches = os.environ.get("QUILT_PATCHES")
-    if not patches:
-        patches = "patches"
+    def run(self, options, args):
+        push = Push(os.getcwd(), self.get_pc_dir(), self.get_patches_dir())
 
-    push = Push(os.getcwd(), ".pc", patches)
-
-    if options.all:
-        push.apply_all()
-    elif not args:
-        push.apply_next_patch()
-    else:
-        push.apply_patch(args[0])
+        if options.all:
+            push.apply_all()
+        elif not args:
+            push.apply_next_patch()
+        else:
+            push.apply_patch(args[0])
