@@ -85,3 +85,7 @@ class Command(object):
         if not pc_dir:
             pc_dir = self.pc_dir
         return pc_dir
+
+    def exit_error(self, error, value=1):
+        print >> sys.stderr, error
+        sys.exit(value)
