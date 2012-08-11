@@ -62,7 +62,7 @@ class Command(object):
 
         (options, pargs) = parser.parse_args(args)
 
-        if len(args) != self.min_args:
+        if len(pargs) < self.min_args:
             parser.print_usage()
             sys.exit(1)
 
