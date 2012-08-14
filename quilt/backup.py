@@ -53,7 +53,7 @@ class Backup(object):
             # create new file in dest_dir
             dest_dir = dest_dir + file.get_directory()
             dest_dir.create()
-            dest_file = dest_dir + file
+            dest_file = dest_dir + File(file.get_basename())
             dest_file.touch()
             return dest_file
         else:
