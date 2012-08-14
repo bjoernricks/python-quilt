@@ -223,6 +223,9 @@ class File(object):
         """
         return Directory(os.path.dirname(self.filename))
 
+    def get_mode(self):
+        return os.stat(self.filename).st_mode
+
     def __str__(self):
         return self.get_name()
 
