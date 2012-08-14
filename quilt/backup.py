@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301 USA
 
-from quilt.utils import Directory, File
+from quilt.utils import Directory, File, DirectoryParam, FileParam
 
 class Backup(object):
 
@@ -29,13 +29,12 @@ class Backup(object):
     backup-files script.
     """
 
-    def backup_file(self, filename, dest_dir, copy_empty=False):
-        file = File(self.filename)
+    @DirectoryParam(["dest_dir"])
+    @FileParam(["file"])
+    def backup_file(self, file, dest_dir, copy_empty=False):
         if file.exists():
             if not copy_empty and file.is_empty():
                 return
-            if not isinstance(dest_dir, Directory):
-                dest_dir = Directory(dest_dir)
             dest_dir.create()
             file.copy(dest_dir)
         else:
