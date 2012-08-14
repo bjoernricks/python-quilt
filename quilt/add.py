@@ -100,8 +100,7 @@ class Add(Command):
 
         if file.exists():
             # be sure user can write original file
-            mode = os.stat(pathname).st_mode
-            os.chmod(filename, mode | stat.S_IWUSR | stat.S_IRUSR)
+            os.chmod(filename, file.get_mode() | stat.S_IWUSR | stat.S_IRUSR)
 
     def add_files(self, filenames, patch_name=None, ignore=False):
         for filename in filenames:
