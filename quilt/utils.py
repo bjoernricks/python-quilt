@@ -87,7 +87,9 @@ class Directory(object):
         return os.path.exists(self.dirname)
 
     def create(self):
-        """ Creates the directory and all its parent directories """
+        """ Creates the directory and all its parent directories if it does not
+        exist yet
+        """
         if not os.path.exists(self.dirname):
             os.makedirs(self.dirname)
 
