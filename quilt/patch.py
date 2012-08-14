@@ -34,19 +34,37 @@ class Patch(object):
         self.reverse = reverse
 
     def run(self, cwd, patch_dir=None, backup=False, prefix=None,
-            reverse=False):
+            reverse=False, work_dir=None, force=False,
+            no_backup_if_mismatch=False, remove_empty_files=False):
         cmd = ["patch"]
         cmd.append("-p" + str(self.strip))
+
         if backup:
             cmd.append("--backup")
+
         if prefix:
             cmd.append("--prefix")
             if not prefix[-1] == os.sep:
                 prefix += os.sep
             cmd.append(prefix)
+
         reverse = reverse != self.reverse
         if reverse:
             cmd.append("-R")
+
+        if work_dir:
+            cmd.append("-d")
+            cmd.append(work_dir)
+
+        if no_backup_if_mismatch:
+            cmd.append("--no-backup-if-mismatch")
+
+        if remove_empty_files:
+            cmd.append("--remove-empty-files")
+
+        if force:
+            cmd.append("-f")
+
         cmd.append("-i")
         if patch_dir:
             name = os.path.join(patch_dir, self.get_name())
