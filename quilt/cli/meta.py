@@ -24,6 +24,8 @@ import sys
 
 from optparse import OptionParser
 
+from quilt.db import Db, Series
+
 command_map = dict()
 
 def register_command(name, command_class):
@@ -85,6 +87,12 @@ class Command(object):
         if not pc_dir:
             pc_dir = self.pc_dir
         return pc_dir
+
+    def get_db(self):
+        return Db(self.get_pc_dir())
+
+    def get_series(self):
+        return Series(self.get_patches_dir())
 
     def exit_error(self, error, value=1):
         print >> sys.stderr, error
