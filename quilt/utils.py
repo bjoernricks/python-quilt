@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
 # 02110-1301 USA
 
-"""Helper functions to run subprocesses in various ways"""
+""" Utility classes used by serveral quilt modules """
 
 import os
 import os.path
