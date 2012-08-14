@@ -79,8 +79,13 @@ class Process(object):
 class Directory(object):
     """Handle directories on filesystems """
 
-    def __init__(self, dirname):
+    def __init__(self, dirname=None):
+        """ Creates a new Directory instance
+        If dirname is not set Directory points to the current working dir.
+        """
         self.dirname = dirname
+        if not self.dirname:
+            self.dirname = os.getcwd()
 
     def exists(self):
         """ Returns True if the directoy exists """
