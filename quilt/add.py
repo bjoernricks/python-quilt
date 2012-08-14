@@ -38,11 +38,11 @@ class Add(Command):
         self.db = Db(quilt_pc)
         self.series = Series(quilt_patches)
 
-    def _file_in_patch(self, filename, patch):
+    def _file_in_patch(self, filename, patch, ignore):
         """ Checks if a backup file of the filename in the current patch
         exists """
         file = self.quilt_pc + File(os.path.join(patch.get_name(), filename))
-        if file.exists():
+        if file.exists() and not ignore:
             raise QuiltError("File %s is already in patch %s" % (filename,
                              patch.get_name()))
 
@@ -68,9 +68,11 @@ class Add(Command):
         backup = Backup()
         backup.backup_file(filename, dest_dir, copy_empty=True)
 
-    def add_file(self, filename, patch_name=None):
+    def add_file(self, filename, patch_name=None, ignore=False):
         """ Add file to the patch with patch_name.
         If patch_name is None or empty the topmost patch will be used.
+        Adding an already added patch will raise an QuiltError if ignore is
+        False.
         """
         file = File(filename)
 
@@ -79,13 +81,9 @@ class Add(Command):
         else:
             patch = self.db.top_patch()
             if not patch:
-                patch = self.series.first_patch()
+                raise QuiltError("No patches applied.")
 
-        if not patch:
-            raise QuiltError("No patch available. Please create a new patch " \
-                             "before adding a file")
-
-        self._file_in_patch(filename, patch)
+        self._file_in_patch(filename, patch, ignore)
         self._file_in_next_patches(filename, patch)
 
         if file.is_link():
@@ -95,8 +93,9 @@ class Add(Command):
 
         if file.exists():
             # be sure user can write original file
-            os.chmod(filename, stat.S_IWUSR | stat.S_IRUSR)
+            mode = os.stat(pathname).st_mode
+            os.chmod(filename, mode | stat.S_IWUSR | stat.S_IRUSR)
 
-    def add_files(self, filenames, patch_name=None):
+    def add_files(self, filenames, patch_name=None, ignore=False):
         for filename in filenames:
-            self.add_file(filename, patch_name)
+            self.add_file(filename, patch_name, ignore)
