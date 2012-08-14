@@ -20,6 +20,7 @@
 # 02110-1301 USA
 
 import os.path
+import stat
 
 from quilt.backup import Backup
 from quilt.command import Command
@@ -64,6 +65,7 @@ class Add(Command):
     def _backup_file(self, filename, patch):
         """ Creates a backup of filename """
         dest_dir = self.quilt_pc + patch.get_name()
+        backup = Backup()
         backup.backup_file(filename, dest_dir, copy_empty=True)
 
     def add_file(self, filename, patch_name=None):
