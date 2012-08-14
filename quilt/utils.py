@@ -93,7 +93,7 @@ class Directory(object):
         """ Creates the directory and all its parent directories if it does not
         exist yet
         """
-        if not os.path.exists(self.dirname):
+        if self.dirname and not os.path.exists(self.dirname):
             os.makedirs(self.dirname)
 
     def _content(self, startdir, dirname=None):
