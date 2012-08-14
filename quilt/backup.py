@@ -59,3 +59,19 @@ class Backup(object):
         else:
             return None
 
+    @DirectoryParam(["src_dir", "dest_dir"])
+    def backup_files(self, src_dir, dest_dir, filenames, copy_empty=False):
+        for filename in filenames:
+            src_file = src_dir + File(filename)
+
+            if not src_file.exists():
+                continue
+            if src_file.is_empty() and not copy_empty:
+                continue
+            self.backup_file(src_file, dest_dir)
+
+    @DirectoryParam(["src_dir", "dest_dir"])
+    def backup_dir(self, src_dir, dest_dir, copy_empty=False):
+        dirs, files = src_dir.contents()
+        for file in files:
+            self.backup_file(file, dest_dir, copy_empty)
