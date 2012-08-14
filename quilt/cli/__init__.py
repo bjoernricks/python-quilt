@@ -27,6 +27,7 @@ import quilt.cli.new
 import quilt.cli.next
 import quilt.cli.patchimport
 import quilt.cli.pop
+import quilt.cli.previous
 import quilt.cli.push
 import quilt.cli.series
 import quilt.cli.top
