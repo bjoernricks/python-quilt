@@ -42,9 +42,13 @@ class Add(Command):
         """ Checks if a backup file of the filename in the current patch
         exists """
         file = self.quilt_pc + File(os.path.join(patch.get_name(), filename))
-        if file.exists() and not ignore:
-            raise QuiltError("File %s is already in patch %s" % (filename,
-                             patch.get_name()))
+        if file.exists():
+            if ignore:
+                return True
+            else:
+                raise QuiltError("File %s is already in patch %s" % (filename,
+                                 patch.get_name()))
+        return False
 
     def _file_in_next_patches(self, filename, patch):
         """ Checks if a backup file of the filename in the applied patches after
@@ -83,7 +87,10 @@ class Add(Command):
             if not patch:
                 raise QuiltError("No patches applied.")
 
-        self._file_in_patch(filename, patch, ignore)
+        exists = self._file_in_patch(filename, patch, ignore)
+        if exists:
+            return
+
         self._file_in_next_patches(filename, patch)
 
         if file.is_link():
