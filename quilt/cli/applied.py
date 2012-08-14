@@ -26,7 +26,7 @@ class AppliedCommand(Command):
     name = "applied"
     usage = "%prog applied"
 
-    def runt(self, options, args):
-        db = Db(self.get_pc_dir())
+    def run(self, options, args):
+        db = self.get_db()
         for patch in db.applied_patches():
             print patch
