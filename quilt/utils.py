@@ -27,6 +27,7 @@ import os
 import os.path
 import shutil
 import subprocess
+import tempfile
 
 from quilt.error import QuiltError
 
@@ -148,6 +149,23 @@ class Directory(object):
 
     def __str__(self):
         return self.dirname
+
+
+class TmpDirectory(Directory):
+    """ Creates a temporary directory and can be used as a context manager.
+    If used with as a context manager in a with statement the temporary
+    directory is deleted automatically.
+    """
+
+    def __init__(self, suffix=None, prefix=None, dir=None):
+        tmp_dir = tempfile.mkdtemp(suffix, prefix, dir)
+        super(TmpDirectory, self).__init__(tmp_dir)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.delete()
 
 
 class File(object):
