@@ -69,7 +69,7 @@ class Command(object):
         self.run(options, pargs)
 
     def run(self, options, args):
-        pass
+        raise NotImplementedError()
 
     def add_args(self, parser):
         pass
