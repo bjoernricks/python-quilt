@@ -21,6 +21,8 @@
 
 """ Utility classes used by serveral quilt modules """
 
+import functools
+import inspect
 import os
 import os.path
 import shutil
@@ -201,3 +203,71 @@ class File(object):
 
     def __str__(self):
         return self.get_name()
+
+
+class FunctionWrapper(object):
+    """ FunctionWrapper class to encapsulate function that are decorated by
+    a Param class.
+    """
+
+    def __init__(self, func, names, cls):
+        self.func = func
+        self.names = names
+        self.cls = cls
+
+    def _get_varnames(self):
+        if inspect.isfunction(self.func):
+            return inspect.getargspec(self.func)[0]
+        elif isinstance(self.func, FunctionWrapper):
+            return self.func._get_varnames()
+
+    def __call__(self, *args, **kw):
+        newargs = []
+        for name, value in zip(self._get_varnames(), args):
+            if name in self.names and not isinstance(value, self.cls):
+                newargs.append(self.cls(value))
+            else:
+                newargs.append(value)
+        for name in self.names:
+            value = kw.get(name, None)
+            if value and not isinstance(value, self.cls):
+                value = self.cls(value)
+                kw[name] = value
+        return self.func(*newargs, **kw)
+
+    def __get__(self, obj, objtype):
+        """Support instance methods."""
+        return functools.partial(self.__call__, obj)
+
+
+class Param(object):
+    """ Base class for Parameter class decorators
+    """
+
+    cls = None
+
+    def __init__(self, names):
+        self.names = names
+
+    def __call__(self, func):
+        return FunctionWrapper(func, self.names, self.cls)
+
+
+class DirectoryParam(Param):
+    """ Decorator class to change parameters of methods and functions to a
+    Directory class if it's not a Directory yet.
+
+    Usage: @DirectoryParam(["paramname1", "paramname2"])
+    """
+
+    cls = Directory
+
+
+class FileParam(Param):
+    """ Decorator class to change parameters of methods and functions to a
+    File class if it's not a File yet.
+
+    Usage: @FileParam(["paramname1", "paramname2"])
+    """
+
+    cls = File
