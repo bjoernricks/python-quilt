@@ -32,6 +32,17 @@ class Backup(object):
     @DirectoryParam(["dest_dir"])
     @FileParam(["file"])
     def backup_file(self, file, dest_dir, copy_empty=False):
+        """ Backup file in dest_dir Directory.
+        The return value is a File object pointing to the copied file in the
+        destination directory or None if no file is copied.
+
+        If file exists and it is not empty it is copied to dest_dir.
+        If file exists and it is empty the file is copied only if copy_empty is
+        True.
+        If file does not exist and copy_empty is True a new file in dest_dir
+        will be created.
+        In all other cases no file will be copied and None is returned.
+        """
         if file.exists():
             if not copy_empty and file.is_empty():
                 return None
@@ -39,6 +50,7 @@ class Backup(object):
             file.copy(dest_dir)
             return dest_dir + file
         elif copy_empty:
+            # create new file in dest_dir
             dest_dir = dest_dir + file.get_directory()
             dest_dir.create()
             dest_file = dest_dir + file
