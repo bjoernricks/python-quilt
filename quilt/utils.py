@@ -39,6 +39,9 @@ class SubprocessError(QuiltError):
         self.returncode = returncode
         self.output = output
 
+    def get_returncode(self):
+        return self.returncode
+
     def __str__(self):
         retval = "Command %s finished with return code %d" % (self.command,
                      self.returncode)
