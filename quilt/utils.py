@@ -229,6 +229,9 @@ class File(object):
     def get_mode(self):
         return os.stat(self.filename).st_mode
 
+    def open(mode="r", buffering=None):
+        return open(self.filename, mode, buffering)
+
     def __str__(self):
         return self.get_name()
 
