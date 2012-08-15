@@ -22,7 +22,7 @@
 import os
 import os.path
 
-from quilt.utils import Process, Directory, File
+from quilt.utils import Process, Directory, File, FileParam, SubprocessError
 
 class Patch(object):
 
@@ -117,3 +117,64 @@ class RollbackPatch(object):
 
     def delete_backup(self):
         self.backup_dir.delete()
+
+
+class Diff(object):
+    """ Wrapper arround the diff util
+    """
+
+    @FileParam(["left", "right"])
+    def __init__(self, left, right):
+        """ left points to the first file and right to the second file
+        """
+        self.left = left
+        if not self.left.exists():
+            self.left = File("/dev/null")
+
+        self.right = right
+        if not self.right.exists():
+            self.right = File("/dev/null")
+
+    def run(self, cwd, left_label=None, right_label=None, unified=True,
+            fd=None):
+        cmd = ["diff"]
+
+        if unified:
+            cmd.append("-u")
+
+        if left_label:
+            cmd.append("--label")
+            cmd.append(left_label)
+
+        if right_label:
+            if not left_label:
+                cmd.append("--label")
+                cmd.append(self.right.get_name())
+            cmd.append("--label")
+            cmd.append(right_label)
+
+        cmd.append(self.left.get_name())
+        cmd.append(self.right.get_name())
+
+        try:
+            Process(cmd).run(cwd=cwd, stdout=fd)
+        except SubprocessError, e:
+            if e.get_returncode() > 1:
+                raise e
+
+    def equal(self, cwd):
+        """ Returns True if left and right are equal
+        """
+        cmd = ["diff"]
+        cmd.append("-q")
+        cmd.append(self.left.get_name())
+        cmd.append(self.right.get_name())
+
+        try:
+            Process(cmd).run(cwd=cwd, suppress_output=True)
+        except SubprocessError, e:
+            if e.get_returncode() == 1:
+                return False
+            else:
+                raise e
+        return True
