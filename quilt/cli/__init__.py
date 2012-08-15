@@ -30,6 +30,7 @@ import quilt.cli.patchimport
 import quilt.cli.pop
 import quilt.cli.previous
 import quilt.cli.push
+import quilt.cli.revert
 import quilt.cli.series
 import quilt.cli.top
 import quilt.cli.unapplied
