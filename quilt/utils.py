@@ -236,6 +236,28 @@ class File(object):
         return self.get_name()
 
 
+class TmpFile(File):
+    """ Tempoary file that is intended to be used within a context manager
+    If used with as a context manager in a with statement the temporary
+    file is deleted automatically.
+    """
+
+    def __init__(self, suffix=None, prefix=None, dir=None, text=False):
+        fd, filename = tempfile.mkstemp(suffix, prefix, dir, text)
+        self.fd = fd
+        super(TmpFile, self).__init__(filename)
+
+    def open(mode=None, buffering=None):
+        return self.fd
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.fd.close()
+        self.delete_if_exists()
+
+
 class FunctionWrapper(object):
     """ FunctionWrapper class to encapsulate function that are decorated by
     a Param class.
