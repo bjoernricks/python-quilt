@@ -87,7 +87,7 @@ class Revert(Command):
 
         self._file_in_patch(filename, patch)
         self._file_in_next_patches(filename, patch)
-        pc_dir = self.quilt_pc + File(patch_name)
+        pc_dir = self.quilt_pc + File(patch.get_name())
         pc_file = pc_dir + file
 
         if not file.exists() and pc_file.is_empty():
