@@ -26,6 +26,7 @@ Currently the following quilt commands have been implemented already
 - previous
 - push
 - top
+- refresh
 - revert
 - series
 - unapplied
@@ -36,7 +37,6 @@ Currently unsupported commands
 - diff
 - files
 - header
-- refresh
 - rename
 
 Unlikely to be supported
