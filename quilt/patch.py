@@ -34,8 +34,8 @@ class Patch(object):
         self.reverse = reverse
 
     def run(self, cwd, patch_dir=None, backup=False, prefix=None,
-            reverse=False, work_dir=None, force=False,
-            no_backup_if_mismatch=False, remove_empty_files=False):
+            reverse=False, work_dir=None, force=False, dry_run=False,
+            no_backup_if_mismatch=False, remove_empty_files=False, quiet=False):
         cmd = ["patch"]
         cmd.append("-p" + str(self.strip))
 
@@ -71,6 +71,13 @@ class Patch(object):
         else:
             name = self.get_name()
         cmd.append(name)
+
+        if quiet:
+            cmd.append("-s")
+
+        if dry_run:
+            cmd.append("--dry-run")
+
         Process(cmd).run(cwd=cwd)
 
     def get_name(self):
