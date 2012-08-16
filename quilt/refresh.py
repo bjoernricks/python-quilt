@@ -58,7 +58,7 @@ class Refresh(Command):
                 orig_file = pc_dir + File(file_name)
                 new_file = File(file_name)
                 diff = Diff(orig_file, new_file)
-                diff.run(self.cwd)
+                diff.run(self.cwd, fd=f)
 
             if tmpfile.is_empty():
                 raise QuiltError("Nothing to refresh.")
