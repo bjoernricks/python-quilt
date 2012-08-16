@@ -229,7 +229,7 @@ class File(object):
     def get_mode(self):
         return os.stat(self.filename).st_mode
 
-    def open(mode="r", buffering=None):
+    def open(self, mode="r", buffering=None):
         return open(self.filename, mode, buffering)
 
     def __str__(self):
@@ -247,7 +247,7 @@ class TmpFile(File):
         self.fd = fd
         super(TmpFile, self).__init__(filename)
 
-    def open(mode=None, buffering=None):
+    def open(self, mode=None, buffering=None):
         return self.fd
 
     def __enter__(self):
