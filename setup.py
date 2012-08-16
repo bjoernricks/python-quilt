@@ -24,6 +24,9 @@ from distutils.core import setup
 
 import quilt
 
+f = open('README.rst', 'r')
+README = f.read()
+
 setup(name="python-quilt",
       version=quilt.__version__,
       description="A quilt patchsystem implementation in Python",
@@ -43,6 +46,7 @@ setup(name="python-quilt",
                    "Topic :: System :: Software Distribution",
                    "Topic :: Utilities",
                    ],
+      long_description=README,
       )
 
 
