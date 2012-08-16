@@ -137,6 +137,11 @@ class Directory(object):
         if self.exists():
             shutil.rmtree(self.dirname)
 
+    def get_name(self):
+        """ Returns the name of the directory
+        """
+        return self.dirname
+
     def __add__(self, other):
         if isinstance(other, Directory):
             return Directory(os.path.join(self.dirname, other.dirname))
