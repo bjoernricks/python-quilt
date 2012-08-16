@@ -249,17 +249,21 @@ class TmpFile(File):
 
     def __init__(self, suffix="", prefix="tmp", dir=None, text=False):
         fd, filename = tempfile.mkstemp(suffix, prefix, dir, text)
-        self.fd = os.fdopen(fd)
+        self.fd = fd
+        self.file = os.fdopen(fd, "rw")
         super(TmpFile, self).__init__(filename)
 
     def open(self, mode=None, buffering=None):
-        return self.fd
+        return self.file
+
+    def write(self, string):
+        os.write(self.fd, string)
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        self.fd.close()
+        self.file.close()
         self.delete_if_exists()
 
 
