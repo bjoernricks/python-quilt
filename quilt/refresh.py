@@ -63,7 +63,7 @@ class Refresh(Command):
             if tmpfile.is_empty():
                 raise QuiltError("Nothing to refresh.")
 
-            tmpfile.copy(self.quilt_patches)
+            tmpfile.copy(self.quilt_patches + File(patch.get_name()))
 
         timestamp = pc_dir + File(".timestamp")
         timestamp.touch()
