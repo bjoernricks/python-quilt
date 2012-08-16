@@ -47,8 +47,8 @@ class Refresh(Command):
             if not patch:
                 raise QuiltError("No patch applied. Nothing to refresh.")
 
-        pc_dir = self.quilt_pc + File(patch.get_name())
-        files = pc_dir.contents()[1]
+        pc_dir = self.quilt_pc + patch.get_name()
+        files = pc_dir.content()[1]
 
         with TmpFile() as tmpfile:
             f = tmpfile.open()
