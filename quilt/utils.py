@@ -242,9 +242,9 @@ class TmpFile(File):
     file is deleted automatically.
     """
 
-    def __init__(self, suffix=None, prefix=None, dir=None, text=False):
+    def __init__(self, suffix="", prefix="tmp", dir=None, text=False):
         fd, filename = tempfile.mkstemp(suffix, prefix, dir, text)
-        self.fd = fd
+        self.fd = os.fdopen(fd)
         super(TmpFile, self).__init__(filename)
 
     def open(self, mode=None, buffering=None):
