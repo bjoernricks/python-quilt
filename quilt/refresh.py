@@ -19,10 +19,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301 USA
 
+import os.path
+
 from quilt.command import Command
 from quilt.db import Db, Series
 from quilt.error import QuiltError
 from quilt.patch import Patch, Diff
+from quilt.signals import Signal
 from quilt.utils import Directory, File, TmpFile
 
 INDEX_LINE = \
@@ -31,6 +34,10 @@ INDEX_LINE = \
 class Refresh(Command):
     """ Command class to refresh (add or remove chunks) a patch
     """
+
+    edit_patch = Signal()
+    refreshed = Signal()
+
     def __init__(self, cwd, quilt_pc, quilt_patches):
         super(Refresh, self).__init__(cwd)
         self.quilt_pc = Directory(quilt_pc)
@@ -38,7 +45,7 @@ class Refresh(Command):
         self.db = Db(quilt_pc)
         self.series = Series(quilt_patches)
 
-    def refresh(self, patch_name=None):
+    def refresh(self, patch_name=None, edit=False):
         """ Refresh patch with patch_name or applied top patch if patch_name is
         None
         """
@@ -72,6 +79,16 @@ class Refresh(Command):
             if tmpfile.is_empty():
                 raise QuiltError("Nothing to refresh.")
 
+            if edit:
+                self.edit_patch(tmpfile)
+                tpatch = Patch(tmpfile.get_name())
+                tpatch.run(pc_dir.get_name(), dry_run=True, quiet=True)
+
+            if patch_file.exists():
+                diff = Diff(patch_file, tmpfile)
+                if diff.equal(self.cwd):
+                    raise QuiltError("Nothing to refresh.")
+
             tmpfile.copy(patch_file)
 
         timestamp = pc_dir + File(".timestamp")
@@ -79,6 +96,8 @@ class Refresh(Command):
 
         refresh = self.quilt_pc + File(patch.get_name() + "~refresh")
         refresh.delete_if_exists()
+
+        self.refreshed(patch)
 
     def _get_labels(self, old_file, new_file):
         dir = os.path.basename(self.cwd)
