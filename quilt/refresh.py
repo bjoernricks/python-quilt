@@ -21,7 +21,8 @@
 
 from quilt.command import Command
 from quilt.db import Db, Series
-from quilt.patch import Patch
+from quilt.error import QuiltError
+from quilt.patch import Patch, Diff
 from quilt.utils import Directory, File, TmpFile
 
 class Refresh(Command):
