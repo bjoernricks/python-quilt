@@ -50,7 +50,7 @@ class Refresh(Command):
         pc_dir = self.quilt_pc + patch.get_name()
         files = pc_dir.content()[1]
 
-        with TmpFile() as tmpfile:
+        with TmpFile(prefix="pquilt-") as tmpfile:
             f = tmpfile.open()
             for file_name in files:
                 if file_name == ".timestamp":
