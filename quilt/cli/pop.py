@@ -35,6 +35,8 @@ class PopCommand(Command):
 
     def run(self, options, args):
         pop = Pop(os.getcwd(), self.get_pc_dir())
+        pop.unapplying.connect(self.unapplying)
+        pop.unapplied.connect(self.unapplied)
 
         if options.all:
             pop.unapply_all()
@@ -42,3 +44,12 @@ class PopCommand(Command):
             pop.unapply_top_patch()
         else:
             pop.unapply_patch(args[0])
+
+    def unapplying(self, patch):
+        print "Removing patch %s" % patch.get_name()
+
+    def unapplied(self, patch):
+        if not patch:
+            print "No patches applied"
+        else:
+            print "Now at patch %s" % patch.get_name()
