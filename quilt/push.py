@@ -25,9 +25,14 @@ from quilt.command import Command
 from quilt.db import Db, Series
 from quilt.error import NoPatchesInSeries, AllPatchesApplied, QuiltError
 from quilt.patch import Patch, RollbackPatch
+from quilt.signals import Signal
 from quilt.utils import SubprocessError, File
 
 class Push(Command):
+
+    applying = Signal()
+    applied = Signal()
+    applied_patch = Signal()
 
     def __init__(self, cwd, quilt_pc, quilt_patches):
         super(Push, self).__init__(cwd)
@@ -45,6 +50,8 @@ class Push(Command):
         if refresh.exists():
             raise QuiltError("Patch %s needs to be refreshed" % \
                                   patch_name)
+
+        self.applying(patch)
 
         try:
             patch.run(self.cwd, patch_dir=self.quilt_patches, backup=True,
@@ -66,6 +73,8 @@ class Push(Command):
         else:
             os.makedirs(prefix)
 
+        self.applied_patch(patch)
+
     def _check(self):
         if not self.series.exists() or not self.series.patches():
             raise NoPatchesInSeries(self.series)
@@ -81,12 +90,14 @@ class Push(Command):
                 patches.remove(applied)
 
         if not patches:
-            raise AllPatchesApplied(self.series)
+            raise AllPatchesApplied(self.series, self.db.top_patch())
 
         for patch in patches:
             self._apply_patch(patch)
 
         self.db.save()
+
+        self.applied(self.db.top_patch())
 
     def apply_next_patch(self):
         """ Apply next patch in series file """
@@ -98,11 +109,13 @@ class Push(Command):
             patch = self.series.patch_after(top)
 
         if not patch:
-            raise AllPatchesApplied(self.series)
+            raise AllPatchesApplied(self.series, top)
 
         self._apply_patch(patch)
 
         self.db.save()
+
+        self.applied(self.db.top_patch())
 
     def apply_all(self):
         """ Apply all patches in series file """
@@ -114,9 +127,11 @@ class Push(Command):
             patches = self.series.patches()
 
         if not patches:
-            raise AllPatchesApplied(self.series)
+            raise AllPatchesApplied(self.series, top)
 
         for patch in patches:
             self._apply_patch(patch)
 
         self.db.save()
+
+        self.applied(self.db.top_patch())
