@@ -31,10 +31,12 @@ class PushCommand(Command):
 
     def add_args(self, parser):
         parser.add_option("-a", "--all", help="apply all patches in series",
-                        action="store_true")
+                          action="store_true")
 
     def run(self, options, args):
         push = Push(os.getcwd(), self.get_pc_dir(), self.get_patches_dir())
+        push.applying.connect(self.applying)
+        push.applied.connect(self.applied)
 
         if options.all:
             push.apply_all()
@@ -42,3 +44,9 @@ class PushCommand(Command):
             push.apply_next_patch()
         else:
             push.apply_patch(args[0])
+
+    def applying(self, patch):
+        print "Applying patch %s" % patch.get_name()
+
+    def applied(self, patch):
+        print "Now at patch %s" % patch.get_name()
