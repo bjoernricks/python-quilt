@@ -59,7 +59,7 @@ class Pop(Command):
         self._check()
 
         patches = self.db.patches_after(Patch(patch_name))
-        for patch in reverse(patches):
+        for patch in reversed(patches):
             self._unapply_patch(patch)
 
         self.db.save()
@@ -77,7 +77,7 @@ class Pop(Command):
         """ Unapply all patches """
         self._check()
 
-        for patch in reverse(self.db.patches()):
+        for patch in reversed(self.db.applied_patches()):
             self._unapply_patch(patch)
 
         self.db.save()
