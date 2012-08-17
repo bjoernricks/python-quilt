@@ -37,5 +37,12 @@ class NoAppliedPatch(QuiltError):
 
 class AllPatchesApplied(QuiltError):
 
+    def __init__(self, series, top=None):
+        self.series = series
+        self.top = top
+
     def __str__(self):
-        return "All patches are already applied"
+        if not self.top:
+            return "All patches are already applied"
+        return "File series fully applied, ends at patch %s" % \
+                self.top.get_name()
