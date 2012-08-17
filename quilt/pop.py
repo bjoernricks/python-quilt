@@ -25,9 +25,14 @@ from quilt.command import Command
 from quilt.db import Db, Series
 from quilt.error import NoAppliedPatch
 from quilt.patch import RollbackPatch, Patch
+from quilt.signals import Signal
 from quilt.utils import Directory, File
 
 class Pop(Command):
+
+    unapplying = Signal()
+    unapplied = Signal()
+    unapplied_patch = Signal()
 
     def __init__(self, cwd, quilt_pc):
         super(Pop, self).__init__(cwd)
@@ -39,6 +44,8 @@ class Pop(Command):
             raise NoAppliedPatch(self.db)
 
     def _unapply_patch(self, patch):
+        self.unapplying(patch)
+
         patch_name = patch.get_name()
         prefix = os.path.join(self.quilt_pc, patch_name)
         timestamp = File(os.path.join(prefix, ".timestamp"))
@@ -53,6 +60,8 @@ class Pop(Command):
         refresh = File(prefix + "~refresh")
         refresh.delete_if_exists()
 
+        self.unapplied_patch(patch)
+
     def unapply_patch(self, patch_name):
         """ Unapply patches up to patch_name. patch_name will end up as top
             patch """
@@ -64,6 +73,8 @@ class Pop(Command):
 
         self.db.save()
 
+        self.unapplied(self.db.top_patch())
+
     def unapply_top_patch(self):
         """ Unapply top patch """
         self._check()
@@ -73,6 +84,8 @@ class Pop(Command):
 
         self.db.save()
 
+        self.unapplied(self.db.top_patch())
+
     def unapply_all(self):
         """ Unapply all patches """
         self._check()
@@ -81,3 +94,5 @@ class Pop(Command):
             self._unapply_patch(patch)
 
         self.db.save()
+
+        self.unapplied(self.db.top_patch())
