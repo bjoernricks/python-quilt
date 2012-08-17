@@ -1,0 +1,36 @@
+0.2         UNRELEASED
+
+    FEATURES
+
+    * quilt/signals.py:
+        - Added a signals/slots implementation.
+    * quilt/refresh.py:
+        - Refresh.refresh refresh now created a p1 patch and writes an index for
+          each changed file.
+
+    BUGFIXES
+
+    * quilt.pop.py
+        - Pop.unapply_all and unapply_patch fix for list reverse usage.
+
+    API
+
+    * quilt/error.py:
+        - AllPatchesApplied.__init__ new constructor that accepts a series and
+          optional a top patch.
+    * quilt/patch.py:
+        - Patch.run new optional parameters quiet and dry_run.
+    * quilt/pop.py:
+        - Pop add new signals unapplying, unapplied_patch and unapplied.
+    * quilt/push.py
+        - Push add signals applying, applied_patch and applied.
+    * quilt/refresh.py:
+        - Refresh add signals refreshed and edit_patch.
+    * quilt/utils.py:
+        - TmpFile.write new method to directly write data to the tempfile.
+        - Directory.get_name new method to get the name of the directory.
+
+
+0.1         2012-08-16
+
+ * Initial release
