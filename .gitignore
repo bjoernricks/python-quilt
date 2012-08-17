@@ -1,3 +1,4 @@
 *.sw*
 *.pyc
 tags
+MANIFEST
