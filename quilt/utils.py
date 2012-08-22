@@ -246,6 +246,16 @@ class File(object):
     def get_mode(self):
         return os.stat(self.filename).st_mode
 
+    def get_absfile(self):
+        """ Returns the file with an absolute path
+        """
+        return File(os.path.abspath(self.filename))
+
+    def get_basefile(self):
+        """ Returns the file without a path
+        """
+        return File(self.get_basename())
+
     def open(self, mode="r", buffering=None):
         return open(self.filename, mode, buffering)
 
