@@ -104,6 +104,7 @@ class Revert(Command):
         if not file.exists() and pc_file.is_empty():
             # new and empty file will be reverted
             pc_file.delete()
+            self.file_reverted(file, patch)
             return
 
         with TmpDirectory(prefix="pquilt-") as tmpdir:
@@ -114,6 +115,7 @@ class Revert(Command):
 
                 diff = Diff(file, tmp_file)
                 if diff.equal(self.cwd):
+                    self.file_unchanged(file, patch)
                     return
 
                 dir = file.get_directory()
