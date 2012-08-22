@@ -36,4 +36,8 @@ class AddCommand(Command):
 
     def run(self, options, args):
         add = Add(os.getcwd(), self.get_pc_dir(), self.get_patches_dir())
+        add.file_added.connect(self.file_added)
         add.add_files(args, options.patch)
+
+    def file_added(self, file, patch):
+        print "File %s added to patch %s" % (file.get_name(), patch.get_name())
