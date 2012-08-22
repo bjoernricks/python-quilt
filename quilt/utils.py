@@ -142,6 +142,11 @@ class Directory(object):
         """
         return self.dirname
 
+    def get_absdir(self):
+        """ Returns this directory with absolute path
+        """
+        return Directory(os.path.abspath(self.dirname))
+
     def __add__(self, other):
         if isinstance(other, Directory):
             return Directory(os.path.join(self.dirname, other.dirname))
