@@ -6,29 +6,56 @@
         - Added a signals/slots implementation.
     * quilt/refresh.py:
         - Refresh.refresh refresh now created a p1 patch and writes an index for
-          each changed file.
+          each changed file. Also it preserves existing patch headers.
+    * quilt/revert.py
+        - Revert.revert_patch doesn't override source file if it is unchanged
 
     BUGFIXES
 
-    * quilt.pop.py
+    * quilt.backup.py:
+        - Backup.backup_file fix copying a non-empty file
+    * quilt.pop.py:
         - Pop.unapply_all and unapply_patch fix for list reverse usage.
+    * quilt.revert.py:
+        - Revert._file_in_patch and Revert._revert_file fix directory handling
+        - Add missing import for Backup class
+        - Revert._apply_patch_temporary fix typo in method name
+        - Revert._apply_patch_temporary fix setting the correct work dir
+        - Revert._apply_patch_temporary fix running patch
+        - Revert.revert_file don't delete source file if patch doesn't change
+          the file.
+    * quilt.utils.py:
+        - TmpDirectory.__init__ None values for suffix and prefix are not
+          allowed. Use suffix = "" and prefix="temp" as defaults.
+        - File.get_directory returns None if the file path doesn't contain a
+          directory
 
     API
 
+    * quilt/add.py:
+        - Add add signal file_added
     * quilt/error.py:
         - AllPatchesApplied.__init__ new constructor that accepts a series and
           optional a top patch.
     * quilt/patch.py:
         - Patch.run new optional parameters quiet and dry_run.
+        - Patch.run work_dir and patch_dir are now Direcory parameters
+        - Patch.get_header new method to return the header of a patch
     * quilt/pop.py:
         - Pop add new signals unapplying, unapplied_patch and unapplied.
     * quilt/push.py
         - Push add signals applying, applied_patch and applied.
     * quilt/refresh.py:
         - Refresh add signals refreshed and edit_patch.
+    * quilt/revert.py:
+        - Add add signals file_reverted, file_unchanged
     * quilt/utils.py:
         - TmpFile.write new method to directly write data to the tempfile.
         - Directory.get_name new method to get the name of the directory.
+        - Directory.get_absdir new method to get the directory with absolute
+          path.
+        - File.get_absfile new method to get the file with an absulute path
+        - File.get_basefile new method to get the file without a path
 
 
 0.1         2012-08-16
