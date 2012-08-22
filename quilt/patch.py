@@ -34,6 +34,7 @@ class Patch(object):
         self.strip = strip
         self.reverse = reverse
 
+    @DirectoryParam(["patch_dir", "work_dir"])
     def run(self, cwd, patch_dir=None, backup=False, prefix=None,
             reverse=False, work_dir=None, force=False, dry_run=False,
             no_backup_if_mismatch=False, remove_empty_files=False, quiet=False):
@@ -55,7 +56,7 @@ class Patch(object):
 
         if work_dir:
             cmd.append("-d")
-            cmd.append(work_dir)
+            cmd.append(work_dir.get_name())
 
         if no_backup_if_mismatch:
             cmd.append("--no-backup-if-mismatch")
@@ -68,7 +69,8 @@ class Patch(object):
 
         cmd.append("-i")
         if patch_dir:
-            name = os.path.join(patch_dir, self.get_name())
+            dir = patch_dir + self.get_name()
+            name = dir.get_name()
         else:
             name = self.get_name()
         cmd.append(name)
