@@ -63,6 +63,11 @@ class Refresh(Command):
 
         with TmpFile(prefix="pquilt-") as tmpfile:
             f = tmpfile.open()
+
+            if patch_file.exists():
+                header = patch.get_header(self.quilt_patches)
+                tmpfile.write(header)
+
             for file_name in files:
                 if file_name == ".timestamp":
                     continue
