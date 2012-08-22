@@ -126,7 +126,6 @@ class Revert(Command):
                 tmp_file.copy(dir)
                 self.file_reverted(file, patch)
             else:
-                file.delete_if_exists()
                 self.file_unchanged(file, patch)
 
     def revert_files(self, filenames, patch_name=None):
