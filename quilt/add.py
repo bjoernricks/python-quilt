@@ -26,11 +26,16 @@ from quilt.backup import Backup
 from quilt.command import Command
 from quilt.db import Db, Series
 from quilt.error import QuiltError
+from quilt.signals import Signal
 from quilt.utils import Directory, File
 
 class Add(Command):
+
     """Command class to add files to the current patch
     """
+
+    file_added = Signal()
+
     def __init__(self, cwd, quilt_pc, quilt_patches):
         super(Add, self).__init__(cwd)
         self.quilt_pc = Directory(quilt_pc)
@@ -101,6 +106,8 @@ class Add(Command):
         if file.exists():
             # be sure user can write original file
             os.chmod(filename, file.get_mode() | stat.S_IWUSR | stat.S_IRUSR)
+
+        self.file_added(file, patch)
 
     def add_files(self, filenames, patch_name=None, ignore=False):
         for filename in filenames:
