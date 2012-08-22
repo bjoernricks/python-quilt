@@ -148,6 +148,8 @@ class Directory(object):
         return Directory(os.path.abspath(self.dirname))
 
     def __add__(self, other):
+        if other == None:
+            return self
         if isinstance(other, Directory):
             return Directory(os.path.join(self.dirname, other.dirname))
         elif isinstance(other, basestring):
