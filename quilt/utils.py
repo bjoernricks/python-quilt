@@ -234,9 +234,14 @@ class File(object):
         return os.path.basename(self.filename)
 
     def get_directory(self):
-        """ Returns the directory where the file is placed in
+        """ Returns the directory where the file is placed in or None if the
+        path to the file doesn't contain a directory
         """
-        return Directory(os.path.dirname(self.filename))
+        dirname = os.path.dirname(self.filename)
+        if dirname:
+            return Directory(dirname)
+        else:
+            return None
 
     def get_mode(self):
         return os.stat(self.filename).st_mode
