@@ -26,11 +26,17 @@ from quilt.command import Command
 from quilt.db import Db, Series
 from quilt.error import QuiltError
 from quilt.patch import Diff
+from quilt.signals import Signal
 from quilt.utils import Directory, File, TmpDirectory
 
 class Revert(Command):
+
     """Command class to remove files from the current patch
     """
+
+    file_reverted = Signal()
+    file_unchanged = Signal()
+
     def __init__(self, cwd, quilt_pc, quilt_patches):
         super(Revert, self).__init__(cwd)
         self.quilt_pc = Directory(quilt_pc)
@@ -116,8 +122,10 @@ class Revert(Command):
                 else:
                     dir.create()
                 tmp_file.copy(dir)
+                self.file_reverted(file, patch)
             else:
                 file.delete_if_exists()
+                self.file_unchanged(file, patch)
 
     def revert_files(self, filenames, patch_name=None):
         for filename in filenames:
