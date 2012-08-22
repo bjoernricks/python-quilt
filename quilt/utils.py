@@ -169,7 +169,7 @@ class TmpDirectory(Directory):
     directory is deleted automatically.
     """
 
-    def __init__(self, suffix=None, prefix=None, dir=None):
+    def __init__(self, suffix="", prefix="temp", dir=None):
         tmp_dir = tempfile.mkdtemp(suffix, prefix, dir)
         super(TmpDirectory, self).__init__(tmp_dir)
 
