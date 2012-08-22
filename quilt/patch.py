@@ -22,7 +22,8 @@
 import os
 import os.path
 
-from quilt.utils import Process, Directory, File, FileParam, SubprocessError
+from quilt.utils import Process, Directory, DirectoryParam, File, FileParam, \
+                        SubprocessError
 
 class Patch(object):
 
@@ -82,6 +83,23 @@ class Patch(object):
 
     def get_name(self):
         return self.patch_name
+
+    @DirectoryParam(["patch_dir"])
+    def get_header(self, patch_dir=None):
+        lines = []
+
+        if patch_dir:
+            file = patch_dir + File(self.get_name())
+            name = file.get_name()
+        else:
+            name = self.get_name()
+        with open(name, "r") as f:
+            for line in f:
+                if line.startswith("---") or line.startswith("Index:"):
+                    break
+                lines.append(line)
+
+        return "".join(lines)
 
     def __eq__(self, other):
         return (isinstance(other, Patch) and self.get_name() == \
