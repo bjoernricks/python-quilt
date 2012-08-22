@@ -286,7 +286,7 @@ class FunctionWrapper(object):
     def __call__(self, *args, **kw):
         newargs = []
         for name, value in zip(self._get_varnames(), args):
-            if name in self.names and not isinstance(value, self.cls):
+            if value and name in self.names and not isinstance(value, self.cls):
                 newargs.append(self.cls(value))
             else:
                 newargs.append(value)
