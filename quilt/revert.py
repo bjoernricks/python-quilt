@@ -19,9 +19,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301 USA
 
+import os
+
+from quilt.backup import Backup
 from quilt.command import Command
 from quilt.db import Db, Series
 from quilt.error import QuiltError
+from quilt.patch import Diff
 from quilt.utils import Directory, File, TmpDirectory
 
 class Revert(Command):
@@ -38,7 +42,8 @@ class Revert(Command):
         """ Checks if a backup file of the filename in the current patch
         exists and raises a QuiltException if not.
         """
-        file = self.quilt_pc + File(os.path.join(patch.get_name(), filename))
+        pc_dir = self.quilt_pc + patch.get_name()
+        file = pc_dir + File(filename)
         if not file.exists():
             raise QuiltError("File %s is not in patch %s" % (filename,
                              patch.get_name()))
@@ -65,9 +70,9 @@ class Revert(Command):
         patch_file = self.quilt_patches + File(patch.get_name())
 
         if patch_file.exists() and not patch_file.is_empty():
-            patch.run(self.cwd, self.quilt_patches, work_dir, tmpdir,
-                    no_backup_if_mismatch=True, remove_empty_files=True,
-                    force=True)
+            patch.run(self.cwd, self.quilt_patches.get_absdir(), work_dir=tmpdir,
+                      no_backup_if_mismatch=True, remove_empty_files=True,
+                      force=True, quiet=True)
         return backup_file
 
 
@@ -87,7 +92,7 @@ class Revert(Command):
 
         self._file_in_patch(filename, patch)
         self._file_in_next_patches(filename, patch)
-        pc_dir = self.quilt_pc + File(patch.get_name())
+        pc_dir = self.quilt_pc + patch.get_name()
         pc_file = pc_dir + file
 
         if not file.exists() and pc_file.is_empty():
@@ -95,13 +100,21 @@ class Revert(Command):
             pc_file.delete()
             return
 
-        with TmpDirectory() as tmpdir:
+        with TmpDirectory(prefix="pquilt-") as tmpdir:
             # apply current patch in tempary directory to revert changes of file
             # that aren't committed in the patch
-            tmp_file = self._apply_patch_tempoary(tmpdir, pc_file, patch)
+            tmp_file = self._apply_patch_temporary(tmpdir, pc_file, patch)
             if tmp_file and tmp_file.exists() and not tmp_file.is_empty():
+
+                diff = Diff(file, tmp_file)
+                if diff.equal(self.cwd):
+                    return
+
                 dir = file.get_directory()
-                dir.create()
+                if not dir:
+                    dir = Directory(os.getcwd())
+                else:
+                    dir.create()
                 tmp_file.copy(dir)
             else:
                 file.delete_if_exists()
