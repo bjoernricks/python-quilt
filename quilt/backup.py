@@ -48,12 +48,12 @@ class Backup(object):
                 return None
             dest_dir.create()
             file.copy(dest_dir)
-            return dest_dir + file
+            return dest_dir + file.get_basefile()
         elif copy_empty:
             # create new file in dest_dir
             dest_dir = dest_dir + file.get_directory()
             dest_dir.create()
-            dest_file = dest_dir + File(file.get_basename())
+            dest_file = dest_dir + file.get_basefile()
             dest_file.touch()
             return dest_file
         else:
@@ -72,6 +72,11 @@ class Backup(object):
 
     @DirectoryParam(["src_dir", "dest_dir"])
     def backup_dir(self, src_dir, dest_dir, copy_empty=False):
-        dirs, files = src_dir.contents()
-        for file in files:
-            self.backup_file(file, dest_dir, copy_empty)
+        for file_name in src.files():
+            file = File(file_name)
+            file_dir = file.get_directory()
+            if file_dir:
+                dest = dest_dir + file_dir
+            else:
+                dest = dest_dir
+            self.backup_file(file, dest, copy_empty)
