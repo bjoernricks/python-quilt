@@ -59,7 +59,7 @@ class Revert(Command):
                 raise QuiltError("File %s is modified by patch %s" % \
                                  (filename, patch.get_name()))
 
-    def _apply_patch_tempoary(self, tmpdir, file, patch):
+    def _apply_patch_temporary(self, tmpdir, file, patch):
         backup = Backup()
         backup_file = backup.backup_file(file, tmpdir)
         patch_file = self.quilt_patches + File(patch.get_name())
