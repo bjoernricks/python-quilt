@@ -33,6 +33,7 @@ class Pop(Command):
     unapplying = Signal()
     unapplied = Signal()
     unapplied_patch = Signal()
+    empty_patch = Signal()
 
     def __init__(self, cwd, quilt_pc):
         super(Pop, self).__init__(cwd)
