@@ -38,6 +38,7 @@ class PushCommand(Command):
         push = Push(self.get_cwd(), self.get_pc_dir(), self.get_patches_dir())
         push.applying_patch.connect(self.applying_patch)
         push.applied.connect(self.applied)
+        push.applied_empty_patch.connect(self.applied_empty_patch)
 
         if options.all:
             push.apply_all(options.force)
@@ -51,3 +52,10 @@ class PushCommand(Command):
 
     def applied(self, patch):
         print "Now at patch %s" % patch.get_name()
+
+    def applied_empty_patch(self, patch, exists):
+        if exists:
+            print "Patch %s appears to be empty; applied" % patch.get_name()
+        else:
+            print "Patch %s does not exist; applied empty patch" % \
+                  patch.get_name()
