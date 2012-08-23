@@ -94,6 +94,9 @@ class Command(object):
     def get_series(self):
         return Series(self.get_patches_dir())
 
+    def get_cwd(self):
+        return os.getcwd()
+
     def exit_error(self, error, value=1):
         print >> sys.stderr, error
         sys.exit(value)
