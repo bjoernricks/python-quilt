@@ -30,6 +30,9 @@ class PushCommand(Command):
     def add_args(self, parser):
         parser.add_option("-a", "--all", help="apply all patches in series",
                           action="store_true")
+        parser.add_option("-f", "--force", help="Force apply, even if the " \
+                                                "patch has rejects.",
+                          action="store_true", default=False)
 
     def run(self, options, args):
         push = Push(self.get_cwd(), self.get_pc_dir(), self.get_patches_dir())
@@ -37,11 +40,11 @@ class PushCommand(Command):
         push.applied.connect(self.applied)
 
         if options.all:
-            push.apply_all()
+            push.apply_all(options.force)
         elif not args:
-            push.apply_next_patch()
+            push.apply_next_patch(options.force)
         else:
-            push.apply_patch(args[0])
+            push.apply_patch(args[0], options.force)
 
     def applying_patch(self, patch):
         print "Applying patch %s" % patch.get_name()
