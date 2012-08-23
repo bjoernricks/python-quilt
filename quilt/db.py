@@ -22,7 +22,7 @@
 import getopt
 import os.path
 
-from quilt.error import QuiltError
+from quilt.error import QuiltError, UnknownPatch
 from quilt.patch import Patch
 
 
@@ -31,9 +31,6 @@ DB_VERSION = 2
 class DBError(QuiltError):
     pass
 
-
-class InvalidPatchError(QuiltError):
-    pass
 
 class PatchLine(object):
 
@@ -114,7 +111,7 @@ class PatchSeries(object):
 
     def _check_patch(self, patch):
         if not self.is_patch(patch):
-            raise InvalidPatchError("Patch %s is not known." % patch)
+            raise UnknownPatch(self, patch)
 
     def exists(self):
         """ Returns True if series file exists """
