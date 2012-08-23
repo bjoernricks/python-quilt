@@ -147,6 +147,13 @@ class Directory(object):
         """
         return Directory(os.path.abspath(self.dirname))
 
+    def is_empty(self):
+        """ Returns True if the directory doesn't contain any files or
+        subdirectories
+        """
+        contents = os.listdir(self.dirname)
+        return len(contents) == 0
+
     def __add__(self, other):
         if other == None:
             return self
