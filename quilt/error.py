@@ -25,14 +25,20 @@ class QuiltError(Exception):
 
 class NoPatchesInSeries(QuiltError):
 
+    def __init__(self, series):
+        self.series = series
+
     def __str__(self):
-        return "No patch in series file %s" % self.args[0].series_file
+        return "No patch in series"
 
 
 class NoAppliedPatch(QuiltError):
 
+    def __init__(self, series):
+        self.series = series
+
     def __str__(self):
-        return "No applied patch in file %s" % self.args[0].series_file
+        return "No patches applied"
 
 
 class AllPatchesApplied(QuiltError):
