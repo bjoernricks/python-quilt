@@ -32,8 +32,8 @@ class PushCommand(Command):
                           action="store_true")
 
     def run(self, options, args):
-        push.applying.connect(self.applying)
         push = Push(self.get_cwd(), self.get_pc_dir(), self.get_patches_dir())
+        push.applying_patch.connect(self.applying_patch)
         push.applied.connect(self.applied)
 
         if options.all:
@@ -43,7 +43,7 @@ class PushCommand(Command):
         else:
             push.apply_patch(args[0])
 
-    def applying(self, patch):
+    def applying_patch(self, patch):
         print "Applying patch %s" % patch.get_name()
 
     def applied(self, patch):
