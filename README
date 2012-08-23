@@ -18,6 +18,7 @@ Currently the following quilt commands have been implemented already
 
 - add
 - applied
+- delete
 - edit
 - import
 - new
@@ -33,7 +34,6 @@ Currently the following quilt commands have been implemented already
 
 Currently unsupported commands
 ------------------------------
-- delete
 - diff
 - files
 - header
