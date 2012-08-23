@@ -37,7 +37,7 @@ class Pop(Command):
 
     def __init__(self, cwd, quilt_pc):
         super(Pop, self).__init__(cwd)
-        self.quilt_pc = quilt_pc
+        self.quilt_pc = Directory(quilt_pc)
         self.db = Db(quilt_pc)
 
     def _check(self):
@@ -48,8 +48,8 @@ class Pop(Command):
         self.unapplying(patch)
 
         patch_name = patch.get_name()
-        prefix = os.path.join(self.quilt_pc, patch_name)
-        timestamp = File(os.path.join(prefix, ".timestamp"))
+        pc_dir = self.quilt_pc + patch_name
+        timestamp = pc_dir + File(".timestamp")
         timestamp.delete_if_exists()
 
         unpatch = RollbackPatch(self.cwd, prefix)
@@ -58,7 +58,7 @@ class Pop(Command):
 
         self.db.remove_patch(patch)
 
-        refresh = File(prefix + "~refresh")
+        refresh = File(pc_dir.get_name() + "~refresh")
         refresh.delete_if_exists()
 
         self.unapplied_patch(patch)
