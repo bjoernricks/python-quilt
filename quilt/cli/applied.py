@@ -20,6 +20,7 @@
 # 02110-1301 USA
 
 from quilt.cli.meta import Command
+from quilt.error import NoAppliedPatch
 
 class AppliedCommand(Command):
 
@@ -28,5 +29,9 @@ class AppliedCommand(Command):
 
     def run(self, options, args):
         db = self.get_db()
+
+        if not db.top_patch():
+            raise NoAppliedPatch(db)
+
         for patch in db.applied_patches():
             print patch
