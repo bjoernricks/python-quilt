@@ -16,10 +16,8 @@
 
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301 USA
-
-import os
 
 from quilt.cli.meta import Command
 from quilt.push import Push
@@ -34,8 +32,8 @@ class PushCommand(Command):
                           action="store_true")
 
     def run(self, options, args):
-        push = Push(os.getcwd(), self.get_pc_dir(), self.get_patches_dir())
         push.applying.connect(self.applying)
+        push = Push(self.get_cwd(), self.get_pc_dir(), self.get_patches_dir())
         push.applied.connect(self.applied)
 
         if options.all:
