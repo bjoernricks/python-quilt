@@ -37,6 +37,7 @@ class PopCommand(Command):
         pop = Pop(os.getcwd(), self.get_pc_dir())
         pop.unapplying.connect(self.unapplying)
         pop.unapplied.connect(self.unapplied)
+        pop.empty_patch.connect(self.empty_patch)
 
         if options.all:
             pop.unapply_all()
@@ -53,3 +54,6 @@ class PopCommand(Command):
             print "No patches applied"
         else:
             print "Now at patch %s" % patch.get_name()
+
+    def empty_patch(self, patch):
+        print "Patch %s appears to be empty, removing" % patch.get_name()
