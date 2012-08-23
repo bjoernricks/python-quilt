@@ -46,3 +46,12 @@ class AllPatchesApplied(QuiltError):
             return "All patches are already applied"
         return "File series fully applied, ends at patch %s" % \
                 self.top.get_name()
+
+class UnknownPatch(QuiltError):
+
+    def __init__(self, series, patch):
+        self.series = series
+        self.patch = patch
+
+    def __str__(self):
+        return "Patch %s is not in series" % self.patch.get_name()
