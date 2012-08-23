@@ -24,6 +24,7 @@ from quilt.cli.meta import find_command, list_commands
 import quilt.cli.add
 import quilt.cli.applied
 import quilt.cli.edit
+import quilt.cli.delete
 import quilt.cli.new
 import quilt.cli.next
 import quilt.cli.patchimport
