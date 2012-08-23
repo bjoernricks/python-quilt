@@ -120,9 +120,10 @@ class Patch(object):
 
 class RollbackPatch(object):
 
+    @DirectoryParam(["cwd", "backup_dir"])
     def __init__(self, cwd, backup_dir):
-        self.cwd = Directory(cwd)
-        self.backup_dir = Directory(backup_dir)
+        self.cwd = cwd
+        self.backup_dir = backup_dir
 
     def rollback(self, keep=False):
         (dirs, files) = self.backup_dir.content()
