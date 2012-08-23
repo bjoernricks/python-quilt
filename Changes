@@ -2,13 +2,17 @@
 
     FEATURES
 
+    * quilt/delete.py:
+        - Added Delete class that implements all features of quilt delete
     * quilt/signals.py:
         - Added a signals/slots implementation.
     * quilt/refresh.py:
-        - Refresh.refresh refresh now created a p1 patch and writes an index for
+        - Refresh.refresh refresh now creates a p1 patch and writes an index for
           each changed file. Also it preserves existing patch headers.
     * quilt/revert.py
         - Revert.revert_patch doesn't override source file if it is unchanged
+    * quilt/pop.py:
+        - Pop._check checks if a refresh file exists if not forced
 
     BUGFIXES
 
@@ -34,17 +38,29 @@
 
     * quilt/add.py:
         - Add add signal file_added
+    * quilt/cli/meta.py:
+        - Command.get_cwd add new method to get the current working dir
+    * quilt/db.py
+        - PatchSeries.is_empty add method to check if a series is empty
+        - InvalidPatchError removed class InvalidPatchError
     * quilt/error.py:
         - AllPatchesApplied.__init__ new constructor that accepts a series and
           optional a top patch.
+        - NoPatchesApplied.__init__, NoPatchInSeries.__init__ new constructor
+          that expects a series instance.
+        - UnknownPatch new class UnknownPatch replaces InvalidPatchError
     * quilt/patch.py:
         - Patch.run new optional parameters quiet and dry_run.
         - Patch.run work_dir and patch_dir are now Direcory parameters
         - Patch.get_header new method to return the header of a patch
     * quilt/pop.py:
-        - Pop add new signals unapplying, unapplied_patch and unapplied.
+        - Pop add new signals empty_patch, unapplying, unapplied_patch and
+          unapplied.
+        - Pop.unapply_patch, unapply_top_patch, unapply_all added new optional
+          param force.
     * quilt/push.py
-        - Push add signals applying, applied_patch and applied.
+        - Push add signals applying, applying_patch, applied_patch, 
+          appllied_empty_patch and applied.
     * quilt/refresh.py:
         - Refresh add signals refreshed and edit_patch.
     * quilt/revert.py:
