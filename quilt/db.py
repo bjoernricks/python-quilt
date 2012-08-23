@@ -261,6 +261,11 @@ class PatchSeries(object):
         """
         return patch in self.patch2line
 
+    def is_empty(self):
+        """ Returns true if no patch is in the series
+        """
+        return len(self.patch2line) == 0
+
 
 class Db(PatchSeries):
 
