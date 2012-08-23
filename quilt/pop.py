@@ -60,9 +60,13 @@ class Pop(Command):
         timestamp = pc_dir + File(".timestamp")
         timestamp.delete_if_exists()
 
-        unpatch = RollbackPatch(self.cwd, prefix)
-        unpatch.rollback()
-        unpatch.delete_backup()
+        if pc_dir.is_empty():
+            pc_dir.delete()
+            self.empty_patch(patch)
+        else:
+            unpatch = RollbackPatch(self.cwd, pc_dir)
+            unpatch.rollback()
+            unpatch.delete_backup()
 
         self.db.remove_patch(patch)
 
