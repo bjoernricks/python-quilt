@@ -40,9 +40,17 @@ class Pop(Command):
         self.quilt_pc = Directory(quilt_pc)
         self.db = Db(quilt_pc)
 
-    def _check(self):
+    def _check(self, force=False):
         if not self.db.exists() or not self.db.patches():
             raise NoAppliedPatch(self.db)
+        if not force:
+            patch = self.db.top_patch()
+            pc_dir = self.quilt_pc + patch.get_name()
+            refresh = File(pc_dir.get_name() + "~refresh")
+            if refresh.exists():
+                raise QuilError("Patch %s needs to be refreshed first." % \
+                                patch.get_name())
+
 
     def _unapply_patch(self, patch):
         self.unapplying(patch)
@@ -63,10 +71,10 @@ class Pop(Command):
 
         self.unapplied_patch(patch)
 
-    def unapply_patch(self, patch_name):
+    def unapply_patch(self, patch_name, force=False):
         """ Unapply patches up to patch_name. patch_name will end up as top
             patch """
-        self._check()
+        self._check(force)
 
         patches = self.db.patches_after(Patch(patch_name))
         for patch in reversed(patches):
@@ -76,9 +84,9 @@ class Pop(Command):
 
         self.unapplied(self.db.top_patch())
 
-    def unapply_top_patch(self):
+    def unapply_top_patch(self, force=False):
         """ Unapply top patch """
-        self._check()
+        self._check(force)
 
         patch = self.db.top_patch()
         self._unapply_patch(patch)
@@ -87,9 +95,9 @@ class Pop(Command):
 
         self.unapplied(self.db.top_patch())
 
-    def unapply_all(self):
+    def unapply_all(self, force=False):
         """ Unapply all patches """
-        self._check()
+        self._check(force)
 
         for patch in reversed(self.db.applied_patches()):
             self._unapply_patch(patch)
