@@ -154,6 +154,18 @@ class Directory(object):
         contents = os.listdir(self.dirname)
         return len(contents) == 0
 
+    def copy(self, dest, symlinks=False):
+        """ Copy to destination directory recursively.
+        If symlinks is true, symbolic links in the source tree are represented
+        as symbolic links in the new tree, but the metadata of the original
+        links is NOT copied; if false or omitted, the contents and metadata of
+        the linked files are copied to the new tree.
+        """
+        if isinstance(dest, Directory):
+            dest = dest.get_name()
+
+        shutil.copytree(self.dirname, dest)
+
     def __add__(self, other):
         if other == None:
             return self

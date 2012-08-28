@@ -72,6 +72,8 @@
         - Directory.get_name new method to get the name of the directory.
         - Directory.get_absdir new method to get the directory with absolute
           path.
+        - Directory.copy new method to recursively copy a directory to a
+          destination directory.
         - File.get_absfile new method to get the file with an absulute path
         - File.get_basefile new method to get the file without a path
 
