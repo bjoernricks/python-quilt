@@ -97,6 +97,9 @@ class PatchLine(object):
     def get_comment(self):
         return self.comment
 
+    def set_comment(self, comment):
+        self.comment = comment
+
     def __str__(self):
         return self.line
 

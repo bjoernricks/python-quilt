@@ -41,6 +41,7 @@
     * quilt/cli/meta.py:
         - Command.get_cwd add new method to get the current working dir
     * quilt/db.py
+        - PatchLines.set_comment new method to set the comment
         - PatchSeries.is_empty add method to check if a series is empty
         - InvalidPatchError removed class InvalidPatchError
     * quilt/error.py:
