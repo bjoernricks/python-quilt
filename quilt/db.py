@@ -269,6 +269,20 @@ class PatchSeries(object):
         """
         return len(self.patch2line) == 0
 
+    def replace(self, old_patch, new_patch):
+        """ Replace old_patch with new_patch
+        The method only replaces the patch and doesn't change any comments.
+        """
+        self._check_patch(old_patch)
+        old_patchline = self.patch2line[old_patch]
+        index = self.patchlines.index(old_patchline)
+        self.patchlines.pop(index)
+        new_patchline = PatchLine(new_patch)
+        new_patchline.set_comment(old_patchline.get_comment())
+        self.patchlines.insert(index, new_patchline)
+        del self.patch2line[old_patch]
+        self.patch2line[new_patch] = new_patchline
+
 
 class Db(PatchSeries):
 

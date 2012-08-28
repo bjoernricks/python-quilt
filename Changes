@@ -43,6 +43,7 @@
     * quilt/db.py
         - PatchLines.set_comment new method to set the comment
         - PatchSeries.is_empty add method to check if a series is empty
+        - PatchSeries.replace add method to replace a patch in the series
         - InvalidPatchError removed class InvalidPatchError
     * quilt/error.py:
         - AllPatchesApplied.__init__ new constructor that accepts a series and
