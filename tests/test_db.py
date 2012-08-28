@@ -138,6 +138,31 @@ class DbTest(QuiltTest):
         self.assertEqual(newfirst1, db.first_patch())
         self.assertEqual(lastpatch, db.top_patch())
 
+    def test_replace(self):
+        db = PatchSeries(os.path.join(test_dir, "data", "db"),
+                         "series_replace1")
+
+        self.assertTrue(db.exists())
+        self.assertFalse(db.is_empty())
+        self.assertEquals(len(db.patches()), 3)
+
+        patch1 = Patch("patch1")
+        patch2 = Patch("patch2")
+        patch4 = Patch("patch4")
+        patch5 = Patch("patch5")
+
+        self.assertTrue(db.is_patch(patch1))
+        db.replace(patch1, patch4)
+        self.assertFalse(db.is_patch(patch1))
+        self.assertTrue(db.is_patch(patch4))
+
+        self.assertTrue(db.is_patch(patch2))
+        db.replace(patch2, patch5)
+        self.assertFalse(db.is_patch(patch2))
+        self.assertTrue(db.is_patch(patch5))
+
+        patchline = db.patch2line[patch5]
+        self.assertEquals(patchline.get_comment(), " my comment")
 
 
 def suite():
