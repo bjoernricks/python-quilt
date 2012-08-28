@@ -79,6 +79,14 @@
         - File.get_basefile new method to get the file without a path
 
 
+    TESTS
+
+    * tests/test_db.py:
+        - Add test for PatchSeries.replace
+    * tests/test_push.py
+        - Add initial tests for Push class
+
+
 0.1         2012-08-16
 
  * Initial release
