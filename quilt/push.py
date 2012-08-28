@@ -147,9 +147,8 @@ class Push(Command):
         if not patches:
             raise AllPatchesApplied(self.series, top)
 
-        self.applying(patch)
-
         for patch in patches:
+            self.applying(patch)
             self._apply_patch(patch, force)
 
         self.db.save()
