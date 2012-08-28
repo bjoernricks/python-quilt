@@ -135,7 +135,7 @@ class Push(Command):
 
         self.applied(self.db.top_patch())
 
-    def apply_all(self):
+    def apply_all(self, force=False):
         """ Apply all patches in series file """
         self._check()
         top = self.db.top_patch()
