@@ -84,7 +84,9 @@
     * tests/test_db.py:
         - Add test for PatchSeries.replace
     * tests/test_push.py
-        - Add initial tests for Push class
+        - Add tests for Push.apply_all and Push.apply_next_patch
+    * test/test_pop.py
+        - Add tests for Pop.unapply_all and Pop.unapply_top_patch
 
 
 0.1         2012-08-16
