@@ -41,7 +41,7 @@ class Push(Command):
         self.db = Db(quilt_pc)
         self.series = Series(quilt_patches)
 
-    def _apply_patch(self, patch, force=False):
+    def _apply_patch(self, patch, force=False, quiet=False):
         patch_name = patch.get_name()
         pc_dir = self.quilt_pc + patch_name
         patch_file = self.quilt_patches + File(patch_name)
@@ -57,7 +57,7 @@ class Push(Command):
         if patch_file.exists():
             try:
                 patch.run(self.cwd, patch_dir=self.quilt_patches, backup=True,
-                        prefix=pc_dir.get_name())
+                        prefix=pc_dir.get_name(), quiet=quiet)
                 refresh.delete_if_exists()
             except SubprocessError, e:
                 refresh.touch()
@@ -92,7 +92,7 @@ class Push(Command):
         if not self.series.exists() or not self.series.patches():
             raise NoPatchesInSeries(self.series)
 
-    def apply_patch(self, patch_name, force=False):
+    def apply_patch(self, patch_name, force=False, quiet=False):
         """ Apply all patches up to patch_name """
         self._check()
         patch = Patch(patch_name)
@@ -109,13 +109,13 @@ class Push(Command):
         self.applying(patch)
 
         for cur_patch in patches:
-            self._apply_patch(cur_patch, force)
+            self._apply_patch(cur_patch, force, quiet)
 
         self.db.save()
 
         self.applied(self.db.top_patch())
 
-    def apply_next_patch(self, force=False):
+    def apply_next_patch(self, force=False, quiet=False):
         """ Apply next patch in series file """
         self._check()
         top = self.db.top_patch()
@@ -129,13 +129,13 @@ class Push(Command):
 
         self.applying(patch)
 
-        self._apply_patch(patch, force)
+        self._apply_patch(patch, force, quiet)
 
         self.db.save()
 
         self.applied(self.db.top_patch())
 
-    def apply_all(self, force=False):
+    def apply_all(self, force=False, quiet=False):
         """ Apply all patches in series file """
         self._check()
         top = self.db.top_patch()
@@ -149,7 +149,7 @@ class Push(Command):
 
         for patch in patches:
             self.applying(patch)
-            self._apply_patch(patch, force)
+            self._apply_patch(patch, force, quiet)
 
         self.db.save()
 

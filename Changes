@@ -61,9 +61,9 @@
         - Pop.unapply_patch, unapply_top_patch, unapply_all added new optional
           param force.
     * quilt/push.py
-        - Push add signals applying, applying_patch, applied_patch, 
+        - Push add signals applying, applying_patch, applied_patch,
           appllied_empty_patch and applied.
-        - Push.apply_all add optional paramter force
+        - Push.apply_all add optional parameters force and quiet
     * quilt/refresh.py:
         - Refresh add signals refreshed and edit_patch.
     * quilt/revert.py:
