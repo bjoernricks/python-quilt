@@ -30,7 +30,7 @@ sys.path.append(os.path.join(test_dir, os.pardir))
 
 from quilt.patch import Patch
 from quilt.push import Push
-from quilt.utils import Directory, TmpDirectory
+from quilt.utils import Directory, TmpDirectory, File
 
 class PushTest(QuiltTest):
 
@@ -49,13 +49,54 @@ class PushTest(QuiltTest):
             pc_dir = tmp_test_dir + "pc"
             patches_dir = tmp_test_dir + "patches"
 
+            f1 = tmp_test_dir + File("f1")
+            self.assertFalse(f1.exists())
+            f2 = tmp_test_dir + File("f2")
+            self.assertFalse(f2.exists())
 
             push = Push(tmp_test_dir.get_name(), pc_dir.get_name(),
                         patches_dir.get_name())
 
             self.assertEquals(None, push.db.top_patch())
-            push.apply_all()
+            push.apply_all(quiet=True)
             self.assertEquals(patch2, push.db.top_patch())
+
+            self.assertTrue(f1.exists())
+            self.assertTrue(f2.exists())
+
+    def test_apply_next(self):
+        patch1 = Patch("p1.patch")
+        patch2 = Patch("p2.patch")
+
+        test_dir = self.data_dir + "test2"
+
+        with TmpDirectory(dir=self.data_dir.get_name()) as tmp_dir:
+            tmp_test_dir = tmp_dir + "test2"
+            test_dir.copy(tmp_test_dir)
+
+            pc_dir = tmp_test_dir + "pc"
+            patches_dir = tmp_test_dir + "patches"
+
+            f1 = tmp_test_dir + File("f1")
+            self.assertFalse(f1.exists())
+            f2 = tmp_test_dir + File("f2")
+            self.assertFalse(f2.exists())
+
+            push = Push(tmp_test_dir.get_name(), pc_dir.get_name(),
+                        patches_dir.get_name())
+            self.assertEquals(None, push.db.top_patch())
+
+            push.apply_next_patch(quiet=True)
+            self.assertEquals(patch1, push.db.top_patch())
+
+            self.assertTrue(f1.exists())
+            self.assertFalse(f2.exists())
+
+            push.apply_next_patch(quiet=True)
+            self.assertEquals(patch2, push.db.top_patch())
+
+            self.assertTrue(f1.exists())
+            self.assertTrue(f2.exists())
 
 
 def suite():
