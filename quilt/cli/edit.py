@@ -19,8 +19,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301 USA
 
-import os
-
 from quilt.add import Add
 from quilt.cli.meta import Command
 from quilt.utils import SubprocessError, Process
@@ -32,9 +30,7 @@ class EditCommand(Command):
     min_args = 1
 
     def run(self, options, args):
-        cwd = os.getcwd()
-
-        add = Add(cwd, self.get_pc_dir(), self.get_patches_dir())
+        add = Add(self.get_cwd(), self.get_pc_dir(), self.get_patches_dir())
         add.add_files(args, ignore=True)
 
         editor = os.environ.get("EDITOR", "vi")
