@@ -3,6 +3,10 @@
     FEATURES
 
     BUGFIXES
+    * quilt.utils.py:
+        - File.copy create destination directory if it does not exit yet.
+          This fixes an issue when importing a patch in a not exiting patches
+          directory.
 
     API
 
