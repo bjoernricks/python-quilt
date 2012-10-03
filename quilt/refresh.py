@@ -73,7 +73,8 @@ class Refresh(Command):
                     continue
                 orig_file = pc_dir + File(file_name)
                 new_file = File(file_name)
-                left_label, right_label, index = self._get_labels(orig_file,
+                left_label, right_label, index = self._get_labels(file_name,
+                                                                  orig_file,
                                                                   new_file)
                 self._write_index(tmpfile, index)
 
@@ -104,13 +105,11 @@ class Refresh(Command):
 
         self.refreshed(patch)
 
-    def _get_labels(self, old_file, new_file):
+    def _get_labels(self, file_name, old_file, new_file):
         dir = os.path.basename(self.cwd)
 
-        old_file_name = old_file.get_name()
-        new_file_name =  new_file.get_name()
-        old_hdr = dir + ".orig/" + old_file_name
-        new_hdr = dir + "/" + new_file_name
+        old_hdr = dir + ".orig/" + file_name
+        new_hdr = dir + "/" + file_name
 
         index = new_hdr
 
