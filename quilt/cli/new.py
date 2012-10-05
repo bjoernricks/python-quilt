@@ -24,11 +24,9 @@ import os.path
 
 from optparse import OptionParser
 
-from quilt.db import Series, Db
-from quilt.patch import Patch
-from quilt.utils import File, Directory
-
 from quilt.cli.meta import Command
+from quilt.error import PatchAlreadyExists
+from quilt.new import New
 
 class NewCommand(Command):
 
@@ -39,26 +37,8 @@ class NewCommand(Command):
     def run(self, options, args):
         newpatch = args[0]
 
-        series = Series(self.get_patches_dir())
-        if series.is_patch(Patch(newpatch)):
-            print >> sys.stderr, "Patch %s already exists" % newpatch
-            sys.exit(1)
-
-        patch_dir = Directory(self.get_patches_dir())
-        patch_dir.create()
-        patchfile = patch_dir + File(newpatch)
-        patchfile.touch()
-
-        db = Db(self.get_pc_dir())
-        if not db.exists():
-            db.create()
-
-        pc_dir = Directory(os.path.join(self.get_pc_dir(), newpatch))
-        if pc_dir.exists():
-            # be sure that the directory is clear
-            pc_dir.delete()
-        pc_dir.create()
-
-        top = db.top_patch()
-        series.add_patches([Patch(newpatch)], top)
-        series.save()
+        new = New(self.get_cwd(), self.get_pc_dir(), self.get_patches_dir())
+        try:
+            new.create(newpatch)
+        except PatchAlreadyExists, e:
+            print e
