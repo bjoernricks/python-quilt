@@ -71,11 +71,11 @@ class Add(Command):
                 raise QuiltError("File %s is already modified by patch %s" % \
                                  (filename, patch.get_name()))
 
-    def _backup_file(self, filename, patch):
-        """ Creates a backup of filename """
+    def _backup_file(self, file, patch):
+        """ Creates a backup of file """
         dest_dir = self.quilt_pc + patch.get_name()
         backup = Backup()
-        backup.backup_file(filename, dest_dir, copy_empty=True)
+        backup.backup_file(file, dest_dir, copy_empty=True)
 
     def add_file(self, filename, patch_name=None, ignore=False):
         """ Add file to the patch with patch_name.
@@ -101,7 +101,7 @@ class Add(Command):
         if file.is_link():
             raise QuiltError("Cannot add symbolic link %s" % filename)
 
-        self._backup_file(filename, patch)
+        self._backup_file(file, patch)
 
         if file.exists():
             # be sure user can write original file

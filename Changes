@@ -11,6 +11,8 @@
         - Fix filenames in the diff header
 
     API
+    * quilt/add.py:
+        - Add._backup_file not accepts a File class instead of a filename
 
     TESTS
 
