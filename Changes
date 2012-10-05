@@ -8,6 +8,10 @@
         - Added new PatchAlreadyExists error class
 
     BUGFIXES
+    * quilt/add.py:
+        - Add._backup_file uses file directory for destination directory too
+          This fixes creating wrong patches when refreshing a patch for a file
+          in a subdirectory of the sources.
     * quilt/utils.py:
         - File.copy create destination directory if it does not exit yet.
           This fixes an issue when importing a patch in a not exiting patches

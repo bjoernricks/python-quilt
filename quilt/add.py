@@ -74,6 +74,10 @@ class Add(Command):
     def _backup_file(self, file, patch):
         """ Creates a backup of file """
         dest_dir = self.quilt_pc + patch.get_name()
+        file_dir = file.get_directory()
+        if file_dir:
+            #TODO get relative path
+            dest_dir = dest_dir + file_dir
         backup = Backup()
         backup.backup_file(file, dest_dir, copy_empty=True)
 
