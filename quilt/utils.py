@@ -227,9 +227,9 @@ class File(object):
     def copy(self, dest):
         """ Copy file to destination """
         if isinstance(dest, File):
-            dest = dest.filename
             dest_dir = dest.get_directory()
             dest_dir.create()
+            dest = dest.filename
         elif isinstance(dest, Directory):
             dest = dest.dirname
 
