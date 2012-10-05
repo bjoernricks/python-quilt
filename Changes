@@ -1,6 +1,9 @@
 0.3         UNRELEASED
 
     FEATURES
+    * quilt/new.py:
+        - Added new New class to be able to reuse the cli code in a python
+          framework
     * quilt/error.py:
         - Added new PatchAlreadyExists error class
 
