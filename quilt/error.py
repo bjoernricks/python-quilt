@@ -61,3 +61,12 @@ class UnknownPatch(QuiltError):
 
     def __str__(self):
         return "Patch %s is not in series" % self.patch.get_name()
+
+class PatchAlreadyExists(QuiltError):
+
+    def __init__(self, series, patchname):
+        self.series = series
+        self.patchname = patchname
+
+    def __str__(self):
+        return "Patch %s already exists" % self.patchname

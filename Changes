@@ -1,6 +1,8 @@
 0.3         UNRELEASED
 
     FEATURES
+    * quilt/error.py:
+        - Added new PatchAlreadyExists error class
 
     BUGFIXES
     * quilt/utils.py:
