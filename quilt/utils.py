@@ -307,6 +307,7 @@ class TmpFile(File):
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.file.close()
+        os.close(self.fd)
         self.delete_if_exists()
 
 
