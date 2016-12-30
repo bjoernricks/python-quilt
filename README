@@ -7,7 +7,8 @@ to manage a series of patches.
 It's intended to be used within a python application or framework but
 also provides a console client interface called pquilt.
 
-python-quilt only requires patch_ and diff_ for creating and applying diffs.
+python-quilt requires the Six package, <https://pypi.python.org/pypi/six>. It
+also requires patch_ and diff_ for creating and applying diffs.
 
 Source code of python-quilt can be found at https://github.com/bjoernricks/python-quilt
 

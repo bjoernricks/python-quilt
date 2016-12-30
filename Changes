@@ -4,6 +4,7 @@
     * Changed from LGPLv2.1 to MIT license
 
     FEATURES
+    * Now requires Six
     * quilt/new.py:
         - Added new New class to be able to reuse the cli code in a python
           framework

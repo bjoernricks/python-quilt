@@ -9,6 +9,7 @@
 from __future__ import print_function
 
 import os
+import six
 import sys
 
 from optparse import OptionParser
@@ -36,9 +37,8 @@ class CommandMetaClass(type):
         return cls
 
 
+@six.add_metaclass(CommandMetaClass)
 class Command(object):
-
-    __metaclass__ = CommandMetaClass
 
     min_args = 0
     usage = ""
