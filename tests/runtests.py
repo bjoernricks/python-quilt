@@ -34,7 +34,7 @@ def find_test_modules(dirname):
     files = glob.glob(os.path.join(test_dir, "test_*.py"))
     for test_file in files:
             name = os.path.basename(test_file)[:-3]
-            names.append(name + ".suite")
+            names.append(name)
     return names
 
 

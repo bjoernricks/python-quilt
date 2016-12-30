@@ -97,8 +97,5 @@ class PopTest(QuiltTest):
             self.assertFalse(f2.exists())
 
 
-def suite():
-    return PopTest.suite()
-
 if __name__ == "__main__":
     PopTest.run_tests()

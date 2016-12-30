@@ -99,8 +99,5 @@ class PushTest(QuiltTest):
             self.assertTrue(f2.exists())
 
 
-def suite():
-    return PushTest.suite()
-
 if __name__ == "__main__":
     PushTest.run_tests()

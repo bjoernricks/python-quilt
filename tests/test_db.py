@@ -165,8 +165,5 @@ class DbTest(QuiltTest):
         self.assertEquals(patchline.get_comment(), " my comment")
 
 
-def suite():
-    return DbTest.suite()
-
 if __name__ == "__main__":
     DbTest.run_tests()
