@@ -18,6 +18,7 @@
         - File.copy create destination directory if it does not exit yet.
           This fixes an issue when importing a patch in a not exiting patches
           directory.
+        - TmpFile.file now has read-write access, not just read access
     * quilt/refresh.py
         - Fix filenames in the diff header
     * quilt/cli/next.py:

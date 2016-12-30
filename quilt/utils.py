@@ -286,14 +286,14 @@ class File(object):
 
 class TmpFile(File):
     """ Tempoary file that is intended to be used within a context manager
-    If used with as a context manager in a with statement the temporary
+    If used as a context manager in a with statement the temporary
     file is deleted automatically.
     """
 
     def __init__(self, suffix="", prefix="tmp", dir=None, text=False):
         fd, filename = tempfile.mkstemp(suffix, prefix, dir, text)
         self.fd = fd
-        self.file = os.fdopen(fd, "rw")
+        self.file = os.fdopen(fd, "r+b")
         super(TmpFile, self).__init__(filename)
 
     def open(self, mode=None, buffering=None):
