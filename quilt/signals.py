@@ -10,6 +10,9 @@ import weakref
 
 class MethodRef(object):
 
+    """ May be compared for equality, but cannot be hashed, stored as a
+        dictionary key, etc. """
+    
     def __init__(self, func):
         if hasattr(func, "im_self"):
             # it's a method
@@ -52,6 +55,8 @@ class MethodRef(object):
                         self.func == other.__func__
             else:
                 return False
+    
+    __hash__ = None
 
 
 class Signal(object):
