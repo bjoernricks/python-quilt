@@ -18,6 +18,15 @@ import tempfile
 
 from quilt.error import QuiltError
 
+if str is bytes:  # Python < 3
+    def _encode_str(s):
+        return s
+else:  # Python 3
+    from locale import getpreferredencoding
+    _encoding = getpreferredencoding(do_setlocale=False)
+    def _encode_str(s):
+        return s.encode(_encoding)
+
 
 class SubprocessError(QuiltError):
 

@@ -13,10 +13,10 @@ from quilt.db import Db, Series
 from quilt.error import QuiltError
 from quilt.patch import Patch, Diff
 from quilt.signals import Signal
-from quilt.utils import Directory, File, TmpFile
+from quilt.utils import Directory, File, TmpFile, _encode_str
 
 INDEX_LINE = \
-    "==================================================================="
+    b"==================================================================="
 
 class Refresh(Command):
     """ Command class to refresh (add or remove chunks) a patch
@@ -110,8 +110,8 @@ class Refresh(Command):
         return (old_hdr, new_hdr, index)
 
     def _write_index(self, f, index):
-        f.write("Index: ")
-        f.write(index)
-        f.write("\n")
+        f.write(b"Index: ")
+        f.write(_encode_str(index))
+        f.write(b"\n")
         f.write(INDEX_LINE)
-        f.write("\n")
+        f.write(b"\n")
