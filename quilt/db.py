@@ -6,6 +6,8 @@
 #
 # See LICENSE comming with the source of python-quilt for details.
 
+from __future__ import print_function
+
 import getopt
 import os.path
 import sys
@@ -76,7 +78,7 @@ class PatchLine(object):
                     elif o in ["-R", "--reverse"]:
                         reverse = True
             except getopt.GetoptError as err:
-                print >> sys.stderr, err
+                print(err, file=sys.stderr)
 
         self.patch = Patch(patch_name, strip, reverse)
 

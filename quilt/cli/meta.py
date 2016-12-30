@@ -6,6 +6,8 @@
 #
 # See LICENSE comming with the source of python-quilt for details.
 
+from __future__ import print_function
+
 import os
 import sys
 
@@ -85,5 +87,5 @@ class Command(object):
         return os.getcwd()
 
     def exit_error(self, error, value=1):
-        print >> sys.stderr, error
+        print(error, file=sys.stderr)
         sys.exit(value)
