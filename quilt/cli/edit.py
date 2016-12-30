@@ -27,5 +27,5 @@ class EditCommand(Command):
                 cmd = [editor]
                 cmd.append(filename)
                 Process(cmd).run(cwd=cwd)
-            except SubprocessError, e:
+            except SubprocessError as e:
                 self.exit_error(e, value=e.returncode)

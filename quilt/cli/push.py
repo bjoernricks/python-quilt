@@ -35,14 +35,14 @@ class PushCommand(Command):
             push.apply_patch(args[0], options.force)
 
     def applying_patch(self, patch):
-        print "Applying patch %s" % patch.get_name()
+        print("Applying patch %s" % patch.get_name())
 
     def applied(self, patch):
-        print "Now at patch %s" % patch.get_name()
+        print("Now at patch %s" % patch.get_name())
 
     def applied_empty_patch(self, patch, exists):
         if exists:
-            print "Patch %s appears to be empty; applied" % patch.get_name()
+            print("Patch %s appears to be empty; applied" % patch.get_name())
         else:
-            print "Patch %s does not exist; applied empty patch" % \
-                  patch.get_name()
+            print("Patch %s does not exist; applied empty patch" % \
+                  patch.get_name())

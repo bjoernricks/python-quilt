@@ -174,7 +174,7 @@ class Diff(object):
 
         try:
             Process(cmd).run(cwd=cwd, stdout=fd)
-        except SubprocessError, e:
+        except SubprocessError as e:
             if e.get_returncode() > 1:
                 raise e
 
@@ -188,7 +188,7 @@ class Diff(object):
 
         try:
             Process(cmd).run(cwd=cwd, suppress_output=True)
-        except SubprocessError, e:
+        except SubprocessError as e:
             if e.get_returncode() == 1:
                 return False
             else:

@@ -75,7 +75,7 @@ class PatchLine(object):
                         strip = a
                     elif o in ["-R", "--reverse"]:
                         reverse = True
-            except getopt.GetoptError, err:
+            except getopt.GetoptError as err:
                 print >> sys.stderr, err
 
         self.patch = Patch(patch_name, strip, reverse)

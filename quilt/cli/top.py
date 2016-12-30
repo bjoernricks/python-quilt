@@ -20,4 +20,4 @@ class TopCommand(Command):
         if not top:
             self.exit_error("No patches applied.")
 
-        print top
+        print(top)

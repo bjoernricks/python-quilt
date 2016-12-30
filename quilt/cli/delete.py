@@ -47,10 +47,10 @@ class DeleteCommand(Command):
             delete.delete_patch(patch, options.remove, options.remove)
 
     def deleted_patch(self, patch):
-        print "Removed patch %s" % patch.get_name()
+        print("Removed patch %s" % patch.get_name())
 
     def deleting_patch(self, patch, applied):
         if applied:
-            print "Removing currently applied patch %s" % patch.get_name()
+            print("Removing currently applied patch %s" % patch.get_name())
         else:
-            print "Removing patch %s" % patch.get_name()
+            print("Removing patch %s" % patch.get_name())

@@ -50,7 +50,7 @@ def main():
     else:
         names = find_test_modules(test_dir)
     if not names:
-        print "No tests available"
+        print("No tests available")
         sys.exit(1)
 
     suite = unittest.defaultTestLoader.loadTestsFromNames(names)

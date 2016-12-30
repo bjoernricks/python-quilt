@@ -17,4 +17,4 @@ class SeriesCommand(Command):
     def run(self, option, args):
         series = Series(self.get_patches_dir())
         for patch in series.patches():
-            print patch
+            print(patch)

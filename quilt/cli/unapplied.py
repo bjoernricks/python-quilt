@@ -25,4 +25,4 @@ class UnappliedCommand(Command):
         else:
             patches = series.patches_after(top)
         for patch in patches:
-            print patch
+            print(patch)

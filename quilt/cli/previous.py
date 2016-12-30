@@ -33,4 +33,4 @@ class PreviousCommand(Command):
             if not patch:
                 self.exit_error("No patch available before %s." % top)
             else:
-                print patch
+                print(patch)

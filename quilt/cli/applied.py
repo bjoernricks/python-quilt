@@ -21,4 +21,4 @@ class AppliedCommand(Command):
             raise NoAppliedPatch(db)
 
         for patch in db.applied_patches():
-            print patch
+            print(patch)

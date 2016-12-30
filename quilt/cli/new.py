@@ -27,5 +27,5 @@ class NewCommand(Command):
         new = New(self.get_cwd(), self.get_pc_dir(), self.get_patches_dir())
         try:
             new.create(newpatch)
-        except PatchAlreadyExists, e:
-            print e
+        except PatchAlreadyExists as e:
+            print(e)

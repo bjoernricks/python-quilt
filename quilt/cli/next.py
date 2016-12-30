@@ -35,10 +35,10 @@ class NextCommand(Command):
             if not top:
                 self.exit_error("No patch in series.")
             else:
-                print top
+                print(top)
         else:
             patch = series.patch_after(top)
             if not patch:
                 self.exit_error("No patch available after %s." % top)
             else:
-                print patch
+                print(patch)

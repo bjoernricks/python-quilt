@@ -28,7 +28,7 @@ class RevertCommand(Command):
         revert.revert_files(args, options.patch)
 
     def file_reverted(self, file, patch):
-        print "Changes to %s in patch %s reverted" % (file.get_name(),
-                                                      patch.get_name())
+        print("Changes to %s in patch %s reverted" % (file.get_name(),
+                                                      patch.get_name()))
     def file_unchanged(self, file, patch):
-        print "File %s is unchanged" % file.get_name()
+        print("File %s is unchanged" % file.get_name())

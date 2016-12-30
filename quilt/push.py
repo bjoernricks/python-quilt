@@ -46,7 +46,7 @@ class Push(Command):
                 patch.run(self.cwd, patch_dir=self.quilt_patches, backup=True,
                         prefix=pc_dir.get_name(), quiet=quiet)
                 refresh.delete_if_exists()
-            except SubprocessError, e:
+            except SubprocessError as e:
                 refresh.touch()
 
                 if not force:

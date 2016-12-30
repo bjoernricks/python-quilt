@@ -27,4 +27,4 @@ class AddCommand(Command):
         add.add_files(args, options.patch)
 
     def file_added(self, file, patch):
-        print "File %s added to patch %s" % (file.get_name(), patch.get_name())
+        print("File %s added to patch %s" % (file.get_name(), patch.get_name()))

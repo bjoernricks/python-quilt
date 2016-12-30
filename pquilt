@@ -15,10 +15,10 @@ from quilt.cli import find_command, list_commands
 from quilt.error import QuiltError
 
 def usage():
-    print "%s command [--help] ..." % (os.path.basename(sys.argv[0]))
-    print "Available commands:"
+    print("%s command [--help] ..." % os.path.basename(sys.argv[0]))
+    print("Available commands:")
     for cmd in list_commands():
-        print "\t", cmd[0]
+        print("\t" + cmd[0])
 
 def main():
     if not len(sys.argv) > 1:
@@ -31,12 +31,12 @@ def main():
     try:
         cmd_cls = find_command(cmd)
         if not cmd_cls:
-            print "command %s not known." % cmd
+            print("command %s not known." % cmd)
             usage()
             sys.exit(2)
         cmd_cls().parse(args)
-    except QuiltError, e:
-        print e
+    except QuiltError as e:
+        print(e)
         sys.exit(1)
 
 if __name__ == "__main__":

@@ -34,13 +34,13 @@ class PopCommand(Command):
             pop.unapply_patch(args[0])
 
     def unapplying(self, patch):
-        print "Removing patch %s" % patch.get_name()
+        print("Removing patch %s" % patch.get_name())
 
     def unapplied(self, patch):
         if not patch:
-            print "No patches applied"
+            print("No patches applied")
         else:
-            print "Now at patch %s" % patch.get_name()
+            print("Now at patch %s" % patch.get_name())
 
     def empty_patch(self, patch):
-        print "Patch %s appears to be empty, removing" % patch.get_name()
+        print("Patch %s appears to be empty, removing" % patch.get_name())

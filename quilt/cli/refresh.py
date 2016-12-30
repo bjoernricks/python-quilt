@@ -43,8 +43,8 @@ class RefreshCommand(Command):
             cmd = [editor]
             cmd.append(tmpfile.get_name())
             Process(cmd).run(cwd=os.getcwd())
-        except SubprocessError, e:
+        except SubprocessError as e:
             self.exit_error(e, value=e.returncode)
 
     def refreshed(self, patch):
-        print "Patch %s refreshed" % patch.get_name()
+        print("Patch %s refreshed" % patch.get_name())
