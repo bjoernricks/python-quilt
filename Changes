@@ -9,6 +9,7 @@
 
     BUGFIXES
     * quilt/db.py:
+        - Check the full ".pc/.version" contents, not just the first byte
         - Fix parsing and error reporting of patch options in series files
     * quilt/add.py:
         - Add._backup_file uses file directory for destination directory too

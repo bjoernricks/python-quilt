@@ -320,10 +320,12 @@ class Db(PatchSeries):
     def check_version(self, version_file):
         """ Checks if the .version file in dirname has the correct supported
             version number """
+        # The file contains a version number as a decimal integer, optionally
+        # followed by a newline
         with open(version_file, "r") as f:
-            version = f.read(1)
+            version = f.read(10)
 
-        if not version == str(DB_VERSION):
+        if len(version) >= 10 or version.rstrip("\r\n") != str(DB_VERSION):
             raise DBError("The quilt meta-data version of %r is not supported "
                           "by python-quilt. Python-quilt only supports "
                           "version %r" % (version, DB_VERSION))
