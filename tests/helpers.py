@@ -23,6 +23,11 @@
 
 import unittest
 
+try:  # Python < 3
+    from cStringIO import StringIO
+except ImportError:  # Python 3
+    from io import StringIO
+
 class QuiltTest(unittest.TestCase):
     """ Base class for all TestCases """
 
@@ -44,3 +49,24 @@ class QuiltTest(unittest.TestCase):
         runner = unittest.TextTestRunner()
         runner.run(cls.suite())
 
+class tmp_mapping:
+    """ Context manager for temporarily altering a mapping """
+    
+    def __init__(self, target):
+        self.target = target
+        self.orig = dict()
+    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, *exc):
+        while self.orig:
+            (key, value) = self.orig.popitem()
+            if value is None:
+                del self.target[key]
+            else:
+                self.target[key] = value
+    
+    def set(self, key, value):
+        self.orig.setdefault(key, self.target.get(key))
+        self.target[key] = value
