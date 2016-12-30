@@ -28,6 +28,8 @@
           This fixes an issue when importing a patch in a not exiting patches
           directory.
         - TmpFile.file now has read-write access, not just read access
+        - Close file descriptors promptly when suppressing child process
+          output.
     * quilt/pop.py, quilt/push.py:
         - Fix raising correct exception class.
     * quilt/refresh.py
