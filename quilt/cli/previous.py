@@ -40,14 +40,10 @@ class PreviousCommand(Command):
                 top = db.top_patch()
 
         if not top:
-            top = series.first_patch()
-            if not top:
-                self.exit_error("No patch in series.")
-            else:
-                print top
+            self.exit_error("No patches applied.")
         else:
             patch = series.patch_before(top)
             if not patch:
-                self.exit_error("No patch available after %s." % patch)
+                self.exit_error("No patch available before %s." % top)
             else:
                 print patch

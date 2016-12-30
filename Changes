@@ -18,6 +18,9 @@
           directory.
     * quilt/refresh.py
         - Fix filenames in the diff header
+    * quilt/cli/previous.py:
+        - Fix error message when the topmost patch is the first patch
+        - Don't report first unapplied patch if no patches are applied
 
     API
     * quilt/add.py:
