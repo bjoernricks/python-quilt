@@ -57,12 +57,12 @@ class DbTest(QuiltTest):
         self.assertEqual([], db.patches_before(firstpatch))
         self.assertEqual(patch_list(["firstpatch", "secondpatch"]),
                          db.patches_before(thirdpatch))
-        self.assertEquals(patch_list(["patchwith.patch", "patchwith.diff",
+        self.assertEqual(patch_list(["patchwith.patch", "patchwith.diff",
                           "patchwith", "lastpatch"]),
                           db.patches_after(thirdpatch))
-        self.assertEquals([], db.patches_after(lastpatch))
-        self.assertEquals(None, db.patch_after(lastpatch))
-        self.assertEquals(thirdpatch, db.patch_after(secondpatch))
+        self.assertEqual([], db.patches_after(lastpatch))
+        self.assertEqual(None, db.patch_after(lastpatch))
+        self.assertEqual(thirdpatch, db.patch_after(secondpatch))
         self.assertEqual(patch_list(["firstpatch", "secondpatch",
                          "thirdpatch"]),
                          db.patches_until(thirdpatch))
@@ -169,7 +169,7 @@ class DbTest(QuiltTest):
 
         self.assertTrue(db.exists())
         self.assertFalse(db.is_empty())
-        self.assertEquals(len(db.patches()), 3)
+        self.assertEqual(len(db.patches()), 3)
 
         patch1 = Patch("patch1")
         patch2 = Patch("patch2")
@@ -187,7 +187,7 @@ class DbTest(QuiltTest):
         self.assertTrue(db.is_patch(patch5))
 
         patchline = db.patch2line[patch5]
-        self.assertEquals(patchline.get_comment(), " my comment")
+        self.assertEqual(patchline.get_comment(), " my comment")
 
 
 if __name__ == "__main__":

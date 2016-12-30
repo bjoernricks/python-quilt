@@ -40,9 +40,9 @@ class PopTest(QuiltTest):
 
             pop = Pop(tmp_test_dir.get_name(), pc_dir.get_name())
 
-            self.assertEquals(patch2, pop.db.top_patch())
+            self.assertEqual(patch2, pop.db.top_patch())
             pop.unapply_all()
-            self.assertEquals(None, pop.db.top_patch())
+            self.assertEqual(None, pop.db.top_patch())
 
             self.assertFalse(f1.exists())
             self.assertFalse(f2.exists())
@@ -66,16 +66,16 @@ class PopTest(QuiltTest):
             self.assertTrue(f2.exists())
 
             pop = Pop(tmp_test_dir.get_name(), pc_dir.get_name())
-            self.assertEquals(patch2, pop.db.top_patch())
+            self.assertEqual(patch2, pop.db.top_patch())
 
             pop.unapply_top_patch()
-            self.assertEquals(patch1, pop.db.top_patch())
+            self.assertEqual(patch1, pop.db.top_patch())
 
             self.assertTrue(f1.exists())
             self.assertFalse(f2.exists())
 
             pop.unapply_top_patch()
-            self.assertEquals(None, pop.db.top_patch())
+            self.assertEqual(None, pop.db.top_patch())
 
             self.assertFalse(f1.exists())
             self.assertFalse(f2.exists())
