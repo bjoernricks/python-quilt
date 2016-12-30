@@ -19,12 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301 USA
 
-import sys
-
 from quilt.cli.meta import Command
 from quilt.db import Db, Series
 from quilt.patch import Patch
-from quilt.utils import File, Directory
 
 class NextCommand(Command):
 
@@ -32,8 +29,6 @@ class NextCommand(Command):
     name = "next"
 
     def run(self, options, args):
-        patch_name = args[0]
-
         series = Series(self.get_patches_dir())
         if not series.exists():
             self.exit_error("No series file found.")
@@ -42,6 +37,7 @@ class NextCommand(Command):
 
         top = None
         if len(args) == 1:
+            patch_name = args[0]
             top = Patch(patch_name)
         else:
             if db.exists():
@@ -56,6 +52,6 @@ class NextCommand(Command):
         else:
             patch = series.patch_after(top)
             if not patch:
-                self.exit_error("No patch available after %s." % patch_name)
+                self.exit_error("No patch available after %s." % top)
             else:
                 print patch

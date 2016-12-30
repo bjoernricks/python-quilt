@@ -18,6 +18,8 @@
           directory.
     * quilt/refresh.py
         - Fix filenames in the diff header
+    * quilt/cli/next.py:
+        - Fix default behaviour without any patch argument
     * quilt/cli/previous.py:
         - Fix error message when the topmost patch is the first patch
         - Don't report first unapplied patch if no patches are applied
