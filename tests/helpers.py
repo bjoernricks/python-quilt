@@ -31,13 +31,6 @@ except ImportError:  # Python 3
 class QuiltTest(unittest.TestCase):
     """ Base class for all TestCases """
 
-    def assert_same_content(self, expected_file, actual_file):
-        expected = None
-        with open(expected_file, "r") as f:
-            expected = f.read()
-        with open(actual_fiel, "r") as f:
-            actual = f.read()
-
     @classmethod
     def suite(cls):
         suite = unittest.TestSuite()
