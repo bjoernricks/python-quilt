@@ -34,7 +34,7 @@ class Revert(Command):
 
     def _file_in_patch(self, filename, patch):
         """ Checks if a backup file of the filename in the current patch
-        exists and raises a QuiltException if not.
+        exists and raises a QuiltError if not.
         """
         pc_dir = self.quilt_pc + patch.get_name()
         file = pc_dir + File(filename)
