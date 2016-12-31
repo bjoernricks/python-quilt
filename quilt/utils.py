@@ -44,7 +44,7 @@ class SubprocessError(QuiltError):
         retval = "Command %s finished with return code %d" % (self.command,
                                                               self.returncode)
         if self.output:
-            retval += "Output was: '%s'" % self.output
+            retval += "; output was: '%s'" % self.output
         return retval
 
 
