@@ -32,6 +32,9 @@
           output.
     * quilt/pop.py, quilt/push.py:
         - Fix raising correct exception class.
+    * quilt/push.py:
+        - Allow pushing a patch even if a previous attempt failed
+        - Prevent pushing if the topmost patch needs refreshing first
     * quilt/refresh.py
         - Fix filenames in the diff header
     * quit/revert.py:
