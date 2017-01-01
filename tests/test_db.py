@@ -28,7 +28,7 @@ from helpers import QuiltTest, StringIO, tmp_mapping
 test_dir = os.path.dirname(__file__)
 sys.path.append(os.path.join(test_dir, os.pardir))
 
-from quilt.db import PatchSeries, Series
+from quilt.db import Db, DBError, DB_VERSION, PatchSeries, Series
 from quilt.db import Patch
 from quilt.utils import TmpDirectory
 
@@ -37,6 +37,15 @@ def patch_list(patch_names):
 
 class DbTest(QuiltTest):
 
+    def test_version(self):
+        version = "234\n"
+        self.assertTrue(version.startswith(format(DB_VERSION)))
+        with TmpDirectory() as dir:
+            file = os.path.join(dir.get_name(), ".version")
+            with open(file, "wb") as file:
+                file.write(version.encode("ascii"))
+            self.assertRaises(DBError, Db, dir.get_name())
+    
     def test_series(self):
         firstpatch = Patch("firstpatch")
         lastpatch = Patch("lastpatch")
