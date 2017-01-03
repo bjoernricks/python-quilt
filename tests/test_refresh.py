@@ -6,6 +6,7 @@
 
 import os
 
+from .helpers import make_file
 from unittest import TestCase
 
 import quilt.refresh
@@ -25,14 +26,11 @@ class Test(TestCase):
                 db.create()
                 backup = os.path.join(".pc", "patch")
                 os.mkdir(backup)
-                with open(os.path.join(backup, "file"), "wb") as backup:
-                    pass
+                make_file(b"", backup, "file")
                 db.add_patch(Patch("patch"))
                 db.save()
-                with open("patch", "wb") as file:
-                    pass
-                with open("file", "wb") as file:
-                    file.write(b"added\n")
+                make_file(b"", "patch")
+                make_file(b"added\n", "file")
                 cmd = quilt.refresh.Refresh(".", ".pc", ".")
                 cmd.refresh()
                 with open("patch", "r") as patch:

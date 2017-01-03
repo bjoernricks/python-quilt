@@ -8,6 +8,10 @@
 
 """ Helpers for the python-quilt test suite """
 
+from contextlib import contextmanager
+import os, os.path
+from quilt.db import Series
+from quilt.utils import TmpDirectory
 import unittest
 
 
@@ -24,6 +28,14 @@ class QuiltTest(unittest.TestCase):
     def run_tests(cls):
         runner = unittest.TextTestRunner()
         runner.run(cls.suite())
+
+
+@contextmanager
+def tmp_series():
+    with TmpDirectory() as dir:
+        patches = os.path.join(dir.get_name(), "patches")
+        os.mkdir(patches)
+        yield (dir.get_name(), Series(patches))
 
 
 class tmp_mapping:
@@ -47,3 +59,8 @@ class tmp_mapping:
     def set(self, key, value):
         self.orig.setdefault(key, self.target.get(key))
         self.target[key] = value
+
+
+def make_file(contents, *path):
+    with open(os.path.join(*path), "wb") as file:
+        file.write(contents)

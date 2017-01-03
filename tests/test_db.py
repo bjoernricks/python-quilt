@@ -11,12 +11,12 @@ import os.path
 from six.moves import cStringIO
 import sys
 
-from helpers import QuiltTest, tmp_mapping
+from helpers import QuiltTest, make_file, tmp_mapping, tmp_series
 
 test_dir = os.path.dirname(__file__)
 sys.path.append(os.path.join(test_dir, os.pardir))
 
-from quilt.db import Db, DBError, DB_VERSION, PatchSeries, Series
+from quilt.db import Db, DBError, DB_VERSION, PatchSeries
 from quilt.db import Patch
 from quilt.utils import TmpDirectory
 
@@ -31,9 +31,7 @@ class DbTest(QuiltTest):
         version = "234\n"
         self.assertTrue(version.startswith(format(DB_VERSION)))
         with TmpDirectory() as dir:
-            file = os.path.join(dir.get_name(), ".version")
-            with open(file, "wb") as file:
-                file.write(version.encode("ascii"))
+            make_file(version.encode("ascii"), dir.get_name(), ".version")
             self.assertRaises(DBError, Db, dir.get_name())
 
     def test_series(self):
@@ -75,13 +73,10 @@ class DbTest(QuiltTest):
                          db.patches())
 
     def test_patch_args(self):
-        with TmpDirectory() as dir:
-            series = Series(dir.get_name())
-            with open(series.series_file, "wb") as file:
-                file.write(
-                    b"patch1 -p0 --reverse\n"
-                    b"patch2 --strip=0 -R\n"
-                )
+        with tmp_series() as [dir, series]:
+            make_file(
+                b"patch1 -p0 --reverse\n"
+                b"patch2 --strip=0 -R\n", series.series_file)
             series.read()
             [patch1, patch2] = series.patches()
             self.assertEqual(patch1.strip, "0")
@@ -90,10 +85,8 @@ class DbTest(QuiltTest):
             self.assertIs(patch2.reverse, True)
 
     def test_bad_args(self):
-        with TmpDirectory() as dir:
-            series = Series(dir.get_name())
-            with open(series.series_file, "wb") as file:
-                file.write(b"patch -X\n")
+        with tmp_series() as [dir, series]:
+            make_file(b"patch -X\n", series.series_file)
             with tmp_mapping(vars(sys)) as tmp_sys:
                 tmp_sys.set("stderr", cStringIO())
                 series.read()

@@ -7,10 +7,13 @@
 #
 # See LICENSE comming with the source of python-quilt for details.
 
-import os.path
+from contextlib import contextmanager
+import os, os.path
+import six
 
-from helpers import QuiltTest
+from helpers import QuiltTest, make_file, tmp_series
 
+from quilt.error import QuiltError
 from quilt.patch import Patch
 from quilt.push import Push
 from quilt.utils import Directory, TmpDirectory, File
@@ -82,6 +85,62 @@ class PushTest(QuiltTest):
 
             self.assertTrue(f1.exists())
             self.assertTrue(f2.exists())
+    
+    def test_force(self):
+        with tmp_series() as [dir, series]:
+            self._make_conflict(dir, series)
+            series.save()
+            cmd = Push(dir, quilt_pc=dir, quilt_patches=series.dirname)
+            with six.assertRaisesRegex(
+                        self, QuiltError, r"does not apply"), \
+                    self._suppress_output():
+                cmd.apply_next_patch(quiet=True)
+            with six.assertRaisesRegex(self, QuiltError,
+                        r"Applied patch.*needs refresh"), \
+                    self._suppress_output():
+                cmd.apply_next_patch(quiet=True, force=True)
+    
+    def test_without_refresh(self):
+        with tmp_series() as [dir, series]:
+            self._make_conflict(dir, series)
+            series.add_patch("p2")
+            series.save()
+            cmd = Push(dir, quilt_pc=dir, quilt_patches=series.dirname)
+            with six.assertRaisesRegex(self, QuiltError,
+                        r"Applied patch.*needs refresh"), \
+                    self._suppress_output():
+                cmd.apply_next_patch(quiet=True, force=True)
+            with six.assertRaisesRegex(self, QuiltError,
+                    r"needs to be refreshed"):
+                cmd.apply_next_patch()
+    
+    def _make_conflict(self, dir, series):
+        series.add_patch(Patch("conflict.patch"))
+        make_file(
+            b"--- orig/file\n"
+            b"+++ new/file\n"
+            b"@@ -1 +1 @@\n"
+            b"-old\n"
+            b"+new\n", series.dirname, "conflict.patch")
+        make_file(b"conflict\n", dir, "file")
+    
+    @contextmanager
+    def _suppress_output(self):
+        """ Silence error messages from the "patch" command """
+        STDOUT_FILENO = 1
+        STDERR_FILENO = 2
+        with open(os.devnull, "w") as null:
+            stdout = os.dup(STDOUT_FILENO)
+            stderr = os.dup(STDERR_FILENO)
+            os.dup2(null.fileno(), STDOUT_FILENO)
+            os.dup2(null.fileno(), STDERR_FILENO)
+        try:
+            yield
+        finally:
+            os.dup2(stdout, STDOUT_FILENO)
+            os.dup2(stderr, STDERR_FILENO)
+            os.close(stdout)
+            os.close(stderr)
 
 
 if __name__ == "__main__":
