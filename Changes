@@ -8,6 +8,8 @@
         - Added new PatchAlreadyExists error class
 
     BUGFIXES
+    * quilt/db.py:
+        - Fix parsing and error reporting of patch options in series files
     * quilt/add.py:
         - Add._backup_file uses file directory for destination directory too
           This fixes creating wrong patches when refreshing a patch for a file

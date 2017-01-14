@@ -21,6 +21,7 @@
 
 import getopt
 import os.path
+import sys
 
 from quilt.error import QuiltError, UnknownPatch
 from quilt.patch import Patch
@@ -78,6 +79,7 @@ class PatchLine(object):
             patch_name = patchline
 
         if patch_args:
+            patch_args = patch_args.split()
             try:
                 opts, args = getopt.getopt(patch_args, "p:R", ["strip=",
                                                                "reverse"])
