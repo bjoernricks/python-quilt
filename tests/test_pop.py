@@ -8,9 +8,12 @@
 # See LICENSE comming with the source of python-quilt for details.
 
 import os.path
+import six
 
-from helpers import QuiltTest
+from helpers import QuiltTest, make_file
 
+from quilt.db import Db
+from quilt.error import QuiltError
 from quilt.patch import Patch
 from quilt.pop import Pop
 from quilt.utils import Directory, TmpDirectory, File
@@ -79,6 +82,17 @@ class PopTest(QuiltTest):
 
             self.assertFalse(f1.exists())
             self.assertFalse(f2.exists())
+    
+    def test_unrefreshed(self):
+        with TmpDirectory() as dir:
+            db = Db(dir.get_name())
+            db.add_patch(Patch("unrefreshed.patch"))
+            db.save()
+            make_file(b"", db.dirname, "unrefreshed.patch~refresh")
+            cmd = Pop(dir.get_name(), db.dirname)
+            with six.assertRaisesRegex(self, QuiltError,
+                    r"needs to be refreshed"):
+                cmd.unapply_top_patch()
 
 
 if __name__ == "__main__":
