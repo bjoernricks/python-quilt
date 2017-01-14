@@ -22,15 +22,15 @@
 
 import os.path
 import sys
-import shutil
 
-from helpers import QuiltTest
+from helpers import QuiltTest, StringIO, tmp_mapping
 
 test_dir = os.path.dirname(__file__)
 sys.path.append(os.path.join(test_dir, os.pardir))
 
-from quilt.db import PatchSeries
+from quilt.db import PatchSeries, Series
 from quilt.db import Patch
+from quilt.utils import TmpDirectory
 
 def patch_list(patch_names):
     return [Patch(name) for name in patch_names]
@@ -73,6 +73,16 @@ class DbTest(QuiltTest):
                           "patchwith.patch", "patchwith.diff",
                           "patchwith", "lastpatch"]),
                           db.patches())
+
+    def test_bad_args(self):
+        with TmpDirectory() as dir:
+            series = Series(dir.get_name())
+            with open(series.series_file, "wb") as file:
+                file.write(b"patch -X\n")
+            with tmp_mapping(vars(sys)) as tmp_sys:
+                tmp_sys.set("stderr", StringIO())
+                series.read()
+                self.assertIn("-X", sys.stderr.getvalue())
 
     def test_add_remove(self):
         # test add, remove patches
