@@ -65,9 +65,10 @@ class Delete(Command):
         backup are True a copy of the deleted patch file will be made.
         """
         patch = self.db.top_patch()
-        if not patch:
-            raise NoAppliedPatch(self.db)
-        after = self.db.patch_after(patch)
+        if patch:
+            after = self.db.patch_after(patch)
+        else:
+            after = self.series.first_patch()
         if not after:
             raise QuiltError("No next patch")
 
