@@ -41,7 +41,7 @@ class DeleteCommand(Command):
         if args.next:
             delete.delete_next(args.remove, args.backup)
         else:
-            delete.delete_patch(args.patch, args.remove, args.remove)
+            delete.delete_patch(args.patch, args.remove, args.backup)
 
     def deleted_patch(self, patch):
         print("Removed patch %s" % patch.get_name())
