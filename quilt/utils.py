@@ -19,6 +19,11 @@ import tempfile
 
 from quilt.error import QuiltError
 
+try:  # Python 3: getargspec() is deprecated
+    _getargspec = inspect.getfullargspec
+except AttributeError:  # Python < 3
+    _getargspec = inspect.getargspec
+
 if str is bytes:  # Python < 3
     def _encode_str(s):
         return s
@@ -325,7 +330,7 @@ class FunctionWrapper(object):
 
     def _get_varnames(self):
         if inspect.isfunction(self.func):
-            return inspect.getargspec(self.func)[0]
+            return _getargspec(self.func).args
         elif isinstance(self.func, FunctionWrapper):
             return self.func._get_varnames()
 
