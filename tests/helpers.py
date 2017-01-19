@@ -12,6 +12,8 @@ from contextlib import contextmanager
 import os, os.path
 from quilt.db import Series
 from quilt.utils import TmpDirectory
+from six.moves import cStringIO
+import sys
 import unittest
 
 
@@ -36,6 +38,17 @@ def tmp_series():
         patches = os.path.join(dir.get_name(), "patches")
         os.mkdir(patches)
         yield (dir.get_name(), Series(patches))
+
+
+def run_cli(command_cls, args, patches, applied):
+    with tmp_mapping(os.environ) as env, \
+            tmp_mapping(vars(sys)) as tmp_sys:
+        env.set("QUILT_PATCHES", patches)
+        env.set("QUILT_PC", applied)
+        tmp_sys.set("stdout", cStringIO())
+        args = type("args", (), args)
+        command_cls().run(args)
+        return sys.stdout.getvalue()
 
 
 class tmp_mapping:

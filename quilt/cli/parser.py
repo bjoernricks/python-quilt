@@ -134,7 +134,7 @@ class ArgumentsCollectorMetaClass(type):
 class ArgumentGroup(object):
 
     """
-    A class to declarative define argument groups at a class
+    A class to declare argument groups at a class
 
     Usage:
         class MyParser(Parser):
@@ -251,7 +251,7 @@ class SubParserGroup(object):
 class Argument(object):
 
     """
-    A class to declarative define positional arguments at a class
+    A class to declare positional arguments at a class
 
     Usage:
         class MyParser(Parser):
@@ -310,7 +310,7 @@ class Argument(object):
 class OptionArgument(Argument):
 
     """
-    A class to declarative define (optional) arguments at a class
+    A class to declare (optional) arguments at a class
 
     Usage:
         class MyParser(Parser):
@@ -319,6 +319,12 @@ class OptionArgument(Argument):
             arg2 = OptionArgument(type=int)
             arg3 = OptionArgument(nargs=2)
             arg4 = OptionArgument(required=True)
+    
+    By default, the option name is taken from the attribute name and prefixed
+    with two dashes, or one dash if the name is a single character:
+    
+    verbose = OptionArgument(action="store_true")  # usage: [--verbose]
+    v = OptionArgument(action="store_true")  # usage: [-v]
     """
 
     prefix_chars = "--"
@@ -326,7 +332,10 @@ class OptionArgument(Argument):
     def _get_args(self):
         args = self.args
         if not args:
-            args = (self.prefix_chars + self.name,)
+            if self.prefix_chars == "--" and len(self.name) == 1:
+                args = ("-" + self.name,)
+            else:
+                args = (self.prefix_chars + self.name,)
         return args
 
 

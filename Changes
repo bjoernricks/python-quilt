@@ -12,6 +12,7 @@
         - Added new PatchAlreadyExists error class
     * quilt/cli:
         - Replaced optparse with argparse.
+        - Add "series -v" option.
 
     BUGFIXES
     * quilt/db.py:
