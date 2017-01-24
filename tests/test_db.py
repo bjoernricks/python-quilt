@@ -74,6 +74,21 @@ class DbTest(QuiltTest):
                           "patchwith", "lastpatch"]),
                           db.patches())
 
+    def test_patch_args(self):
+        with TmpDirectory() as dir:
+            series = Series(dir.get_name())
+            with open(series.series_file, "wb") as file:
+                file.write(
+                    b"patch1 -p0 --reverse\n"
+                    b"patch2 --strip=0 -R\n"
+                )
+            series.read()
+            [patch1, patch2] = series.patches()
+            self.assertEqual(patch1.strip, "0")
+            self.assertIs(patch1.reverse, True)
+            self.assertEqual(patch2.strip, "0")
+            self.assertIs(patch2.reverse, True)
+
     def test_bad_args(self):
         with TmpDirectory() as dir:
             series = Series(dir.get_name())
