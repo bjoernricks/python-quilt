@@ -84,9 +84,9 @@ class PatchLine(object):
                 opts, args = getopt.getopt(patch_args, "p:R", ["strip=",
                                                                "reverse"])
                 for o, a in opts:
-                    if o in ["p", "strip"]:
+                    if o in ["-p", "--strip"]:
                         strip = a
-                    elif o in ["R", "reverse"]:
+                    elif o in ["-R", "--reverse"]:
                         reverse = True
             except getopt.GetoptError, err:
                 print >> sys.stderr, err
