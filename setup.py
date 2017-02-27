@@ -17,36 +17,44 @@
 
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301 USA
 
 from setuptools import setup
 
+from codecs import open
+
+import os
+
 import quilt
 
-f = open('README.rst', 'r')
-README = f.read()
+here = os.path.abspath(os.path.dirname(__file__))
 
-setup(name="python-quilt",
-      version=quilt.__version__,
-      description="A quilt patchsystem implementation in Python",
-      author="Björn Ricks",
-      author_email="bjoern.ricks@gmail.com",
-      url="http://github.com/bjoernricks/python-quilt",
-      scripts=["pquilt"],
-      license="LGPLv2.1+",
-      packages=["quilt", "quilt.cli"],
-      classifiers=["Development Status :: 3 - Alpha",
-                   "Environment :: Console",
-                   "Intended Audience :: Developers",
-                   "Intended Audience :: System Administrators",
-                   "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
-                   "Programming Language :: Python",
-                   "Topic :: Software Development :: Build Tools",
-                   "Topic :: System :: Software Distribution",
-                   "Topic :: Utilities",
-                   ],
-      long_description=README,
-      )
+with open(os.path.join(here, 'README.rst'), 'r', encoding="utf-8") as f:
+    README = f.read()
 
-
+setup(
+    name="python-quilt",
+    version=quilt.__version__,
+    description="A quilt patchsystem implementation in Python",
+    author="Björn Ricks",
+    author_email="bjoern.ricks@gmail.com",
+    url="http://github.com/bjoernricks/python-quilt",
+    scripts=["pquilt"],
+    license="LGPLv2.1+",
+    packages=["quilt", "quilt.cli"],
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Environment :: Console",
+        "Intended Audience :: Developers",
+        "Intended Audience :: System Administrators",
+        "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2.7",
+        "Topic :: Software Development :: Build Tools",
+        "Topic :: System :: Software Distribution",
+        "Topic :: Utilities",
+    ],
+    long_description=README,
+    keywords="patch quilt python cli",
+)
