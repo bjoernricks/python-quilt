@@ -3,7 +3,7 @@
 
 # python-quilt - A Python implementation of the quilt patch system
 #
-# Copyright (C) 2012  Björn Ricks <bjoern.ricks@googlemail.com>
+# Copyright (C) 2012, 2017  Björn Ricks <bjoern.ricks@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -20,7 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
 # 02110-1301 USA
 
-from distutils.core import setup
+from setuptools import setup
 
 import quilt
 
