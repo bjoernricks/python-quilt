@@ -13,6 +13,7 @@ import six
 
 from helpers import QuiltTest, make_file, tmp_series
 
+from quilt.db import Db
 from quilt.error import QuiltError
 from quilt.patch import Patch
 from quilt.push import Push
@@ -113,6 +114,30 @@ class PushTest(QuiltTest):
             with six.assertRaisesRegex(self, QuiltError,
                     r"needs to be refreshed"):
                 cmd.apply_next_patch()
+    
+    def test_fail_after_success(self):
+        """ Test where the first patch applies but a later patch fails """
+        with tmp_series() as [dir, series]:
+            make_file(
+                b"--- /dev/null\n"
+                b"+++ dir/new-file\n"
+                b"@@ -0,0 +1,1 @@\n"
+                b"+new file\n", series.dirname, "good.patch")
+            series.add_patch(Patch("good.patch"))
+            
+            self._make_conflict(dir, series)
+            series.save()
+            cmd = Push(dir, quilt_pc=dir, quilt_patches=series.dirname)
+            with six.assertRaisesRegex(self, QuiltError,
+                        r"conflict\.patch does not apply"), \
+                    self._suppress_output():
+                cmd.apply_all()
+            [applied] = Db(dir).patches()
+            self.assertEqual(applied.get_name(), "good.patch")
+            with open(os.path.join(dir, "new-file"), "rb") as file:
+                self.assertEqual(file.read(), b"new file\n")
+            with open(os.path.join(dir, "file"), "rb") as file:
+                self.assertEqual(file.read(), b"conflict\n")
     
     def _make_conflict(self, dir, series):
         series.add_patch(Patch("conflict.patch"))

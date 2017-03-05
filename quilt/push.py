@@ -100,10 +100,11 @@ class Push(Command):
 
         self.applying(patch)
 
-        for cur_patch in patches:
-            self._apply_patch(cur_patch, force, quiet)
-
-        self.db.save()
+        try:
+            for cur_patch in patches:
+                self._apply_patch(cur_patch, force, quiet)
+        finally:
+            self.db.save()
 
         self.applied(self.db.top_patch())
 
@@ -139,10 +140,11 @@ class Push(Command):
         if not patches:
             raise AllPatchesApplied(self.series, top)
 
-        for patch in patches:
-            self.applying(patch)
-            self._apply_patch(patch, force, quiet)
-
-        self.db.save()
+        try:
+            for patch in patches:
+                self.applying(patch)
+                self._apply_patch(patch, force, quiet)
+        finally:
+            self.db.save()
 
         self.applied(self.db.top_patch())
