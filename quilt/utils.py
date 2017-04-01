@@ -72,7 +72,8 @@ class Process(object):
                 if suppress_output:
                     kw["stdout"].close()
         except OSError as e:
-            raise SubprocessError(self.cmd, e.errno, e.strerror)
+            msg = "Failed starting command {!r}: {}".format(self.cmd, e)
+            raise QuiltError(msg)
 
         if inputdata is not None:
             process.stdin.write(inputdata)
