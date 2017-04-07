@@ -23,11 +23,6 @@
 
 import unittest
 
-try:  # Python < 3
-    from cStringIO import StringIO
-except ImportError:  # Python 3
-    from io import StringIO
-
 class QuiltTest(unittest.TestCase):
     """ Base class for all TestCases """
 

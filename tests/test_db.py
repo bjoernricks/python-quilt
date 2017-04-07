@@ -21,9 +21,10 @@
 # 02110-1301 USA
 
 import os.path
+from six.moves import cStringIO
 import sys
 
-from helpers import QuiltTest, StringIO, tmp_mapping
+from helpers import QuiltTest, tmp_mapping
 
 test_dir = os.path.dirname(__file__)
 sys.path.append(os.path.join(test_dir, os.pardir))
@@ -104,7 +105,7 @@ class DbTest(QuiltTest):
             with open(series.series_file, "wb") as file:
                 file.write(b"patch -X\n")
             with tmp_mapping(vars(sys)) as tmp_sys:
-                tmp_sys.set("stderr", StringIO())
+                tmp_sys.set("stderr", cStringIO())
                 series.read()
                 self.assertIn("-X", sys.stderr.getvalue())
 

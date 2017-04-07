@@ -2,10 +2,11 @@
 
 from contextlib import contextmanager
 import os, os.path
+from six.moves import cStringIO
 import sys
 from unittest import TestCase
 
-from helpers import StringIO, tmp_mapping
+from helpers import tmp_mapping
 
 from quilt.cli.next import NextCommand
 from quilt.cli.previous import PreviousCommand
@@ -15,7 +16,7 @@ class Test(TestCase):
     def test_previous_only_unapplied(self):
         with self._setup_test_data(), \
                 tmp_mapping(vars(sys)) as tmp_sys:
-            tmp_sys.set("stderr", StringIO())
+            tmp_sys.set("stderr", cStringIO())
             with self.assertRaises(SystemExit) as caught:
                 PreviousCommand().run(None, [])
             self.assertEqual(caught.exception.code, 1)
@@ -24,7 +25,7 @@ class Test(TestCase):
     def test_next_topmost(self):
         with self._setup_test_data(), \
                 tmp_mapping(vars(sys)) as tmp_sys:
-            tmp_sys.set("stdout", StringIO())
+            tmp_sys.set("stdout", cStringIO())
             NextCommand().run(None, [])
             self.assertEqual("p1.patch\n", sys.stdout.getvalue())
     
