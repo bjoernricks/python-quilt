@@ -1,5 +1,8 @@
 0.3         UNRELEASED
 
+    META
+    * Changed from LGPLv2.1 to MIT license
+
     FEATURES
     * quilt/new.py:
         - Added new New class to be able to reuse the cli code in a python
