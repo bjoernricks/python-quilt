@@ -2,3 +2,7 @@
 *.pyc
 tags
 MANIFEST
+dist
+build
+.pc/
+*.egg-info
