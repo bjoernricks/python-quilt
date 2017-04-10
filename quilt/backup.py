@@ -59,7 +59,7 @@ class Backup(object):
 
     @DirectoryParam(["src_dir", "dest_dir"])
     def backup_dir(self, src_dir, dest_dir, copy_empty=False):
-        for file_name in src.files():
+        for file_name in src_dir.files():
             file = File(file_name)
             file_dir = file.get_directory()
             if file_dir:
