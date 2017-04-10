@@ -1,3 +1,7 @@
+# vim: fileencoding=utf-8 et sw=4 ts=4 tw=80:
+
+# See LICENSE comming with the source of python-quilt for details.
+
 import runpy
 from six.moves import cStringIO
 import sys
