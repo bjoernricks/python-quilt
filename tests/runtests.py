@@ -7,22 +7,11 @@
 #
 # See LICENSE comming with the source of python-quilt for details.
 
-import os
-import glob
 import sys
 import unittest
 import optparse
 
-test_dir = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(os.path.join(test_dir, os.pardir))
-
-def find_test_modules(dirname):
-    names = []
-    files = glob.glob(os.path.join(test_dir, "test_*.py"))
-    for test_file in files:
-            name = os.path.basename(test_file)[:-3]
-            names.append(name)
-    return names
+from tests import find_test_modules
 
 
 def main():
@@ -35,7 +24,7 @@ def main():
     if args:
         names = args
     else:
-        names = find_test_modules(test_dir)
+        names = find_test_modules()
     if not names:
         print("No tests available")
         sys.exit(1)
