@@ -12,9 +12,10 @@ from quilt.backup import Backup
 from quilt.command import Command
 from quilt.db import Db, Series
 from quilt.error import QuiltError
-from quilt.patch import Diff
+from quilt.patch import Diff, Patch
 from quilt.signals import Signal
 from quilt.utils import Directory, File, TmpDirectory
+
 
 class Revert(Command):
 
