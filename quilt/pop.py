@@ -10,10 +10,11 @@ import os.path
 
 from quilt.command import Command
 from quilt.db import Db, Series
-from quilt.error import NoAppliedPatch
+from quilt.error import NoAppliedPatch, QuiltError
 from quilt.patch import RollbackPatch, Patch
 from quilt.signals import Signal
 from quilt.utils import Directory, File
+
 
 class Pop(Command):
 
@@ -35,9 +36,8 @@ class Pop(Command):
             pc_dir = self.quilt_pc + patch.get_name()
             refresh = File(pc_dir.get_name() + "~refresh")
             if refresh.exists():
-                raise QuilError("Patch %s needs to be refreshed first." % \
-                                patch.get_name())
-
+                raise QuiltError("Patch %s needs to be refreshed first." %
+                                 patch.get_name())
 
     def _unapply_patch(self, patch):
         self.unapplying(patch)
