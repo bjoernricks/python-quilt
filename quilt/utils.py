@@ -25,6 +25,7 @@ if str is bytes:  # Python < 3
 else:  # Python 3
     from locale import getpreferredencoding
     _encoding = getpreferredencoding(do_setlocale=False)
+
     def _encode_str(s):
         return s.encode(_encoding)
 
@@ -41,7 +42,7 @@ class SubprocessError(QuiltError):
 
     def __str__(self):
         retval = "Command %s finished with return code %d" % (self.command,
-                     self.returncode)
+                                                              self.returncode)
         if self.output:
             retval += "Output was: '%s'" % self.output
         return retval
@@ -164,7 +165,7 @@ class Directory(object):
         shutil.copytree(self.dirname, dest)
 
     def __add__(self, other):
-        if other == None:
+        if other is None:
             return self
         if isinstance(other, Directory):
             return Directory(os.path.join(self.dirname, other.dirname))

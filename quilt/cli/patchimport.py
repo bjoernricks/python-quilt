@@ -11,6 +11,7 @@ import os
 from quilt.cli.meta import Command
 from quilt.patchimport import Import
 
+
 class PatchImportCommand(Command):
     name = "import"
     usage = "%prog import [-P patch] patchfile [...]"
@@ -22,7 +23,8 @@ class PatchImportCommand(Command):
                           "single patch.", dest="patchname")
 
     def run(self, options, args):
-        importp = Import(os.getcwd(), self.get_pc_dir(), self.get_patches_dir())
+        importp = Import(os.getcwd(), self.get_pc_dir(),
+                         self.get_patches_dir())
 
         if options.patchname:
             if len(args) > 1:

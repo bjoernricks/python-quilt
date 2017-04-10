@@ -15,6 +15,7 @@ from quilt.pop import Pop
 from quilt.signals import Signal
 from quilt.utils import Directory, File
 
+
 class Delete(Command):
 
     """Command class to delete patches

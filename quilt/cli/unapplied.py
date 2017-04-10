@@ -6,10 +6,9 @@
 #
 # See LICENSE comming with the source of python-quilt for details.
 
-import os
-
 from quilt.cli.meta import Command
 from quilt.db import Db, Series
+
 
 class UnappliedCommand(Command):
 

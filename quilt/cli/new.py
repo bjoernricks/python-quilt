@@ -6,14 +6,10 @@
 #
 # See LICENSE comming with the source of python-quilt for details.
 
-import sys
-import os.path
-
-from optparse import OptionParser
-
 from quilt.cli.meta import Command
 from quilt.error import PatchAlreadyExists
 from quilt.new import New
+
 
 class NewCommand(Command):
 

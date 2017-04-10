@@ -6,6 +6,7 @@
 #
 # See LICENSE comming with the source of python-quilt for details.
 
+
 class QuiltError(Exception):
     pass
 
@@ -38,7 +39,8 @@ class AllPatchesApplied(QuiltError):
         if not self.top:
             return "All patches are already applied"
         return "File series fully applied, ends at patch %s" % \
-                self.top.get_name()
+            self.top.get_name()
+
 
 class UnknownPatch(QuiltError):
 
@@ -48,6 +50,7 @@ class UnknownPatch(QuiltError):
 
     def __str__(self):
         return "Patch %s is not in series" % self.patch.get_name()
+
 
 class PatchAlreadyExists(QuiltError):
 

@@ -9,6 +9,7 @@
 from quilt.cli.meta import Command
 from quilt.push import Push
 
+
 class PushCommand(Command):
 
     usage = "%prog push [-a] [patch]"
@@ -44,5 +45,5 @@ class PushCommand(Command):
         if exists:
             print("Patch %s appears to be empty; applied" % patch.get_name())
         else:
-            print("Patch %s does not exist; applied empty patch" % \
+            print("Patch %s does not exist; applied empty patch" %
                   patch.get_name())

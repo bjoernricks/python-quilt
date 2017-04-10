@@ -18,6 +18,7 @@ from quilt.utils import Directory, File, TmpFile, _encode_str
 INDEX_LINE = \
     b"==================================================================="
 
+
 class Refresh(Command):
     """ Command class to refresh (add or remove chunks) a patch
     """

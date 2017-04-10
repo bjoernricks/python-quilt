@@ -55,7 +55,7 @@ class Revert(Command):
             file = self.quilt_pc + File(os.path.join(patch.get_name(),
                                                      filename))
             if file.exists():
-                raise QuiltError("File %s is modified by patch %s" % \
+                raise QuiltError("File %s is modified by patch %s" %
                                  (filename, patch.get_name()))
 
     def _apply_patch_temporary(self, tmpdir, file, patch):
@@ -64,11 +64,10 @@ class Revert(Command):
         patch_file = self.quilt_patches + File(patch.get_name())
 
         if patch_file.exists() and not patch_file.is_empty():
-            patch.run(self.cwd, self.quilt_patches.get_absdir(), work_dir=tmpdir,
-                      no_backup_if_mismatch=True, remove_empty_files=True,
-                      force=True, quiet=True)
+            patch.run(self.cwd, self.quilt_patches.get_absdir(),
+                      work_dir=tmpdir, no_backup_if_mismatch=True,
+                      remove_empty_files=True, force=True, quiet=True)
         return backup_file
-
 
     def revert_file(self, filename, patch_name=None):
         """ Revert not added changes of filename.
@@ -96,8 +95,8 @@ class Revert(Command):
             return
 
         with TmpDirectory(prefix="pquilt-") as tmpdir:
-            # apply current patch in tempary directory to revert changes of file
-            # that aren't committed in the patch
+            # apply current patch in tempary directory to revert changes of
+            # file that aren't committed in the patch
             tmp_file = self._apply_patch_temporary(tmpdir, pc_file, patch)
             if tmp_file and tmp_file.exists() and not tmp_file.is_empty():
 

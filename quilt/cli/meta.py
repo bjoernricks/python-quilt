@@ -18,11 +18,14 @@ from quilt.db import Db, Series
 
 command_map = dict()
 
+
 def register_command(name, command_class):
     command_map[name] = command_class
 
+
 def find_command(name):
     return command_map.get(name, None)
+
 
 def list_commands():
     return sorted(command_map.items())

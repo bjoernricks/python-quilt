@@ -9,10 +9,11 @@
 from quilt.cli.meta import Command
 from quilt.delete import Delete
 
+
 class DeleteCommand(Command):
 
     usage = "%prog delete [-r] [--backup] [patch|-n]"
-    name  = "delete"
+    name = "delete"
 
     def add_args(self, parser):
         parser.add_option("-r", help="Remove the deleted patch file from the " \

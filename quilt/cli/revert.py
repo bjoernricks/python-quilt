@@ -11,6 +11,7 @@ import os
 from quilt.revert import Revert
 from quilt.cli.meta import Command
 
+
 class RevertCommand(Command):
 
     usage = "%prog revert [-p patch] file1 [...]"
@@ -30,5 +31,6 @@ class RevertCommand(Command):
     def file_reverted(self, file, patch):
         print("Changes to %s in patch %s reverted" % (file.get_name(),
                                                       patch.get_name()))
+
     def file_unchanged(self, file, patch):
         print("File %s is unchanged" % file.get_name())

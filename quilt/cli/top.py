@@ -9,6 +9,7 @@
 from quilt.cli.meta import Command
 from quilt.db import Db
 
+
 class TopCommand(Command):
 
     usage = "%prog top"

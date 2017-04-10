@@ -9,8 +9,9 @@
 import os
 import os.path
 
-from quilt.utils import Process, Directory, DirectoryParam, File, FileParam, \
+from quilt.utils import Process, DirectoryParam, File, FileParam, \
                         SubprocessError
+
 
 class Patch(object):
 
@@ -24,7 +25,8 @@ class Patch(object):
     @DirectoryParam(["patch_dir", "work_dir"])
     def run(self, cwd, patch_dir=None, backup=False, prefix=None,
             reverse=False, work_dir=None, force=False, dry_run=False,
-            no_backup_if_mismatch=False, remove_empty_files=False, quiet=False):
+            no_backup_if_mismatch=False, remove_empty_files=False,
+            quiet=False):
         cmd = ["patch"]
         cmd.append("-p" + str(self.strip))
 
@@ -92,7 +94,7 @@ class Patch(object):
         return b"".join(lines)
 
     def __eq__(self, other):
-        return (isinstance(other, Patch) and self.get_name() == \
+        return (isinstance(other, Patch) and self.get_name() ==
                 other.get_name())
 
     def __hash__(self):

@@ -13,6 +13,7 @@ from quilt.patch import Patch, RollbackPatch
 from quilt.signals import Signal
 from quilt.utils import SubprocessError, File, Directory
 
+
 class Push(Command):
 
     applying = Signal()
@@ -35,8 +36,7 @@ class Push(Command):
         refresh = File(pc_dir.get_name() + "~refresh")
 
         if refresh.exists():
-            raise QuiltError("Patch %s needs to be refreshed" % \
-                                  patch_name)
+            raise QuiltError("Patch %s needs to be refreshed" % patch_name)
 
         forced = False
         self.applying_patch(patch)
@@ -44,7 +44,7 @@ class Push(Command):
         if patch_file.exists():
             try:
                 patch.run(self.cwd, patch_dir=self.quilt_patches, backup=True,
-                        prefix=pc_dir.get_name(), quiet=quiet)
+                          prefix=pc_dir.get_name(), quiet=quiet)
                 refresh.delete_if_exists()
             except SubprocessError as e:
                 refresh.touch()

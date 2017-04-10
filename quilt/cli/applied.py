@@ -9,6 +9,7 @@
 from quilt.cli.meta import Command
 from quilt.error import NoAppliedPatch
 
+
 class AppliedCommand(Command):
 
     name = "applied"

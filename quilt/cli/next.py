@@ -10,6 +10,7 @@ from quilt.cli.meta import Command
 from quilt.db import Db, Series
 from quilt.patch import Patch
 
+
 class NextCommand(Command):
 
     usage = "%prog next [patchname]"

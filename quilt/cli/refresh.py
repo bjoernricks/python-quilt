@@ -12,6 +12,7 @@ from quilt.cli.meta import Command
 from quilt.refresh import Refresh
 from quilt.utils import SubprocessError, Process
 
+
 class RefreshCommand(Command):
 
     usage = "%prog refresh [patch]"

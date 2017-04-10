@@ -9,6 +9,7 @@
 from quilt.cli.meta import Command
 from quilt.db import Series
 
+
 class SeriesCommand(Command):
 
     usage = "%prog series"

@@ -6,7 +6,8 @@
 #
 # See LICENSE comming with the source of python-quilt for details.
 
-from quilt.utils import Directory, File, DirectoryParam, FileParam
+from quilt.utils import File, DirectoryParam, FileParam
+
 
 class Backup(object):
 

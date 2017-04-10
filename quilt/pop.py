@@ -6,10 +6,8 @@
 #
 # See LICENSE comming with the source of python-quilt for details.
 
-import os.path
-
 from quilt.command import Command
-from quilt.db import Db, Series
+from quilt.db import Db
 from quilt.error import NoAppliedPatch, QuiltError
 from quilt.patch import RollbackPatch, Patch
 from quilt.signals import Signal

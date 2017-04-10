@@ -13,6 +13,7 @@ from quilt.db import Db, Series
 from quilt.patch import Patch
 from quilt.utils import Directory, File
 
+
 class Import(Command):
     """ Command class to import patches into the patch queue """
 

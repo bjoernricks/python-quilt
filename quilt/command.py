@@ -6,6 +6,7 @@
 #
 # See LICENSE comming with the source of python-quilt for details.
 
+
 class Command(object):
 
     def __init__(self, cwd):

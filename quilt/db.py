@@ -16,8 +16,8 @@ import sys
 from quilt.error import QuiltError, UnknownPatch
 from quilt.patch import Patch
 
-
 DB_VERSION = 2
+
 
 class DBError(QuiltError):
     pass
@@ -192,7 +192,7 @@ class PatchSeries(object):
 
     def patches(self):
         """ Returns the list of patches """
-        return [line.get_patch() for line in self.patchlines if \
+        return [line.get_patch() for line in self.patchlines if
                 line.get_patch()]
 
     def _patchlines_after(self, patch):
@@ -217,7 +217,7 @@ class PatchSeries(object):
 
     def patches_after(self, patch):
         """ Returns a list of patches after patch from the patches list """
-        return [line.get_patch() for line in self._patchlines_after(patch) if \
+        return [line.get_patch() for line in self._patchlines_after(patch) if
                 line.get_patch()]
 
     def patch_after(self, patch):
@@ -231,7 +231,7 @@ class PatchSeries(object):
 
     def patches_before(self, patch):
         """ Returns a list of patches before patch from the patches list """
-        return [line.get_patch() for line in self._patchlines_before(patch) \
+        return [line.get_patch() for line in self._patchlines_before(patch)
                 if line.get_patch()]
 
     def patch_before(self, patch):
@@ -247,7 +247,7 @@ class PatchSeries(object):
         """ Returns a list of patches before patch from the patches list
         including the provided patch
         """
-        return [line.get_patch() for line in self._patchlines_until(patch) if \
+        return [line.get_patch() for line in self._patchlines_until(patch) if
                 line.get_patch()]
 
     def is_patch(self, patch):

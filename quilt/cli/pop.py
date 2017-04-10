@@ -11,6 +11,7 @@ import os
 from quilt.cli.meta import Command
 from quilt.pop import Pop
 
+
 class PopCommand(Command):
 
     usage = "%prog pop [-a] [patch]"
@@ -18,7 +19,7 @@ class PopCommand(Command):
 
     def add_args(self, parser):
         parser.add_option("-a", "--all", help="remove all applied patches",
-                        action="store_true")
+                          action="store_true")
 
     def run(self, options, args):
         pop = Pop(os.getcwd(), self.get_pc_dir())
