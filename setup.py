@@ -26,6 +26,7 @@ setup(
     description="A quilt patchsystem implementation in Python",
     author="Björn Ricks",
     author_email="bjoern.ricks@gmail.com",
+    install_requires=["six"],
     url="http://github.com/bjoernricks/python-quilt",
     scripts=["pquilt"],
     license="LGPLv2.1+",
