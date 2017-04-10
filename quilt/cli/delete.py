@@ -34,8 +34,7 @@ class DeleteCommand(Command):
         delete.deleting_patch.connect(self.deleting_patch)
 
         if options.next and len(args) > 0:
-            parser.print_usage()
-            sys.exit(1)
+            self.exit_error("-n parameter doesn't take an argument")
 
         if options.next:
             delete.delete_next(options.remove, options.remove)
