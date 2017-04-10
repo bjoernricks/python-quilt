@@ -5,12 +5,14 @@
 # See LICENSE comming with the source of python-quilt for details.
 
 import os
+
 from unittest import TestCase
 
-from quilt.db import Db, Patch
-from quilt.error import QuiltError
 import quilt.refresh
+
+from quilt.db import Db, Patch
 from quilt.utils import TmpDirectory
+
 
 class Test(TestCase):
 

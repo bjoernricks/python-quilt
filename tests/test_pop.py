@@ -8,23 +8,21 @@
 # See LICENSE comming with the source of python-quilt for details.
 
 import os.path
-import sys
 
 from helpers import QuiltTest
-
-test_dir = os.path.dirname(__file__)
-sys.path.append(os.path.join(test_dir, os.pardir))
 
 from quilt.patch import Patch
 from quilt.pop import Pop
 from quilt.utils import Directory, TmpDirectory, File
+
+test_dir = os.path.dirname(__file__)
+
 
 class PopTest(QuiltTest):
 
     data_dir = Directory(os.path.join(test_dir, "data", "pop"))
 
     def test_unapply_all(self):
-        patch1 = Patch("p1.patch")
         patch2 = Patch("p2.patch")
 
         test_dir = self.data_dir + "test1"
@@ -34,7 +32,6 @@ class PopTest(QuiltTest):
             test_dir.copy(tmp_test_dir)
 
             pc_dir = tmp_test_dir + "pc"
-            patches_dir = tmp_test_dir + "patches"
 
             f1 = tmp_test_dir + File("f1")
             self.assertTrue(f1.exists())
@@ -58,10 +55,10 @@ class PopTest(QuiltTest):
 
         with TmpDirectory(dir=self.data_dir.get_name()) as tmp_dir:
             tmp_test_dir = tmp_dir + "test2"
+
             test_dir.copy(tmp_test_dir)
 
             pc_dir = tmp_test_dir + "pc"
-            patches_dir = tmp_test_dir + "patches"
 
             f1 = tmp_test_dir + File("f1")
             self.assertTrue(f1.exists())

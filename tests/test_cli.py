@@ -3,11 +3,14 @@
 # See LICENSE comming with the source of python-quilt for details.
 
 import runpy
-from six.moves import cStringIO
 import sys
+
 from unittest import TestCase
 
+from six.moves import cStringIO
+
 from helpers import tmp_mapping
+
 
 class Test(TestCase):
 

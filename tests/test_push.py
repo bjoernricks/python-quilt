@@ -8,23 +8,21 @@
 # See LICENSE comming with the source of python-quilt for details.
 
 import os.path
-import sys
 
 from helpers import QuiltTest
-
-test_dir = os.path.dirname(__file__)
-sys.path.append(os.path.join(test_dir, os.pardir))
 
 from quilt.patch import Patch
 from quilt.push import Push
 from quilt.utils import Directory, TmpDirectory, File
+
+test_dir = os.path.dirname(__file__)
+
 
 class PushTest(QuiltTest):
 
     data_dir = Directory(os.path.join(test_dir, "data", "push"))
 
     def test_apply_all(self):
-        patch1 = Patch("p1.patch")
         patch2 = Patch("p2.patch")
 
         test_dir = self.data_dir + "test1"

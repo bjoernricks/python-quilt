@@ -20,8 +20,10 @@ from quilt.db import Db, DBError, DB_VERSION, PatchSeries, Series
 from quilt.db import Patch
 from quilt.utils import TmpDirectory
 
+
 def patch_list(patch_names):
     return [Patch(name) for name in patch_names]
+
 
 class DbTest(QuiltTest):
 
@@ -33,7 +35,7 @@ class DbTest(QuiltTest):
             with open(file, "wb") as file:
                 file.write(version.encode("ascii"))
             self.assertRaises(DBError, Db, dir.get_name())
-    
+
     def test_series(self):
         firstpatch = Patch("firstpatch")
         lastpatch = Patch("lastpatch")
@@ -43,9 +45,9 @@ class DbTest(QuiltTest):
         db = PatchSeries(os.path.join(test_dir, "data", "db"), "series_test1")
 
         self.assertEqual(patch_list(["firstpatch", "secondpatch", "thirdpatch",
-                          "patchwith.patch", "patchwith.diff",
-                          "patchwith", "lastpatch"]),
-                          db.patches())
+                                     "patchwith.patch", "patchwith.diff",
+                                     "patchwith", "lastpatch"]),
+                         db.patches())
         self.assertEqual(firstpatch, db.first_patch())
         self.assertEqual(lastpatch, db.top_patch())
         self.assertEqual(secondpatch, db.patch_after(firstpatch))
@@ -55,7 +57,7 @@ class DbTest(QuiltTest):
         self.assertEqual(patch_list(["firstpatch", "secondpatch"]),
                          db.patches_before(thirdpatch))
         self.assertEquals(patch_list(["patchwith.patch", "patchwith.diff",
-                           "patchwith", "lastpatch"]),
+                          "patchwith", "lastpatch"]),
                           db.patches_after(thirdpatch))
         self.assertEquals([], db.patches_after(lastpatch))
         self.assertEquals(None, db.patch_after(lastpatch))
@@ -67,9 +69,9 @@ class DbTest(QuiltTest):
         # test re-reading patches list
         db.read()
         self.assertEqual(patch_list(["firstpatch", "secondpatch", "thirdpatch",
-                          "patchwith.patch", "patchwith.diff",
-                          "patchwith", "lastpatch"]),
-                          db.patches())
+                                     "patchwith.patch", "patchwith.diff",
+                                     "patchwith", "lastpatch"]),
+                         db.patches())
 
     def test_patch_args(self):
         with TmpDirectory() as dir:
@@ -107,18 +109,18 @@ class DbTest(QuiltTest):
         db.add_patch(newlastpatch)
         self.assertTrue(db.is_patch(newlastpatch))
         self.assertEqual(patch_list(["firstpatch", "secondpatch", "thirdpatch",
-                          "patchwith.patch", "patchwith.diff",
-                          "patchwith", "lastpatch",
-                          "newlastpatch"]),
-                          db.patches())
+                                     "patchwith.patch", "patchwith.diff",
+                                     "patchwith", "lastpatch",
+                                     "newlastpatch"]),
+                         db.patches())
         self.assertEqual(newlastpatch, db.top_patch())
 
         db.remove_patch(newlastpatch)
         self.assertFalse(db.is_patch(newlastpatch))
         self.assertEqual(patch_list(["firstpatch", "secondpatch", "thirdpatch",
-                          "patchwith.patch", "patchwith.diff",
-                          "patchwith", "lastpatch"]),
-                          db.patches())
+                                     "patchwith.patch", "patchwith.diff",
+                                     "patchwith", "lastpatch"]),
+                         db.patches())
         self.assertEqual(lastpatch, db.top_patch())
 
         newfirst1 = Patch("newfirst1")
@@ -127,10 +129,10 @@ class DbTest(QuiltTest):
         self.assertTrue(db.is_patch(newfirst1))
         self.assertTrue(db.is_patch(newfirst2))
         self.assertEqual(patch_list(["newfirst1", "newfirst2",
-                          "firstpatch", "secondpatch", "thirdpatch",
-                          "patchwith.patch", "patchwith.diff",
-                          "patchwith", "lastpatch"]),
-                          db.patches())
+                                     "firstpatch", "secondpatch", "thirdpatch",
+                                     "patchwith.patch", "patchwith.diff",
+                                     "patchwith", "lastpatch"]),
+                         db.patches())
         self.assertEqual(lastpatch, db.top_patch())
 
         newlast1 = Patch("newlast1")
@@ -140,10 +142,10 @@ class DbTest(QuiltTest):
         self.assertTrue(db.is_patch(newlast1))
         self.assertTrue(db.is_patch(newlast2))
         self.assertEqual(patch_list(["firstpatch", "newlast1", "newlast2",
-                          "secondpatch", "thirdpatch",
-                          "patchwith.patch", "patchwith.diff",
-                          "patchwith", "lastpatch"]),
-                          db.patches())
+                                     "secondpatch", "thirdpatch",
+                                     "patchwith.patch", "patchwith.diff",
+                                     "patchwith", "lastpatch"]),
+                         db.patches())
         self.assertEqual(lastpatch, db.top_patch())
 
         db = PatchSeries(os.path.join(test_dir, "data", "db"), "series_test1")
@@ -153,10 +155,10 @@ class DbTest(QuiltTest):
         self.assertTrue(db.is_patch(newfirst1))
         self.assertTrue(db.is_patch(newfirst2))
         self.assertEqual(patch_list(["newfirst1", "newfirst2", "firstpatch",
-                          "secondpatch", "thirdpatch",
-                          "patchwith.patch", "patchwith.diff",
-                          "patchwith", "lastpatch"]),
-                          db.patches())
+                                     "secondpatch", "thirdpatch",
+                                     "patchwith.patch", "patchwith.diff",
+                                     "patchwith", "lastpatch"]),
+                         db.patches())
         self.assertEqual(newfirst1, db.first_patch())
         self.assertEqual(lastpatch, db.top_patch())
 
