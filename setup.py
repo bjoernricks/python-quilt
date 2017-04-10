@@ -45,4 +45,5 @@ setup(
     ],
     long_description=README,
     keywords="patch quilt python cli",
+    test_suite="tests.pquilt_test_suite",
 )
