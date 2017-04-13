@@ -14,7 +14,7 @@ from quilt.db import Db, Series
 from quilt.error import QuiltError
 from quilt.patch import Diff, Patch
 from quilt.signals import Signal
-from quilt.utils import Directory, File, TmpDirectory
+from quilt.utils import Directory, File, SubprocessError, TmpDirectory
 
 
 class Revert(Command):
@@ -47,7 +47,7 @@ class Revert(Command):
         patch exists """
 
         if not self.db.is_patch(patch):
-            # no paches applied
+            # no patches applied
             return
 
         patches = self.db.patches_after(patch)
@@ -64,9 +64,14 @@ class Revert(Command):
         patch_file = self.quilt_patches + File(patch.get_name())
 
         if patch_file.exists() and not patch_file.is_empty():
-            patch.run(self.cwd, self.quilt_patches.get_absdir(),
-                      work_dir=tmpdir, no_backup_if_mismatch=True,
-                      remove_empty_files=True, force=True, quiet=True)
+            try:
+                patch.run(self.cwd, self.quilt_patches.get_absdir(),
+                          work_dir=tmpdir, no_backup_if_mismatch=True,
+                          remove_empty_files=True, force=True,
+                          quiet=True, _suppress_output=True,
+                )
+            except SubprocessError:
+                pass  # Expected to fail if there are other files in patch
         return backup_file
 
     def revert_file(self, filename, patch_name=None):
@@ -95,7 +100,7 @@ class Revert(Command):
             return
 
         with TmpDirectory(prefix="pquilt-") as tmpdir:
-            # apply current patch in tempary directory to revert changes of
+            # apply current patch in temporary directory to revert changes of
             # file that aren't committed in the patch
             tmp_file = self._apply_patch_temporary(tmpdir, pc_file, patch)
             if tmp_file and tmp_file.exists() and not tmp_file.is_empty():

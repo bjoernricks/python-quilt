@@ -26,7 +26,7 @@ class Patch(_EqBase):
     def run(self, cwd, patch_dir=None, backup=False, prefix=None,
             reverse=False, work_dir=None, force=False, dry_run=False,
             no_backup_if_mismatch=False, remove_empty_files=False,
-            quiet=False):
+            quiet=False, _suppress_output=False):
         cmd = ["patch"]
         cmd.append("-p" + str(self.strip))
 
@@ -70,7 +70,7 @@ class Patch(_EqBase):
         if dry_run:
             cmd.append("--dry-run")
 
-        Process(cmd).run(cwd=cwd)
+        Process(cmd).run(cwd=cwd, suppress_output=_suppress_output)
 
     def get_name(self):
         return self.patch_name

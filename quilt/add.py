@@ -48,7 +48,7 @@ class Add(Command):
         patch exists """
 
         if not self.db.is_patch(patch):
-            # no paches applied
+            # no patches applied
             return
 
         patches = self.db.patches_after(patch)
