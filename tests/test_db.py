@@ -51,6 +51,7 @@ class DbTest(QuiltTest):
         self.assertEqual(firstpatch, db.first_patch())
         self.assertEqual(lastpatch, db.top_patch())
         self.assertEqual(secondpatch, db.patch_after(firstpatch))
+        self.assertEqual(secondpatch, db.patch_before(thirdpatch))
         self.assertTrue(db.is_patch(thirdpatch))
         self.assertFalse(db.is_patch(Patch("notapatch")))
         self.assertEqual([], db.patches_before(firstpatch))

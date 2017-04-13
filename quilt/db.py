@@ -240,7 +240,7 @@ class PatchSeries(object):
         """
         patches = self.patches_before(patch)
         if patches:
-            return patches[0]
+            return patches[-1]
         return None
 
     def patches_until(self, patch):
