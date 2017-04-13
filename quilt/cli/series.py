@@ -12,10 +12,10 @@ from quilt.db import Series
 
 class SeriesCommand(Command):
 
-    usage = "%prog series"
     name = "series"
+    help = "Print the names of all patches in the series file."
 
-    def run(self, option, args):
+    def run(self, args):
         series = Series(self.get_patches_dir())
         for patch in series.patches():
             print(patch)

@@ -7,22 +7,26 @@
 # See LICENSE comming with the source of python-quilt for details.
 
 from quilt.cli.meta import Command
+from quilt.cli.parser import Argument
 from quilt.db import Series, Db
 from quilt.patch import Patch
 
 
 class PreviousCommand(Command):
 
-    usage = "%prog previous [patchname]"
     name = "previous"
+    help = "Print the name of the previous patch before the specified or " \
+           "topmost patch in the series file."
 
-    def run(self, options, args):
+    patch = Argument(nargs="?")
+
+    def run(self, args):
         series = Series(self.get_patches_dir())
         db = Db(self.get_pc_dir())
 
         top = None
-        if len(args) > 0:
-            top = Patch(args[0])
+        if args.patch:
+            top = Patch(args.patch)
         else:
             if db.exists():
                 top = db.top_patch()

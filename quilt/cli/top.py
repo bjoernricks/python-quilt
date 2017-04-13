@@ -12,10 +12,11 @@ from quilt.db import Db
 
 class TopCommand(Command):
 
-    usage = "%prog top"
     name = "top"
+    help = "Print the name of the topmost patch on the current stack of " \
+           "applied patches."
 
-    def run(self, options, args):
+    def run(self, args):
         db = Db(self.get_pc_dir())
         top = db.top_patch()
         if not top:

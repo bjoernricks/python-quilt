@@ -10,26 +10,28 @@ import os
 
 from quilt.add import Add
 from quilt.cli.meta import Command
+from quilt.cli.parser import Argument
 from quilt.utils import SubprocessError, Process
 
 
 class EditCommand(Command):
 
-    usage = "%prog edit file1 [...]"
     name = "edit"
-    min_args = 1
+    help = "Edit the specified file(s) in $EDITOR after adding it (them) to " \
+           "the topmost patch."
 
-    def run(self, options, args):
+    file = Argument(nargs="+")
+
+    def run(self, args):
         cwd = self.get_cwd()
         add = Add(cwd, self.get_pc_dir(), self.get_patches_dir())
-        add.add_files(args, ignore=True)
+        add.add_files(args.file, ignore=True)
 
         editor = os.environ.get("EDITOR", "vi")
 
-        for filename in args:
+        for filename in args.file:
             try:
-                cmd = [editor]
-                cmd.append(filename)
+                cmd = [editor, filename]
                 Process(cmd).run(cwd=cwd)
             except SubprocessError as e:
                 self.exit_error(e, value=e.returncode)

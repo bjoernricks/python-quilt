@@ -9,27 +9,28 @@
 import os
 
 from quilt.cli.meta import Command
+from quilt.cli.parser import Argument, OptionArgument
 from quilt.patchimport import Import
 
 
 class PatchImportCommand(Command):
+
     name = "import"
-    usage = "%prog import [-P patch] patchfile [...]"
-    min_args = 1
+    help = "Import external patches."
 
-    def add_args(self, parser):
-        parser.add_option("-P", metavar="NAME", help="Import patch as NAME. " \
-                          "This option can only be used when importing a " \
-                          "single patch.", dest="patchname")
+    patchname = OptionArgument("-P", metavar="NAME", dest="patchname",
+                               help="Import patch as NAME. This option can "
+                               "only be used when importing a single patch.")
+    patchfile = Argument(nargs="+")
 
-    def run(self, options, args):
+    def run(self, args):
         importp = Import(os.getcwd(), self.get_pc_dir(),
                          self.get_patches_dir())
 
-        if options.patchname:
-            if len(args) > 1:
+        if args.patchname:
+            if len(args.patchfile) > 1:
                 self.exit_error("It's only possible to rename a patch if one "
                                 "patch will be imported.")
-            importp.import_patch(args[0], options.patchname)
+            importp.import_patch(args.patchfile[0], args.patchname)
         else:
-            importp.import_patches(args)
+            importp.import_patches(args.patchfile)

@@ -21,6 +21,10 @@ from quilt.cli.next import NextCommand
 from quilt.cli.previous import PreviousCommand
 
 
+class C(object):
+    patch = None
+
+
 class Test(TestCase):
 
     def test_previous_only_unapplied(self):
@@ -28,7 +32,7 @@ class Test(TestCase):
                 tmp_mapping(vars(sys)) as tmp_sys:
             tmp_sys.set("stderr", cStringIO())
             with self.assertRaises(SystemExit) as caught:
-                PreviousCommand().run(None, [])
+                PreviousCommand().run(C())
             self.assertEqual(caught.exception.code, 1)
             self.assertIn("No patches applied", sys.stderr.getvalue())
 
@@ -36,7 +40,7 @@ class Test(TestCase):
         with self._setup_test_data(), \
                 tmp_mapping(vars(sys)) as tmp_sys:
             tmp_sys.set("stdout", cStringIO())
-            NextCommand().run(None, [])
+            NextCommand().run(C())
             self.assertEqual("p1.patch\n", sys.stdout.getvalue())
 
     @contextmanager

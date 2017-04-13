@@ -7,16 +7,20 @@
 # See LICENSE comming with the source of python-quilt for details.
 
 from quilt.cli.meta import Command
+from quilt.cli.parser import Argument
 from quilt.db import Db, Series
 from quilt.patch import Patch
 
 
 class NextCommand(Command):
 
-    usage = "%prog next [patchname]"
     name = "next"
+    help = "Print the name of the next patch after the specified or topmost " \
+           "patch in the series file."
 
-    def run(self, options, args):
+    patch = Argument(nargs="?")
+
+    def run(self, args):
         series = Series(self.get_patches_dir())
         if not series.exists():
             self.exit_error("No series file found.")
@@ -24,8 +28,8 @@ class NextCommand(Command):
         db = Db(self.get_pc_dir())
 
         top = None
-        if len(args) == 1:
-            patch_name = args[0]
+        if args.patch:
+            patch_name = args.patch
             top = Patch(patch_name)
         else:
             if db.exists():

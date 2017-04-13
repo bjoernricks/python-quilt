@@ -10,22 +10,26 @@ import os
 
 from quilt.add import Add
 from quilt.cli.meta import Command
+from quilt.cli.parser import Argument, OptionArgument
 
 
 class AddCommand(Command):
 
-    usage = "%prog add [-p patch] file1 [...]"
     name = "add"
-    min_args = 1
+    help = "Add one or more files to the topmost or named patch."
+
+    patch = OptionArgument("-p", help="patch to add files to",
+                           metavar="PATCH", dest="patch")
+    file = Argument(nargs="+")
 
     def add_args(self, parser):
         parser.add_option("-p", help="patch to add files to",
                           metavar="PATCH", dest="patch")
 
-    def run(self, options, args):
+    def run(self, args):
         add = Add(os.getcwd(), self.get_pc_dir(), self.get_patches_dir())
         add.file_added.connect(self.file_added)
-        add.add_files(args, options.patch)
+        add.add_files(args.file, args.patch)
 
     def file_added(self, file, patch):
         print("File %s added to patch %s" %

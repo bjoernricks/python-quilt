@@ -9,30 +9,32 @@
 import os
 
 from quilt.cli.meta import Command
+from quilt.cli.parser import Argument, OptionArgument
 from quilt.pop import Pop
 
 
 class PopCommand(Command):
 
-    usage = "%prog pop [-a] [patch]"
     name = "pop"
+    help = "Remove patch(es) from the stack of applied patches."
 
-    def add_args(self, parser):
-        parser.add_option("-a", "--all", help="remove all applied patches",
-                          action="store_true")
+    all = OptionArgument("-a", "--all", dest="all", action="store_true",
+                         help="remove all applied patches")
 
-    def run(self, options, args):
+    patch = Argument(nargs="?")
+
+    def run(self, args):
         pop = Pop(os.getcwd(), self.get_pc_dir())
         pop.unapplying.connect(self.unapplying)
         pop.unapplied.connect(self.unapplied)
         pop.empty_patch.connect(self.empty_patch)
 
-        if options.all:
+        if args.all:
             pop.unapply_all()
-        elif not args:
-            pop.unapply_top_patch()
+        elif args.patch:
+            pop.unapply_patch(args.patch)
         else:
-            pop.unapply_patch(args[0])
+            pop.unapply_top_patch()
 
     def unapplying(self, patch):
         print("Removing patch %s" % patch.get_name())

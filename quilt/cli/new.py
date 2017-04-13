@@ -7,21 +7,22 @@
 # See LICENSE comming with the source of python-quilt for details.
 
 from quilt.cli.meta import Command
+from quilt.cli.parser import Argument
 from quilt.error import PatchAlreadyExists
 from quilt.new import New
 
 
 class NewCommand(Command):
 
-    min_args = 1
-    usage = "%prog new patchname"
     name = "new"
+    help = "Create a new patch with the specified file name, and insert it " \
+           "after the topmost patch."
 
-    def run(self, options, args):
-        newpatch = args[0]
+    patch = Argument("patchname", nargs=1)
 
+    def run(self, args):
         new = New(self.get_cwd(), self.get_pc_dir(), self.get_patches_dir())
         try:
-            new.create(newpatch)
+            new.create(args.patchname[0])
         except PatchAlreadyExists as e:
             print(e)

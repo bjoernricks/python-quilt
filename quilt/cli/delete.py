@@ -7,44 +7,41 @@
 # See LICENSE comming with the source of python-quilt for details.
 
 from quilt.cli.meta import Command
+from quilt.cli.parser import Argument, OptionArgument
 from quilt.delete import Delete
 
 
 class DeleteCommand(Command):
 
-    usage = "%prog delete [-r] [--backup] [patch|-n]"
     name = "delete"
+    help = "Remove the specified or topmost patch from the series file."
 
-    def add_args(self, parser):
-        parser.add_option("-r", help="Remove the deleted patch file from the " \
-                                     "patches directory as well.",
-                          action="store_true", dest="remove", default=False)
-        parser.add_option("-n", help="Delete the next patch after topmost, " \
-                                      "rather than the specified or topmost " \
-                                      "patch.",
-                          action="store_true", dest="next")
-        parser.add_option("--backup", help="Rename the patch file to patch~ " \
-                                      "rather than deleting it. Ignored if " \
-                                      "not used with `-r'.",
-                          action="store_true", default=False, dest="backup")
+    remove = OptionArgument("-r", action="store_true", dest="remove",
+                            default=False,
+                            help="Remove the deleted patch file from the "
+                            "patches directory as well.")
+    backup = OptionArgument("--backup",
+                            action="store_true", default=False, dest="backup",
+                            help="Rename the patch file to patch~ rather than "
+                            "deleting it. Ignored if not used with `-r'.")
+    next = OptionArgument("-n", action="store_true", dest="next",
+                          help="Delete the next patch after topmost, "
+                          "rather than the specified or topmost patch.")
+    patch = Argument(nargs="?")
 
-    def run(self, options, args):
+    def run(self, args):
         delete = Delete(self.get_cwd(), self.get_pc_dir(),
                         self.get_patches_dir())
         delete.deleted_patch.connect(self.deleted_patch)
         delete.deleting_patch.connect(self.deleting_patch)
 
-        if options.next and len(args) > 0:
+        if args.next and args.patch:
             self.exit_error("-n parameter doesn't take an argument")
 
-        if options.next:
-            delete.delete_next(options.remove, options.remove)
+        if args.next:
+            delete.delete_next(args.remove, args.backup)
         else:
-            patch = None
-            if len(args) > 0:
-                patch = args[0]
-
-            delete.delete_patch(patch, options.remove, options.remove)
+            delete.delete_patch(args.patch, args.remove, args.remove)
 
     def deleted_patch(self, patch):
         print("Removed patch %s" % patch.get_name())

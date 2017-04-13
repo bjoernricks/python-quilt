@@ -8,25 +8,26 @@
 
 import os
 
-from quilt.revert import Revert
 from quilt.cli.meta import Command
+from quilt.cli.parser import Argument, OptionArgument
+from quilt.revert import Revert
 
 
 class RevertCommand(Command):
 
-    usage = "%prog revert [-p patch] file1 [...]"
     name = "revert"
-    min_args = 1
+    help = "Revert  uncommitted  changes  to  the  topmost  or  named  " \
+           "patch for the specified file(s)."
 
-    def add_args(self, parser):
-        parser.add_option("-p", help="revert changes in the named patch",
-                          metavar="PATCH", dest="patch")
+    patch = OptionArgument("-p", metavar="PATCH", dest="patch",
+                           help="revert changes in the named patch")
+    file = Argument(nargs="+")
 
-    def run(self, options, args):
+    def run(self, args):
         revert = Revert(os.getcwd(), self.get_pc_dir(), self.get_patches_dir())
         revert.file_reverted.connect(self.file_reverted)
         revert.file_unchanged.connect(self.file_unchanged)
-        revert.revert_files(args, options.patch)
+        revert.revert_files(args.file, args.patch)
 
     def file_reverted(self, file, patch):
         print("Changes to %s in patch %s reverted" % (file.get_name(),

@@ -7,33 +7,34 @@
 # See LICENSE comming with the source of python-quilt for details.
 
 from quilt.cli.meta import Command
+from quilt.cli.parser import Argument, OptionArgument
 from quilt.push import Push
 
 
 class PushCommand(Command):
 
-    usage = "%prog push [-a] [patch]"
     name = "push"
+    help = " Apply  patch(es)  from the series file."
 
-    def add_args(self, parser):
-        parser.add_option("-a", "--all", help="apply all patches in series",
-                          action="store_true")
-        parser.add_option("-f", "--force", help="Force apply, even if the " \
-                                                "patch has rejects.",
-                          action="store_true", default=False)
+    all = OptionArgument("-a", dest="all", action="store_true",
+                         help="apply all patches in series")
+    force = OptionArgument("-f", dest="force", action="store_true",
+                           default=False,
+                           help="Force apply, even if the patch has rejects.")
+    patch = Argument(nargs="?")
 
-    def run(self, options, args):
+    def run(self, args):
         push = Push(self.get_cwd(), self.get_pc_dir(), self.get_patches_dir())
         push.applying_patch.connect(self.applying_patch)
         push.applied.connect(self.applied)
         push.applied_empty_patch.connect(self.applied_empty_patch)
 
-        if options.all:
-            push.apply_all(options.force)
-        elif not args:
-            push.apply_next_patch(options.force)
+        if args.all:
+            push.apply_all(args.force)
+        elif args.patch:
+            push.apply_patch(args.patch, args.force)
         else:
-            push.apply_patch(args[0], options.force)
+            push.apply_next_patch(args.force)
 
     def applying_patch(self, patch):
         print("Applying patch %s" % patch.get_name())

@@ -12,9 +12,12 @@ import os
 import six
 import sys
 
-from optparse import OptionParser
+import quilt
 
 from quilt.db import Db, Series
+
+from quilt.cli.parser import Parser, SubParser, ArgumentsCollectorMetaClass, \
+                             Argument
 
 command_map = dict()
 
@@ -31,42 +34,28 @@ def list_commands():
     return sorted(command_map.items())
 
 
-class CommandMetaClass(type):
+class CommandMetaClass(ArgumentsCollectorMetaClass):
 
-    def __new__(meta, name, bases, dict):
-        cls = type.__new__(meta, name, bases, dict)
+    def __new__(meta, name, bases, attrs):
+        cls = super(CommandMetaClass, meta).__new__(meta, name, bases, attrs)
         if cls.name is not None:
             register_command(cls.name, cls)
         return cls
 
 
 @six.add_metaclass(CommandMetaClass)
-class Command(object):
+class Command(SubParser):
 
-    min_args = 0
-    usage = ""
-    patches_dir = "patches"
-    pc_dir = ".pc"
     name = None
+    help = None
+    description = None
 
-    def parse(self, args):
-        parser = OptionParser(usage=self.usage)
-
-        self.add_args(parser)
-
-        (options, pargs) = parser.parse_args(args)
-
-        if len(pargs) < self.min_args:
-            parser.print_usage()
-            sys.exit(1)
-
-        self.run(options, pargs)
-
-    def run(self, options, args):
-        raise NotImplementedError()
-
-    def add_args(self, parser):
-        pass
+    def __init__(self):
+        super(Command, self).__init__(self.name, help=self.help,
+                                      description=self.description or
+                                      self.help)
+        self.patches_dir = "patches"
+        self.pc_dir = ".pc"
 
     def get_patches_dir(self):
         patches_dir = os.environ.get("QUILT_PATCHES")
@@ -92,3 +81,37 @@ class Command(object):
     def exit_error(self, error, value=1):
         print(error, file=sys.stderr)
         sys.exit(value)
+
+    def get_defaults(self):
+        return {"run": self.run}
+
+    def run(options, args):
+        raise NotImplementedError()
+
+
+class QuiltCli(Parser):
+
+    default_subparsers_kwargs = {
+        "title": "list of commands",
+        "dest": "command",
+        "description": "List of available commands. Use %(prog)s COMMAND "
+                       "--help for more info.",
+        "help": "Description",
+        "metavar": "COMMAND",
+    }
+
+    version = Argument("--version", action="version",
+                       version="%%(prog)s %s" % quilt.__version__)
+
+    def __init__(self, *args, **kwargs):
+        super(QuiltCli, self).__init__(*args, **kwargs)
+
+        for cmd in list_commands():
+            self.add_subparser(cmd[1]())
+
+    def run(self):
+        args = self.parse_args()
+        if args.command:
+            args.run(args)
+        else:
+            self.print_usage()

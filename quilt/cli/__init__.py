@@ -6,7 +6,7 @@
 #
 # See LICENSE comming with the source of python-quilt for details.
 
-from quilt.cli.meta import find_command, list_commands
+from quilt.cli.meta import QuiltCli, find_command, list_commands
 
 import quilt.cli.add
 import quilt.cli.applied
