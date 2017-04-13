@@ -10,8 +10,8 @@ to manage a series of patches.
 It's intended to be used within a python application or framework but
 also provides a console client interface called pquilt.
 
-python-quilt requires the Six package, <https://pypi.python.org/pypi/six>. It
-also requires patch_ and diff_ for creating and applying diffs.
+python-quilt requires the six_ package for python 2/3 compatibility. It
+also requires patch_ and diff_ tools for creating and applying diffs.
 
 Source code of python-quilt can be found at https://github.com/bjoernricks/python-quilt
 
@@ -64,5 +64,6 @@ has stepped up to implement its feature.
 
 .. _python: http://www.python.org/
 .. _quilt: http://savannah.nongnu.org/projects/quilt
+.. _six: https://pypi.python.org/pypi/six
 .. _patch: http://savannah.gnu.org/projects/patch/
 .. _diff: http://www.gnu.org/software/diffutils/
