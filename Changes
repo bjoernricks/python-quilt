@@ -34,7 +34,7 @@
 
     API
     * quilt/add.py:
-        - Add._backup_file not accepts a File class instead of a filename
+        - Add._backup_file now expects a File class instead of a filename
 
     TESTS
 
