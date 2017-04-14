@@ -10,11 +10,15 @@
           framework
     * quilt/error.py:
         - Added new PatchAlreadyExists error class
+    * quilt/cli:
+        - Replaced optparse with argparse.
 
     BUGFIXES
     * quilt/db.py:
         - Check the full ".pc/.version" contents, not just the first byte
         - Fix parsing and error reporting of patch options in series files
+        - Fix patch_before to return correct patch. Before the first patch of
+          the series has been returned.
     * quilt/add.py:
         - Add._backup_file uses file directory for destination directory too
           This fixes creating wrong patches when refreshing a patch for a file
@@ -24,13 +28,19 @@
           This fixes an issue when importing a patch in a not exiting patches
           directory.
         - TmpFile.file now has read-write access, not just read access
+    * quilt/pop.py, quilt/push.py:
+        - Fix raising correct exception class.
     * quilt/refresh.py
         - Fix filenames in the diff header
+    * quit/revert.py:
+        - Add missing import for Patch class.
     * quilt/cli/next.py:
         - Fix default behaviour without any patch argument
     * quilt/cli/previous.py:
         - Fix error message when the topmost patch is the first patch
         - Don't report first unapplied patch if no patches are applied
+    * quilt/cli/delete.py:
+        - Fix passing backup flag to delete_next and delete_patch.
 
     API
     * quilt/add.py:
