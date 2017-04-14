@@ -43,8 +43,8 @@ import six
 
 
 def get_declared_instances_list(bases, attrs, collect_cls, instance_attr):
-    instances = [(name, attrs.pop(name)) for name, obj in attrs.items() if
-                 isinstance(obj, collect_cls)]
+    instances = [(name, attrs.pop(name)) for name, obj in attrs.copy().items()
+                 if isinstance(obj, collect_cls)]
     instances.sort(key=lambda x: x[1].creation_counter)
     for base in bases[::-1]:
         if hasattr(base, instance_attr):
