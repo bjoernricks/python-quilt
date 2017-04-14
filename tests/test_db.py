@@ -27,6 +27,20 @@ def patch_list(patch_names):
 
 class DbTest(QuiltTest):
 
+    def test_patch_equivalence(self):
+        a = Patch("same")
+        self.assertTrue(a == a)
+        self.assertFalse(a != a)
+        
+        b = Patch("same")
+        self.assertTrue(a == b)
+        self.assertFalse(a != b)
+        self.assertEqual(hash(a), hash(b))
+        
+        c = Patch("different")
+        self.assertTrue(a != c)
+        self.assertFalse(a == c)
+    
     def test_version(self):
         version = "234\n"
         self.assertTrue(version.startswith(format(DB_VERSION)))

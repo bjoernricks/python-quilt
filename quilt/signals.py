@@ -8,8 +8,10 @@
 
 import weakref
 
+from quilt.utils import _EqBase
 
-class MethodRef(object):
+
+class MethodRef(_EqBase):
 
     """ May be compared for equality, but cannot be hashed, stored as a
         dictionary key, etc. """
@@ -56,8 +58,6 @@ class MethodRef(object):
                         self.func == other.__func__
             else:
                 return False
-
-    __hash__ = None
 
 
 class Signal(object):
