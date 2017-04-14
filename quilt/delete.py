@@ -66,7 +66,7 @@ class Delete(Command):
         """
         patch = self.db.top_patch()
         if patch:
-            after = self.db.patch_after(patch)
+            after = self.series.patch_after(patch)
         else:
             after = self.series.first_patch()
         if not after:

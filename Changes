@@ -40,8 +40,8 @@
     * quit/revert.py:
         - Add missing import for Patch class.
     * quilt/delete.py:
-        - Choose the first patch in "delete_next" rather than complaining no
-          patches are applied
+        - Choose the first unapplied patch in "delete_next" rather than
+          complaining no patches are applied
     * quilt/cli/next.py:
         - Fix default behaviour without any patch argument
     * quilt/cli/previous.py:
