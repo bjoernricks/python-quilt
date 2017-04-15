@@ -6,7 +6,7 @@
 
 import os
 
-from .helpers import make_file
+from helpers import make_file
 from unittest import TestCase
 
 import quilt.refresh
