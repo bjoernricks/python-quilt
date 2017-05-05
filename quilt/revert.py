@@ -68,7 +68,7 @@ class Revert(Command):
                 patch.run(self.cwd, self.quilt_patches.get_absdir(),
                           work_dir=tmpdir, no_backup_if_mismatch=True,
                           remove_empty_files=True, force=True,
-                          quiet=True, _suppress_output=True,
+                          quiet=True, suppress_output=True,
                 )
             except SubprocessError:
                 pass  # Expected to fail if there are other files in patch
