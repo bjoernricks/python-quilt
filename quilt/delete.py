@@ -60,7 +60,7 @@ class Delete(Command):
         self.deleted_patch(patch)
 
     def delete_next(self, remove=False, backup=False):
-        """ Delete next patch after the topmost applied patch
+        """ Delete next unapplied patch
         If remove is True the patch file will also be removed. If remove and
         backup are True a copy of the deleted patch file will be made.
         """

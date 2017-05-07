@@ -25,7 +25,7 @@ class DeleteCommand(Command):
                             help="Rename the patch file to patch~ rather than "
                             "deleting it. Ignored if not used with `-r'.")
     next = OptionArgument("-n", action="store_true", dest="next",
-                          help="Delete the next patch after topmost, "
+                          help="Delete the next unapplied patch, "
                           "rather than the specified or topmost patch.")
     patch = Argument(nargs="?")
 

@@ -29,7 +29,7 @@ class New(Command):
     def create(self, patchname):
         """ Adds a new patch with patchname to the queue
 
-        The new patch will be added after the top patch
+        The new patch will be added as the next unapplied patch.
         """
         patch = Patch(patchname)
         if self.series.is_patch(patch):
