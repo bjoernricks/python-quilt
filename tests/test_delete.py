@@ -1,10 +1,8 @@
-import os, os.path
+import os.path
 from quilt.db import Db
 from quilt.patch import Patch
-from six.moves import cStringIO
-import sys
 
-from helpers import QuiltTest, make_file, tmp_mapping, tmp_series
+from helpers import QuiltTest, make_file, run_cli, tmp_series
 
 from quilt.delete import Delete
 from quilt.cli.delete import DeleteCommand
@@ -43,17 +41,9 @@ class Test(QuiltTest):
             patches.save()
             patch = os.path.join(patches.dirname, "patch")
             make_file(b"", patch)
-            class args:
-                next = True
-                patch = None
-                remove = True
-                backup = False
-            with tmp_mapping(os.environ) as env, \
-                    tmp_mapping(vars(sys)) as tmp_sys:
-                env.set("QUILT_PATCHES", patches.dirname)
-                env.set("QUILT_PC", dir)
-                tmp_sys.set("stdout", cStringIO())
-                DeleteCommand().run(args)
+            run_cli(DeleteCommand,
+                dict(next=True, patch=None, remove=True, backup=False),
+                patches.dirname, applied=dir)
             self.assertFalse(os.path.exists(patch))
             self.assertFalse(os.path.exists(patch + "~"))
     
@@ -64,16 +54,8 @@ class Test(QuiltTest):
             patches.save()
             patch = os.path.join(patches.dirname, "patch")
             make_file(b"", patch)
-            class args:
-                patch = "patch"
-                next = False
-                remove = True
-                backup = False
-            with tmp_mapping(os.environ) as env, \
-                    tmp_mapping(vars(sys)) as tmp_sys:
-                env.set("QUILT_PATCHES", patches.dirname)
-                env.set("QUILT_PC", dir)
-                tmp_sys.set("stdout", cStringIO())
-                DeleteCommand().run(args)
+            run_cli(DeleteCommand,
+                dict(patch="patch", next=False, remove=True, backup=False),
+                patches.dirname, applied=dir)
             self.assertFalse(os.path.exists(patch))
             self.assertFalse(os.path.exists(patch + "~"))
