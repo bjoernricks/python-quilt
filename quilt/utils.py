@@ -37,14 +37,14 @@ else:  # Python 3
 
 class _EqBase(object):
     """ Helpers for defining __eq__ in Python < 3
-    
+
     This class prevents inheriting the default Python 2 hashing
     implementation, which would give different hashes for different but
     equivalent objects. This avoids a DeprecationWarning and imitates how
     Python 3 disables hashing whenever __eq__ is overridden.
     """
     __hash__ = None
-    
+
     def __ne__(self, other):
         """ Defers to __eq__, imitating Python 3 """
         return not self.__eq__(other)
