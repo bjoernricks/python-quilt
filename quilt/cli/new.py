@@ -16,13 +16,13 @@ class NewCommand(Command):
 
     name = "new"
     help = "Create a new patch with the specified file name, and insert it " \
-           "as the next unapplied patch."
+           "as the topmost applied patch."
 
-    patch = Argument("patchname", nargs=1)
+    patchname = Argument()
 
     def run(self, args):
         new = New(self.get_cwd(), self.get_pc_dir(), self.get_patches_dir())
         try:
-            new.create(args.patchname[0])
+            new.create(args.patchname)
         except PatchAlreadyExists as e:
             print(e)

@@ -47,6 +47,9 @@
     * quilt/delete.py:
         - Choose the first unapplied patch in "delete_next" rather than
           complaining no patches are applied
+    * quilt/new.py:
+        - The patch created by "new" now becomes the topmost applied patch
+          rather then an unapplied patch.
     * quilt/cli/next.py:
         - Fix default behaviour without any patch argument
     * quilt/cli/previous.py:

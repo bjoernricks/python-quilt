@@ -29,7 +29,7 @@ class New(Command):
     def create(self, patchname):
         """ Adds a new patch with patchname to the queue
 
-        The new patch will be added as the next unapplied patch.
+        The new patch will be added as the topmost applied patch.
         """
         patch = Patch(patchname)
         if self.series.is_patch(patch):
@@ -44,11 +44,19 @@ class New(Command):
         if pc_dir.exists():
             # be sure that the directory is clear
             pc_dir.delete()
-        else:
-            pc_dir.create()
+
+        # create empty .pc/<patchname> directory as quilt does too
+        pc_dir.create()
 
         top = self.db.top_patch()
+        # add new patch after the current topmost applied patch
         self.series.add_patches([patch], top)
+        # "apply" patch
+        self.db.add_patch(patch)
+
+        # create patches/series files
         self.series.save()
+        # create .pc/.version and .pc/applied-patches files
+        self.db.save()
 
         self.patch_created(patch)
