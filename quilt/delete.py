@@ -60,14 +60,15 @@ class Delete(Command):
         self.deleted_patch(patch)
 
     def delete_next(self, remove=False, backup=False):
-        """ Delete next patch after the topmost applied patch
+        """ Delete next unapplied patch
         If remove is True the patch file will also be removed. If remove and
         backup are True a copy of the deleted patch file will be made.
         """
         patch = self.db.top_patch()
-        if not patch:
-            raise NoAppliedPatch(self.db)
-        after = self.db.patch_after(patch)
+        if patch:
+            after = self.series.patch_after(patch)
+        else:
+            after = self.series.first_patch()
         if not after:
             raise QuiltError("No next patch")
 

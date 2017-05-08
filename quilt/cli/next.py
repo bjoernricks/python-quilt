@@ -15,7 +15,8 @@ from quilt.patch import Patch
 class NextCommand(Command):
 
     name = "next"
-    help = "Print the name of the next patch after the specified or topmost " \
+    help = "Print the name of the next unapplied patch, " \
+           "or of the patch after the specified " \
            "patch in the series file."
 
     patch = Argument(nargs="?")

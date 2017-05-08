@@ -16,7 +16,7 @@ class NewCommand(Command):
 
     name = "new"
     help = "Create a new patch with the specified file name, and insert it " \
-           "after the topmost patch."
+           "as the next unapplied patch."
 
     patch = Argument("patchname", nargs=1)
 

@@ -25,7 +25,7 @@ class DeleteCommand(Command):
                             help="Rename the patch file to patch~ rather than "
                             "deleting it. Ignored if not used with `-r'.")
     next = OptionArgument("-n", action="store_true", dest="next",
-                          help="Delete the next patch after topmost, "
+                          help="Delete the next unapplied patch, "
                           "rather than the specified or topmost patch.")
     patch = Argument(nargs="?")
 
@@ -41,7 +41,7 @@ class DeleteCommand(Command):
         if args.next:
             delete.delete_next(args.remove, args.backup)
         else:
-            delete.delete_patch(args.patch, args.remove, args.remove)
+            delete.delete_patch(args.patch, args.remove, args.backup)
 
     def deleted_patch(self, patch):
         print("Removed patch %s" % patch.get_name())

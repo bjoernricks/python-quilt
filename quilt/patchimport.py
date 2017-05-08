@@ -34,7 +34,7 @@ class Import(Command):
 
     def import_patch(self, patch_name, new_name=None):
         """ Import patch into the patch queue
-        The patch is inserted after the current top applied patch
+        The patch is inserted as the next unapplied patch.
         """
         if new_name:
             dir_name = os.path.dirname(new_name)
