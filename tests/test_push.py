@@ -13,7 +13,8 @@ import six
 
 from helpers import QuiltTest, make_file, tmp_series
 
-from quilt.error import QuiltError
+from quilt.db import Db
+from quilt.error import QuiltError, AllPatchesApplied
 from quilt.patch import Patch
 from quilt.push import Push
 from quilt.utils import Directory, TmpDirectory, File
@@ -86,6 +87,14 @@ class PushTest(QuiltTest):
             self.assertTrue(f1.exists())
             self.assertTrue(f2.exists())
     
+    def test_upto_applied(self):
+        """ Push up to a specified patch when a patch is already applied """
+        top = os.path.join(test_dir, "data", "pop", "test1")
+        pc = os.path.join(top, "pc")
+        patches = os.path.join(top, "patches")
+        cmd = Push(top, pc, patches)
+        self.assertRaises(AllPatchesApplied, cmd.apply_patch, "p1.patch")
+    
     def test_force(self):
         with tmp_series() as [dir, series]:
             self._make_conflict(dir, series)
@@ -113,6 +122,30 @@ class PushTest(QuiltTest):
             with six.assertRaisesRegex(self, QuiltError,
                     r"needs to be refreshed"):
                 cmd.apply_next_patch()
+    
+    def test_fail_after_success(self):
+        """ Test where the first patch applies but a later patch fails """
+        with tmp_series() as [dir, series]:
+            make_file(
+                b"--- /dev/null\n"
+                b"+++ dir/new-file\n"
+                b"@@ -0,0 +1,1 @@\n"
+                b"+new file\n", series.dirname, "good.patch")
+            series.add_patch(Patch("good.patch"))
+            
+            self._make_conflict(dir, series)
+            series.save()
+            cmd = Push(dir, quilt_pc=dir, quilt_patches=series.dirname)
+            with six.assertRaisesRegex(self, QuiltError,
+                        r"conflict\.patch does not apply"), \
+                    self._suppress_output():
+                cmd.apply_all()
+            [applied] = Db(dir).patches()
+            self.assertEqual(applied.get_name(), "good.patch")
+            with open(os.path.join(dir, "new-file"), "rb") as file:
+                self.assertEqual(file.read(), b"new file\n")
+            with open(os.path.join(dir, "file"), "rb") as file:
+                self.assertEqual(file.read(), b"conflict\n")
     
     def _make_conflict(self, dir, series):
         series.add_patch(Patch("conflict.patch"))

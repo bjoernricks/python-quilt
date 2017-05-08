@@ -9,13 +9,13 @@
 import os
 import os.path
 
-from quilt.utils import Process, DirectoryParam, File, FileParam, \
+from quilt.utils import Process, DirectoryParam, _EqBase, File, FileParam, \
                         SubprocessError
 
 
-class Patch(object):
+class Patch(_EqBase):
 
-    """ Wrapper arround the patch util """
+    """ Wrapper around the patch util """
 
     def __init__(self, patch_name, strip=1, reverse=False):
         self.patch_name = patch_name
@@ -26,7 +26,7 @@ class Patch(object):
     def run(self, cwd, patch_dir=None, backup=False, prefix=None,
             reverse=False, work_dir=None, force=False, dry_run=False,
             no_backup_if_mismatch=False, remove_empty_files=False,
-            quiet=False):
+            quiet=False, suppress_output=False):
         cmd = ["patch"]
         cmd.append("-p" + str(self.strip))
 
@@ -70,7 +70,7 @@ class Patch(object):
         if dry_run:
             cmd.append("--dry-run")
 
-        Process(cmd).run(cwd=cwd)
+        Process(cmd).run(cwd=cwd, suppress_output=suppress_output)
 
     def get_name(self):
         return self.patch_name
@@ -138,7 +138,7 @@ class RollbackPatch(object):
 
 
 class Diff(object):
-    """ Wrapper arround the diff util
+    """ Wrapper around the diff util
     """
 
     @FileParam(["left", "right"])

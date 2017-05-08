@@ -35,10 +35,15 @@
     * quilt/push.py:
         - Allow pushing a patch even if a previous attempt failed
         - Prevent pushing if the topmost patch needs refreshing first
+        - Fix pushing up to a specific patch when some patches are already
+          applied.
+        - Keep applied patches list consistent if a patch does not apply but
+          prior patches were applied, or "push -f" was used
     * quilt/refresh.py
         - Fix filenames in the diff header
     * quit/revert.py:
         - Add missing import for Patch class.
+        - Handle when there are multiple files in a patch
     * quilt/delete.py:
         - Choose the first unapplied patch in "delete_next" rather than
           complaining no patches are applied
