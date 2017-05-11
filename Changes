@@ -5,10 +5,6 @@
 
     FEATURES
     * Added compatibility with Python 3.2-3.6. Now requires Six.
-    * quilt/db.py:
-        - Always write the ".pc/applied-patches" file with "\n" as newlines,
-          rather than using CRLF on Windows. The trailing CR confused the
-          original Quilt in some circumstances.
     * quilt/new.py:
         - Added new New class to be able to reuse the cli code in a python
           framework
@@ -24,6 +20,9 @@
         - Fix parsing and error reporting of patch options in series files
         - Fix patch_before to return correct patch. Before the first patch of
           the series has been returned.
+        - Always write the ".pc/applied-patches" file with "\n" as newlines,
+          rather than using CRLF on Windows with python 3. The trailing CR
+          confused the original Quilt in some circumstances.
     * quilt/add.py:
         - Add._backup_file uses file directory for destination directory too
           This fixes creating wrong patches when refreshing a patch for a file
