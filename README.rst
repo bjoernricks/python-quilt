@@ -4,6 +4,9 @@ python-quilt
 .. image:: https://travis-ci.org/bjoernricks/python-quilt.svg?branch=master
     :target: https://travis-ci.org/bjoernricks/python-quilt
 
+.. image:: https://img.shields.io/pypi/v/python-quilt.svg
+    :target: https://pypi.python.org/pypi/python-quilt
+
 python-quilt is a python_ implementation of the well-known tool quilt_
 to manage a series of patches.
 
