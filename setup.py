@@ -29,7 +29,7 @@ setup(
     install_requires=["six"],
     url="http://github.com/bjoernricks/python-quilt",
     scripts=["pquilt"],
-    license="LGPLv2.1+",
+    license="MIT",
     packages=["quilt", "quilt.cli"],
     classifiers=[
         "Development Status :: 3 - Alpha",
