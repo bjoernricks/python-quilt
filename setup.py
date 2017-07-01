@@ -23,7 +23,7 @@ with open(os.path.join(here, 'README.rst'), 'r', encoding="utf-8") as f:
 setup(
     name="python-quilt",
     version=quilt.__version__,
-    description="A quilt patchsystem implementation in Python",
+    description="A quilt patch system implementation in Python",
     author="Björn Ricks",
     author_email="bjoern.ricks@gmail.com",
     install_requires=["six"],
@@ -32,7 +32,7 @@ setup(
     license="MIT",
     packages=["quilt", "quilt.cli"],
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Intended Audience :: System Administrators",
