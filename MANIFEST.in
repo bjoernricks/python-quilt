@@ -1,3 +1,7 @@
 include README*
 include CHANGES*
 include LICENSE*
+include pyproject.toml
+include setup.py
+include Pipfile*
+recursive-include tests *.py
