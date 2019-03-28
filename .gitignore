@@ -6,3 +6,4 @@ dist
 build
 .pc/
 *.egg-info
+.venv
